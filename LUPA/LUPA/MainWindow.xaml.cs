@@ -7,7 +7,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LUPA.DataContainers;
-using System.Text;
 
 namespace LUPA
 {
@@ -44,6 +43,9 @@ namespace LUPA
             }
         }
 
+        /// <summary>
+        /// Removes a Key/Contour Point (depends on which radio button is checked)
+        /// </summary>
         private void Map_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.OriginalSource is Rectangle clickedShape)
@@ -114,6 +116,7 @@ namespace LUPA
 
             if (result == true)
             {
+                Map.Children.Clear();
                 map = Parser.ParseFile(ofd.FileName);
                 DrawMap();
             }
