@@ -18,7 +18,6 @@ namespace LUPA
     {
         Map map;
         System.Windows.Point position;
-        public const int toolbarHeight = 30;
 
         public MainWindow()
         {
@@ -32,6 +31,7 @@ namespace LUPA
         private void Map_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             position = e.GetPosition(this);
+            position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
                 DrawPoint(Brushes.IndianRed, position);
@@ -63,7 +63,7 @@ namespace LUPA
         private void RemovePointFromDataContainer(Rectangle clickedShape)
         {
             double x = Canvas.GetLeft(clickedShape);
-            double y = Canvas.GetTop(clickedShape) + toolbarHeight;
+            double y = Canvas.GetTop(clickedShape) + TopToolbar.ActualHeight;
             map.KeyPoints.RemoveAll(o => o.X == x && o.Y == y);
             map.ContourPoints.RemoveAll(o => o.X == x && o.Y == y);
         }
@@ -76,7 +76,7 @@ namespace LUPA
                 Stroke = color
             };
             Map.Children.Add(rec);
-            Canvas.SetTop(rec, position.Y - TopToolbar.ActualHeight);
+            Canvas.SetTop(rec, position.Y);
             Canvas.SetLeft(rec, position.X);
         }
 
@@ -115,6 +115,35 @@ namespace LUPA
             if (result == true)
             {
                 map = Parser.ParseFile(ofd.FileName);
+                DrawMap();
+            }
+        }
+
+        private void DrawMap()
+        {
+            DrawContourPoints();
+            DrawKeyPoints();
+        }
+
+        private void DrawContourPoints()
+        {
+            System.Windows.Point position = new System.Windows.Point();
+            foreach (var cp in map.ContourPoints)
+            {               
+                position.X = cp.X;
+                position.Y = cp.Y;
+                DrawPoint(Brushes.LightSeaGreen, position);
+            }
+        }
+
+        private void DrawKeyPoints()
+        {
+            System.Windows.Point position = new System.Windows.Point();
+            foreach (var kp in map.KeyPoints)
+            {
+                position.X = kp.X;
+                position.Y = kp.Y;
+                DrawPoint(Brushes.IndianRed, position);
             }
         }
 

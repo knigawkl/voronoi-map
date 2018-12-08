@@ -30,3 +30,7 @@ C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.d
 C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.pdb
 C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.xml
 C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.CopyComplete
+D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.dll
+D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.pdb
+D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.xml
+D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.CopyComplete
