@@ -28,19 +28,39 @@
 
 \newpage
 
-\section{Słownik pojęć}
+\section{Wstęp teoretyczny}
+
+\subsection{Słownik pojęć}
 
 \tab Zrozumienie dokumentu ułatwia zapoznanie się z poniższymi definicjami.
 \\\textit{Punkt kluczowy} -- bank, parabank lub kasa oszczędnościowo-kredytowa (\textit{KOK})
 \\\textit{Obszar} -- fragment terenu, na którym znajduje się tylko jeden punkt kluczowy
+\\\textit{Obiekt} -- Element terenu podlegający analizie
+\\\textit{Budynek mieszkalny} -- Obiekt zawierający informację o liczbie jego mieszkańców
+
+\subsection{Założenia}
+
+\begin{enumerate}
+\item Pod danymi współrzędnymi może znajdować się tylko jeden punkt kluczowy lub obiekt. 
+\item Każdy punkt kluczowy lub obiekt zajmuje dokładnie jedną jednostkę terenu. 
+\item Każdy punkt kluczowy lub obiekt musi znajdować się na co najmniej jednym obszarze. Znajduje się on na więcej niż jednym obszarze, gdy leży na granicy obszarów.
+\end{enumerate}
 
 \section{Funkcje programu}
 
-\tab Program umożliwia użytkownikowi:
+\tab Program, na podstawie danych wejściowych, umożliwia użytkownikowi:
 \begin{enumerate}
 \item wczytanie z pliku tekstowego (\textit{.txt}) konturu terenu, współrzędnych punktów kluczowych, informacji o obiektach,
-\item graficzne przedstawienie konturu terenu, punktów kluczowych, optymalnych granic obszarów,
+\item graficzne przedstawienie konturu terenu, punktów kluczowych, optymalnych granic obszarów.
+\end{enumerate}
 
+\tab W trakcie działania programu, program umożliwia użytkownikowi:
+\begin{enumerate}
+\item dodawanie lub usuwanie konturu terenu,
+\item dodawanie lub usuwanie punktów kluczowych, 
+\item nakładanie grafiki pod wyznaczone kontury,
+\item wyświetlenie listy obiektów należących do danego obszaru z grupowaniem po typie,
+\item wyświetlenie liczby mieszkańców wybranego obszaru, na podstawie informacji o budynkach mieszkalnych na danym obszarze.
 \end{enumerate}
 
 \section{Opis interakcji użytkownika z programem}
