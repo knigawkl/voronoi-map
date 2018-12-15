@@ -1,9 +1,9 @@
 # Kontury terenu (wymienione w kolejności łączenia): Lp. x y
 1. 0 0
 2. 0 20
-3. 20 30.5
-4. 40 20
-5. 40 0
+3. 20 30,5
+4. 400 20
+5. 400 0
 
 # Punkty kluczowe: Lp. x y Nazwa
 1. 1 1 KOK Krawczyka

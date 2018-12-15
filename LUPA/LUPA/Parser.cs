@@ -11,17 +11,25 @@ namespace LUPA
     {
         public struct CountourPoint
         {
-            public int Id { get; set; }
-            public int X { get; set; }
-            public int Y { get; set; }
+            public string Id { get; set; }
+            public double X { get; set; }
+            public double Y { get; set; }
+
+            public CountourPoint(string id, double x, double y)
+            {
+                Id = id;
+                X = x;
+                Y = y;
+            }
         }
 
-        public List<CountourPoint> countour;
+        
         public int width = 0;
         public int height = 0;
 
-        public void Parse(string inputFilePath)
+        public List<CountourPoint> ParseContour(string inputFilePath)
         {
+            List<CountourPoint> contour = new List<CountourPoint>();
             try
             {
                 var lines = new List<string>();
@@ -48,18 +56,41 @@ namespace LUPA
                         "Currently there are " + hashCounter + " such lines");
                 }
 
+                int[] commentLinesIndices = new int[4];
+                int lineNumIterator = 0, commentLineIterator = 0;
                 foreach (var line in lines)
                 {
-                    Console.WriteLine(line);
+                    if (line.StartsWith("#"))
+                    {
+                        commentLinesIndices[commentLineIterator] = lineNumIterator;
+                        commentLineIterator++;
+                    }
+                    lineNumIterator++;
+                }
+
+                
+                for (int i = commentLinesIndices[0] + 1; i < commentLinesIndices[1] - 1; i++)
+                {
+                    string[] elems = lines[i].Split();
+                    string index = elems[0];
+                    if (!double.TryParse(elems[1], out var xPos))
+                    {
+                        throw new Exception("X position has to be a floating point number. Line: " + (i + 1));
+                    }
+                    if (!double.TryParse(elems[2], out var yPos))
+                    {
+                        throw new Exception("Y position has to be a floating point number. Line: " + (i + 1));
+                    }
+
+                    contour.Add(new CountourPoint(index, xPos, yPos));
                 }
 
             }
             catch (Exception e)
             {
-                //wypisac do konsolki w okienku blad
+                Console.WriteLine(e.Message + "Lukaszku" + e.StackTrace);
             }
-
+            return contour;
         }
     }
 }
-

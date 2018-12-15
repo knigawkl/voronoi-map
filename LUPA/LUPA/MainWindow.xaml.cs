@@ -53,7 +53,22 @@ namespace LUPA
             ofd.ShowDialog();
 
             Parser p = new Parser();
-            p.Parse(ofd.FileName);
+            var contour = p.ParseContour(ofd.FileName);
+
+            foreach (var contourPoint in contour)
+            {
+                start = new Point(contourPoint.X, contourPoint.Y);
+
+                var rec = new Rectangle()
+                {
+                    Stroke = Brushes.IndianRed,
+                    StrokeThickness = 5
+                };
+
+                Map.Children.Add(rec);
+                Canvas.SetTop(rec, start.Y - 20);
+                Canvas.SetLeft(rec, start.X);
+            }
         }
     }
 }

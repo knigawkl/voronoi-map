@@ -17,7 +17,7 @@
                 <MenuItem Header="Open" Click="OpenFile_Click"/>
             </MenuItem>
         </Menu>
-        <Canvas Name="Map" MouseDown="Map_MouseDown">
+        <Canvas Name="Map" MouseDown="Map_MouseDown" DockPanel.Dock="Bottom">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Resources/contour.jpg"/>
             </Canvas.Background>
