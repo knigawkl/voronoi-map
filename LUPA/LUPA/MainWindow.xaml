@@ -7,13 +7,21 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="LUPA"
-        Height="512"
-        Width="512"
+        Height="500"
+        Width="500"
         WindowStartupLocation="CenterScreen"
         Icon="/Resources/icon.ico">
-    <Canvas Name="Map" MouseDown="Map_MouseDown">
-        <Canvas.Background>
-            <ImageBrush ImageSource="/Resources/contour.jpg"/>
-        </Canvas.Background>
-    </Canvas>
+    <DockPanel>
+        <Menu Height="20" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Click="OpenFile_Click"/>
+            </MenuItem>
+        </Menu>
+        <Canvas Name="Map" MouseDown="Map_MouseDown">
+            <Canvas.Background>
+                <ImageBrush ImageSource="/Resources/contour.jpg"/>
+            </Canvas.Background>
+        </Canvas>
+    </DockPanel>
+
 </Window>

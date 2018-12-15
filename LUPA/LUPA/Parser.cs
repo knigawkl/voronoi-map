@@ -20,12 +20,12 @@ namespace LUPA
         public int width = 0;
         public int height = 0;
 
-        public void Parse(string input)
+        public void Parse(string inputFilePath)
         {
             try
             {
                 var lines = new List<string>();
-                using (var reader = new StreamReader(input))
+                using (var reader = new StreamReader(inputFilePath))
                 {
                     string line;
                     while ((line = reader.ReadLine()) != null)
@@ -46,6 +46,11 @@ namespace LUPA
                 {
                     throw new Exception("There should be four comment lines, each starting with a hash symbol. " +
                         "Currently there are " + hashCounter + " such lines");
+                }
+
+                foreach (var line in lines)
+                {
+                    Console.WriteLine(line);
                 }
 
             }

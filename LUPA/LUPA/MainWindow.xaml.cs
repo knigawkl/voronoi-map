@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,14 +34,26 @@ namespace LUPA
 
             var rec = new Rectangle()
             {
-                Stroke = Brushes.Black,
+                Stroke = Brushes.IndianRed,
                 StrokeThickness = 5
             };
 
             Map.Children.Add(rec);
-            Canvas.SetTop(rec, start.Y);
+            Canvas.SetTop(rec, start.Y - 20);
             Canvas.SetLeft(rec, start.X);
+        }
 
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                DefaultExt = ".txt",
+                Filter = "TXT Files (*.txt)|*.txt",
+            };
+            ofd.ShowDialog();
+
+            Parser p = new Parser();
+            p.Parse(ofd.FileName);
         }
     }
 }
