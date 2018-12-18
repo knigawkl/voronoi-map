@@ -1,7 +1,7 @@
 ﻿LUPA
 
 
-exe
+winexe
 C#
 .cs
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\
@@ -16,5 +16,5 @@ D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\App.xaml
 131569487696
 MainWindow.xaml;
 
-True
+False
 

@@ -5,7 +5,6 @@ D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csprojAssemblyRefer
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\MainWindow.g.cs
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\App.g.cs
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA_MarkupCompile.cache
-D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA_MarkupCompile.lref
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\MainWindow.baml
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.g.resources
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.Properties.Resources.resources

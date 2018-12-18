@@ -39,7 +39,7 @@ namespace LUPA
             };
 
             Map.Children.Add(rec);
-            Canvas.SetTop(rec, start.Y - 20);
+            Canvas.SetTop(rec, start.Y - TopToolbar.ActualHeight);
             Canvas.SetLeft(rec, start.X);
         }
 
@@ -66,8 +66,23 @@ namespace LUPA
                 };
 
                 Map.Children.Add(rec);
-                Canvas.SetTop(rec, start.Y - 20);
+                Canvas.SetTop(rec, start.Y);
                 Canvas.SetLeft(rec, start.X);
+            }
+        }
+
+        const double ScaleRate = 1.1;
+        private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                st.ScaleX *= ScaleRate;
+                st.ScaleY *= ScaleRate;
+            }
+            else
+            {
+                st.ScaleX /= ScaleRate;
+                st.ScaleY /= ScaleRate;
             }
         }
     }

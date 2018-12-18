@@ -3,25 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LUPA"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="LUPA"
-        Height="500"
+        Height="560"
         Width="500"
         WindowStartupLocation="CenterScreen"
         Icon="/Resources/icon.ico">
     <DockPanel>
-        <Menu Height="20" DockPanel.Dock="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="Open" Click="OpenFile_Click"/>
-            </MenuItem>
-        </Menu>
-        <Canvas Name="Map" MouseDown="Map_MouseDown" DockPanel.Dock="Bottom">
+        <ToolBar Name="TopToolbar" Height="30"  DockPanel.Dock="Top" Margin="0,0,0,0" Background="DarkGray">
+            <Button Name="OpenFileBtn" Click="OpenFile_Click">
+                Open File
+            </Button>
+        </ToolBar>
+
+        <Canvas  Name="Map" MouseDown="Map_MouseDown"  Width="Auto" Height="500" MouseWheel="Canvas_MouseWheel">
+            <Canvas.RenderTransform>
+                <ScaleTransform x:Name="st"/>
+            </Canvas.RenderTransform>
             <Canvas.Background>
                 <ImageBrush ImageSource="/Resources/contour.jpg"/>
             </Canvas.Background>
         </Canvas>
+
     </DockPanel>
 
 </Window>
