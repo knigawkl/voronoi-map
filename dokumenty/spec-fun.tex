@@ -30,15 +30,34 @@
 
 \section{Wstęp teoretyczny}
 
-\tab  Ale specka
+todo
+
 
 \section{Funkcje programu}
 
-Będzie dużo
+\tab Program posiada trzy główne funkcje:
+\begin{enumerate}
+\item rysowanie planszy na podstawie danych z pliku,
+\item modyfikowanie planszy za pomocą prostych narzędzi z przybornika,
+\item pokazywanie list mieszkańców oraz obiektów na wybranym przez użytkownika obszarze.
+\end{enumerate}
+\tab Użytkownik otrzymuje powyższe główne funkcje dzięki poniższym funkcjom pomocniczym:
+\begin{itemize}
+\item wczytanie danych z pliku tekstowego,
+\item wczytanie grafiki tła,
+\item dodawanie elementów konturu planszy,
+\item dodawanie punktów kluczowych dzielących kontur na obszary,
+\item dodawanie obiektów o typach zadeklarowanych w pliku tekstowym,
+\item wypisywanie list z liczbą mieszkańców na danym obszarze,
+\item wypisywanie list obiektów dla danego obszaru,
+\item możliwość pogrupowania obiektów z tej listy,
+\item wyświetlenie pomocy informującej użytkownika o wszystkich funkcjach programu oraz o tym, jak należy ich używać,
+\item obsługa możliwych błędów oraz informowanie o ich rodzajach.
+\end{itemize}
 
 \section{Opis interakcji użytkownika z programem}
 
-Dwa okienka, jak się uda
+Każdy wie jak obsługiwać mikrofalówkę
 
 \section{Sytuacje wyjątkowe}
 
@@ -46,6 +65,30 @@ Wszystkie są na swój sposób wyjątkowe
 
 \section{Zarys testów akceptacyjnych}
 
-Działa to nie ruszaj
+\tab Test akceptacyjne zostaną przeprowadzone bez użycia zewnętrznych narzędzi. Ich celem będzie uruchomienie i sprawdzenie poprawności działania programu dla różnych danych wejściowych oraz różnych sposobów interakcji z programem.
+
+Pierwsze testy akceptacyjne będą polegać na uruchomieniu programu z różnymi, poprawnie przygotowanymi zestawami danych. W szczególności przeprowadzone zostaną testy z zastosowaniem plików:
+
+\begin{itemize}
+\item z niewielką ilością punktów granicznych (mniej niż 5 elementów konturu),
+\item z dużą ilością punktów granicznych (więcej niż 20 elementów konturu),
+\item bez deklaracji dodatkowych typów obiektów,
+\item z deklaracjami dodatkowych typów obiektów,
+\item o minimalnym i maksymalnym rozmiarze planszy,
+\item graficznych o minimalnym i maksymalnym rozmiarze planszy.
+\end{itemize}
+
+Przeprowadzone zostaną także testy mające na celu sprawdzenie odporności programu na błędne dane wejściowe. W tej części program zostanie sprawdzony pod kątem plików:
+
+\begin{itemize}
+\item z błędnie zapisanymi danymi, omówionymi w sytuacjach wyjątkowych,
+\item zawierających kontury z przecinającymi się liniami,
+\item o rozmiarze planszy przekraczającym górny limit
+\item niezawierających żadnych punktów,
+\item próbujących umieścić punkty kluczowe lub obiekty poza granicami planszy,
+\item graficznych o zbyt dużym rozmiarze.
+\end{itemize}
+
+W trakcie trwania programu sprawdzone zostaną także próby wpisania niepoprawnych danych przy dodawaniu obiektów oraz prób ręcznego dodania obiektów i punktów kluczowych poza granicami planszy.
 
 \end{document}
