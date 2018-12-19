@@ -69,27 +69,26 @@ Każdy wie jak obsługiwać mikrofalówkę
 \begin{itemize}
 \item gdy użytkownik wskaże na nieistniejący plik, program wyświetli okno dialogowe z informacją o nieodnalezieniu żądanego pliku,
 \item gdy plik będzie pusty lub nie będzie złożony z czterech części oddzielonych liniami rozpoczynającymi się znakiem \#, program wyświetli komunikat o niewłaściwej strukturze pliku wejściowego,
-\item gdy plik wejściowy będzie zawierać linię przechowującą zbyt mało argumentów, lub gdy jeden z tych argumentów będzie niepoprawnie podany (np. argument, który miał być liczbą będzie zawierać literę, lub zawiera ujemną wartość), program wypisze komunikat o błędzie odczytywania linii wraz z podaniem numeru danej linii,
+\item gdy plik wejściowy będzie zawierać linię przechowującą zbyt mało argumentów, lub gdy jeden z tych argumentów będzie niepoprawnie podany (np. argument, który miał być liczbą będzie zawierać literę, lub zawiera ujemną wartość), program wyświetli komunikat o błędzie odczytywania linii wraz z podaniem numeru danej linii,
 \item gdy jeden z parametrów x, y będzie wykraczać poza ustalony maksymalny rozmiar mapy, program wyświetli okno dialogowe z informacją przekroczeniu limitu rozmiaru w danej linii,
-\item gdy w deklaracji konturów wystąpią przynajmniej dwie przecinające się linie, program wypisze komunikat o przecinaniu się linii konturowych,
+\item gdy w deklaracji konturów wystąpią przynajmniej dwie przecinające się linie, program wyświetli komunikat o przecinaniu się linii konturowych,
 \item gdy przy deklaracji punktów kluczowych przynajmniej jeden z nich znajduje się poza granicami wyznaczonymi wcześniej jako kontury planszy, program wyświetli okno dialogowe z informacją o niewłaściwym punkcie kluczowym wraz z podaniem numeru danej linii,
-\item gdy w deklaracji obiektów nie będą znajdować się trzy obowiązkowe typy obiektów -- dom, szkoła oraz niedźwiedź, program wypisze komunikat o braku obowiązkowych deklaracji obiektów,
+\item gdy w deklaracji obiektów nie będą znajdować się trzy obowiązkowe typy obiektów -- dom, szkoła oraz niedźwiedź, program wyświetli komunikat o braku obowiązkowych deklaracji obiektów,
 \item gdy w linii zawierającej deklarację obiektu nie zostanie rozpoznany typ parametru obiektu, zostanie wyświetlone okno dialogowe o nierozpoznaniu typu parametru wraz z podaniem linii, w której wystąpił problem,
-\item gdy w ostatniej części pliku, zawierającej listę obiektów znajdzie się obiekt o niezadeklarowanym wcześniej typie, program wyświetli komunikat o nieznanym typie obiektu w danej linii.
+\item gdy w ostatniej części pliku, zawierającej listę obiektów znajdzie się obiekt o niezadeklarowanym wcześniej typie, program wyświetli komunikat o nieznanym typie obiektu w danej linii,
+\item gdy na liście obiektów zostanie umieszczony obiekt znajdujący się poza granicami wyznaczonymi przez kontur mapy, zostanie wyświetlony komunikat o niewłaściwym obiekcie w danej linii.
 
 \end{itemize}
 
-\item tego jeszcze nie ma :)
+\item Sytuacje związane z interakcją z programem
 \begin{itemize}
-\item gdy nie uda się otworzyć pliku wejściowego, pojawi się okno dialogowe z komunikatem \textit{,,Could not open file!''},
-\item gdy plik wejściowy okaże się pusty, pojawi się okno dialogowe z komunikatem \textit{,,Could not read an empty file!''}.
-\end{itemize}
-\item Sytuacje związane z niemożnością odnalezienia satysfakcjonującego wyniku programu:
-\begin{itemize}
-\item w przypadku gdy nie uda się znaleźć korzystnego sposobu wymiany waluty, w wynikowe pole tekstowe zostanie wpisane: \textit{,,Currency exchange: Could not find any beneficial exchange!''},
-\item w przypadku gdy nie uda się odnaleźć arbitrażu, w wynikowe pole tekstowe zostanie wpisane \textit{,,Arbitrage finding: Could not find any arbitrage!''}.
+\item gdy nie uda się otworzyć pliku graficznego, wyświetlone zostanie okno dialogowe z informacją o nieudanej próbie otwarcia pliku graficznego,
+\item gdy użytkownik próbuje dodać punkt kluczowy poza konturem planszy, program wyświetli komunikat o niemożliwości dodania punktu w tym miejscu,
+\item gdy użytkownik próbuje dodać obiekt poza konturem planszy, program wyświetli informację o niemożliwości dodania obiektu w tym miejscu,
+\item gdy użytkownik spróbuje dodać obiekt podając niewłaściwe dane dla tego obiektu, program wyświetli komunikat o podaniu niepoprawnych danych.
 \end{itemize}
 \end{enumerate}
+
 \section{Zarys testów akceptacyjnych}
 
 \tab Test akceptacyjne zostaną przeprowadzone bez użycia zewnętrznych narzędzi. Ich celem będzie uruchomienie i sprawdzenie poprawności działania programu dla różnych danych wejściowych oraz różnych sposobów interakcji z programem.

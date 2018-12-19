@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.1)  19 DEC 2018 18:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.1)  19 DEC 2018 20:09
 entering extended mode
 **./spec-fun.tex
 (spec-fun.tex
@@ -878,21 +878,21 @@ LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <12> not available
 [2] [3] 
 AED: lastpage setting LastPage
 [4]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 121.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 121.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 120.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 120.
  (spec-fun.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 121.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 121.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 120.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 120.
 Package rerunfilecheck Info: File `spec-fun.out' has not changed.
 (rerunfilecheck)             Checksum: 4F3399886502ED436A9F8EB7B8A4AE2E;300.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 121.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 120.
  ) 
 Here is how much of TeX's memory you used:
- 8787 strings out of 493303
- 127073 string characters out of 3128480
+ 8785 strings out of 493303
+ 127053 string characters out of 3128480
  227921 words of memory out of 3000000
- 12197 multiletter control sequences out of 15000+200000
- 45386 words of font info for 36 fonts, out of 3000000 for 9000
+ 12196 multiletter control sequences out of 15000+200000
+ 41124 words of font info for 35 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  28i,6n,43p,438b,484s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Mateeusz/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ma
@@ -903,9 +903,9 @@ ype1/public/lm/lmcsc10.pfb><C:/Users/Mateeusz/AppData/Local/Programs/MiKTeX 2.9
 /fonts/type1/public/lm/lmr12.pfb><C:/Users/Mateeusz/AppData/Local/Programs/MiKT
 eX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/Mateeusz/AppData/Local/Progra
 ms/MiKTeX 2.9/fonts/type1/public/lm/lmsy10.pfb>
-Output written on spec-fun.pdf (4 pages, 116308 bytes).
+Output written on spec-fun.pdf (4 pages, 111772 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 17 named destinations out of 1000 (max. 500000)
+ 80 PDF objects out of 1000 (max. 8388607)
+ 16 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
