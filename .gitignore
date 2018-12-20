@@ -361,3 +361,6 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+#Wazne bo sie psuja merge przez to cos
+*.suo
