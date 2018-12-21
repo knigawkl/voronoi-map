@@ -32,7 +32,19 @@
 
 \subsection{Słownik pojęć}
 
+\tab Zapoznanie się z poniższymi pojęciami ułatwi zrozumienie dokumentu. 
+\\\textit{Obszar} -- fragment terenu, na którym znajduje się tylko jeden punkt kluczowy
+\\\textit{Punkt kluczowy} -- punkt, według którego współrzędnych wyznaczane są obszary
+\\\textit{Obiekt} -- element terenu podlegający analizie
+\\\textit{Budynek mieszkalny} -- obiekt zawierający informację o liczbie jego mieszkańców
+
 \subsection{Założenia}
+
+\begin{enumerate}
+\item Pod danymi współrzędnymi może znajdować się tylko jeden punkt kluczowy lub obiekt.
+\item Każdy punkt kluczowy lub obiekt zajmuje dokładnie jedną jednostkę terenu.
+\item Każdy punkt kluczowy lub obiekt musi znajdować się na co najmniej jednym obszarze. Znajduje się on na więcej niż jednym obszarze, gdy leży na granicy obszarów.
+\end{enumerate}
 
 \section{Funkcje programu}
 
@@ -58,7 +70,9 @@
 
 \section{Opis interakcji użytkownika z programem}
 
-Każdy wie jak obsługiwać mikrofalówkę
+\tab Na \textit{Rysunku 1} przedstawiono prototypowy wygląd okna głównego programu. W górnej części okna znajduje się wąski pasek narzędzi, na którym umieszczono dwa przyciski. Kliknięcie pierwszego z nich otwiera eksplorator plików umożliwiający wybranie pliku tekstowego, z którego zostaną wczytane dane. Wybranie drugiego przycisku skutkuje otwarciem eksploratora umożliwiającego wybór pliku graficznego, który stanie się tłem dla planszy.
+\\\tab Poniżej, w centrum okna głównego, znajduje się mapa terenu, na której wyświetlane mogą być kontury terenu, punkty kluczowe oraz obiekty. Na prawo od mapy umieszczono pionowy pasek narzędzi, na którym znajduje się szereg przycisków-przełączników. Każdy przycisk-przełącznik odpowiada jednemu z typów obiektów zadeklarowanych w pliku wejściowym. Znajduje się tam również przycisk-przełącznik symbolizujący kontur terenu.
+
 
 \begin{figure}[H]
 \centering
