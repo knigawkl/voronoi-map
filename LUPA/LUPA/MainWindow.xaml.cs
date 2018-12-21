@@ -24,7 +24,6 @@ namespace LUPA
         public MainWindow()
         {
             InitializeComponent();
-            OutputTxt.Text = "Integer lacus tortor, facilisis a convallis efficitur, pretium ac lacus. Sed elementum est at suscipit ullamcorper. Fusce congue sodales eros, nec egestas lacus consequat efficitur. Proin vehicula ac lorem at interdum. Integer sit amet sollicitudin risus. Cras ut dignissim mi. Quisque eget ante orci. Fusce suscipit rutrum massa, eu scelerisque libero ultrices non. Fusce elementum diam augue, vel suscipit enim fringilla eget. Pellentesque pretium egestas porta. Nullam pretium augue ac blandit convallis. Mauris eget erat ut mauris iaculis iaculis quis vitae nibh. Sed faucibus rutrum quam, non convallis leo rutrum ac. Cras molestie mi arcu, et rutrum velit porttitor vel. Duis elementum, mi pharetra condimeCurabitur hendrerit purus nec auctor vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et leo orci. Cras fermentum vestibulum urna vitae blandit. Aenean facilisis, mi nec convallis condimentum, dui urna lobortis massa, et rutrum orci nisl eget justo. Nam nunc odio, placerat sed arcu at, blandit mollis eros. Cras tincidunt ut nibh vel maximus. Aenean accumsan augue nulla, nec tempus quam dignissim cursus.ntum tincidunt, tellus ipsum venenatis sem, eget rutrum felis urna non elit. Nulla pellentesque arcu libero.";
         }
 
         Point start;

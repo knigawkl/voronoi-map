@@ -6,29 +6,40 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="LUPA"
-        Height="800"
-        Width="900"
+        Height="700"
+        Width="914"
         WindowStartupLocation="CenterScreen"
         Icon="/Resources/icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="600"/>
-            <RowDefinition Height="170"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="600"/>
             <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
-        
-        
+
+
         <ToolBar Name="TopToolbar" Height="30" Width="900" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="LightGray">
-            <Button Name="OpenFileBtn" Click="OpenFile_Click" Background="DarkGray">
-                Open File
+            <Button Name="OpenFileBtn" Click="OpenFile_Click" Background="DarkGray" Height="30" Width="100">
+                Otwórz plik
             </Button>
-            <Button Name="ChangeBackgroundBtn" Click="ChangeBackground_Click" Background="DarkGray">
-                Change Background
+            <Button Name="ChangeBackgroundBtn" Click="ChangeBackground_Click" Background="DarkGray" Height="30" Width="100">
+                Zmień tło
             </Button>
+            <Button Name="HelpBtn" Click="OpenFile_Click" Background="DarkGray" Height="30" Width="100">
+                Pomoc
+            </Button>
+            <RadioButton Margin="10, 0"  GroupName="Obiekty"  
+                        Width="100" Height="30" Background="IndianRed">
+                Kontur
+            </RadioButton>
+            <RadioButton Margin="0, 0" GroupName="Obiekty" 
+                        Width="100" Height="30" Background="LightSeaGreen">
+                Punkt Kluczowy
+            </RadioButton>
         </ToolBar>
 
         <Canvas  Name="Map" MouseDown="Map_MouseDown"  Width="600" Height="600" Grid.Row="1" Grid.Column="0">
@@ -37,28 +48,25 @@
             </Canvas.Background>
         </Canvas>
 
-        <TextBox Name="OutputTxt" Height="170" Width="900" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
-                 Focusable="False" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap">
-        </TextBox>
+        
 
-        <StackPanel Name="SideToolbar" Height="600" Width="300" Grid.Row="1" Grid.Column="1"  Background="LightGray">
-            <RadioButton Margin="10,50,0,0" VerticalAlignment="Top" GroupName="Obiekty"
-                        Width="250" Height="30">
-                KOK
-            </RadioButton>
-            <RadioButton Margin="10,5,0,0" VerticalAlignment="Top" GroupName="Obiekty"
-                        Width="250" Height="30">
-                SZKOŁA
-            </RadioButton>
-            <RadioButton Margin="10,5,0,0" VerticalAlignment="Top" GroupName="Obiekty"
-                        Width="250" Height="30">
-                NIEDŹWIEDŻ
-            </RadioButton>
-            <RadioButton Margin="10,5,0,0" VerticalAlignment="Top" GroupName="Obiekty"
-                        Width="250" Height="30">
-                GMACH ELEKTROTECHNIKI
-            </RadioButton>
+        <StackPanel Name="SideToolbar" Height="600" Width="300" Grid.Row="1" Grid.Column="1"  Background="DarkGray">
+            <TextBox Margin="4,4,4,4" Background="LightGray" Width="292" Height="300" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
+                Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów...
+            </TextBox>
+            <TextBox Margin="4,0,4,4" Background="LightGray" Width="292" Height="288" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
+                Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów z grupowaniem po typie...
+            </TextBox>
         </StackPanel>
+
+        
+        
+        <TextBox Name="OutputTxt" Height="38" Width="900" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
+                 Focusable="False" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" 
+                 TextWrapping="Wrap" Background="DimGray">
+
+        </TextBox>
+        
     </Grid>
 
 </Window>
