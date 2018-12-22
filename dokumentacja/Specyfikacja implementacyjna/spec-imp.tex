@@ -15,7 +15,7 @@
 
 \rfoot{\thepage \hspace{lpt} / \pageref{LastPage}}
 
-\title{ \sc{Specyfikacja funkcjonalna} \\
+\title{ \sc{Specyfikacja implementacyjna} \\
 \emph{Projekt ,,Group of Visionaires''} }
 
 \author{Mateusz Smoliński}
@@ -32,9 +32,9 @@
 
 \section{Wstęp}
 
-\tab Cel projektu
+\tab Celem projektu jest napisanie programu prezentującego interaktywną mapę na podstawie danych z pliku wejściowego. Program otrzymuje punkty tworzące kontur mapy, punkty kluczowe, na podstawie których kontur zostaje podzielony na obszary, a także definicje obiektów oraz listę takowych obiektów, które mają być brane pod uwagę przy analizie wyżej wspomnianych obszarów.
 
-Działanie i efekt pracy
+Jeśli dane będą podane prawidłowo, program na ich podstawie generuje planszę, która dalej może być modyfikowana przez użytkownika. Może on dodawać i usuwać elementy konturu, zmieniając kształt mapy, a także dodawać i usuwać punkty kluczowe, wpływając tym samym na podział na obszary. Po kliknięciu na jeden z punktów kluczowych użytkownik otrzyma informacje o obiektach znajdujących się na wyznaczonym przez niego obszarze.
 
 Projekt ,,LUPA'' zostanie napisany w języku C\#, w środowisku Microsoft Visual Studio 15.9.4 na wersji C\#???. Implementacja oraz testowanie programu odbywać się będą na komputerach o następujących parametrach: 
 \begin{itemize}
