@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.22)  21 DEC 2018 22:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.22)  22 DEC 2018 01:05
 entering extended mode
 **./spec-fun.tex
 (spec-fun.tex
@@ -830,46 +830,50 @@ File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 59.
  [2]
-<a.png, id=59, 533.5935pt x 477.58424pt>
+<a.png, id=59, 678.73575pt x 522.15076pt>
 File: a.png Graphic file (type png)
 <use a.png>
-Package pdftex.def Info: a.png  used on input line 79. on input line 79.
-Package pdftex.def Info: Requested size: 426.79134pt x 382.00961pt on input lin
-e 79.
- [3pdfTeX warning (ext4): destination with the same identifier (name{figure.1})
- has been already used, duplicate ignored
+Package pdftex.def Info: a.png  used on input line 80. on input line 80.
+Package pdftex.def Info: Requested size: 512.1496pt x 394.01825pt on input line
+ 80.
+
+Overfull \hbox (28.45273pt too wide) in paragraph at lines 80--81
+ [][] 
+ []
+
+[3pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.91 \item g
-            dy użytkownik wskaże na nieistniejący plik, program wyświetl...
- <./a.png>] [4] 
+l.87 
+      <./a.png>] [4] 
 AED: lastpage setting LastPage
 [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 142.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 142.
  (spec-fun.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 142.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 142.
 Package rerunfilecheck Info: File `spec-fun.out' has not changed.
 (rerunfilecheck)             Checksum: 80F785AFB4284278226DACC087792188;428.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 142.
  ) 
 Here is how much of TeX's memory you used:
  8805 strings out of 493312
  123838 string characters out of 3138864
- 226903 words of memory out of 3000000
+ 227903 words of memory out of 3000000
  12199 multiletter control sequences out of 15000+200000
  58882 words of font info for 45 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,6n,43p,496b,476s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 28i,6n,43p,1012b,484s stack positions out of 5000i,500n,10000p,200000b,50000s
 {D:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathsy.enc}{D:/Program Fil
 es/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc}<D:/Program Files/MiKTeX 2.9/fonts/t
 ype1/public/lm/lmbx12.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lm
 csc10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr12.pfb><D:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><D:/Program Files/MiKTeX 
 2.9/fonts/type1/public/lm/lmsy10.pfb>
-Output written on spec-fun.pdf (5 pages, 339621 bytes).
+Output written on spec-fun.pdf (5 pages, 254035 bytes).
 PDF statistics:
  100 PDF objects out of 1000 (max. 8388607)
  23 named destinations out of 1000 (max. 500000)

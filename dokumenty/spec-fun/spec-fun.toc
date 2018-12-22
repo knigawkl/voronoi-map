@@ -4,5 +4,5 @@
 \contentsline {subsection}{\numberline {1.2}Za\IeC {\l }o\IeC {\.z}enia}{2}{subsection.1.2}
 \contentsline {section}{\numberline {2}Funkcje programu}{2}{section.2}
 \contentsline {section}{\numberline {3}Opis interakcji u\IeC {\.z}ytkownika z programem}{3}{section.3}
-\contentsline {section}{\numberline {4}Sytuacje wyj\IeC {\k a}tkowe}{3}{section.4}
+\contentsline {section}{\numberline {4}Sytuacje wyj\IeC {\k a}tkowe}{4}{section.4}
 \contentsline {section}{\numberline {5}Zarys test\IeC {\'o}w akceptacyjnych}{5}{section.5}
