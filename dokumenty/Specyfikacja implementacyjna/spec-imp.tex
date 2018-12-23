@@ -208,7 +208,7 @@ Ta metoda ma działanie odwrotne do poprzedniej metody -- przyjmuje punkt kluczo
 
 \subsection{Klasa CustomObjectType}
 
-\tab Klasa przechowuje dokładne dane o zadeklarowanych przez użytkownika parametrów obiektu. Oprócz nazwy będącej prostym napisem przechowuje ona słownik zmiennych -- każdy parametr musi mieć swoją charakterystyczną nazwę oraz przypisany do niej typ. Klasa ta będzie stanowić bazę do tworzenia konkretnych obiektów, które reprezentuje następna klasa -- \textit{CustomObjectInstance}.
+\tab Klasa przechowuje dokładne dane o zadeklarowanych przez użytkownika parametrach obiektu. Oprócz nazwy będącej prostym napisem przechowuje ona słownik zmiennych -- każdy parametr musi mieć swoją charakterystyczną nazwę oraz przypisany do niej typ. Klasa ta będzie stanowić bazę do tworzenia konkretnych obiektów, które reprezentuje następna klasa -- \textit{CustomObjectInstance}.
 
 \subsection{Klasa CustomObjectInstance}
 
@@ -233,29 +233,34 @@ Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w po
 
 \section{Testy jednostkowe}
 
-\tab Projekty testów zakładają użycie narzędzia ???. Poniżej znajduje się lista testów planowanych dla kluczowych metod programu, dla każdej z nich przewidziane są różne przypadki otrzymanych danych. 
+\tab Projekty testów zakładają użycie narzędzia \textit{NUnit}. Testy zostaną wykonane według zasady AAA (Arrange Act Assert). Poniżej znajduje się lista testów planowanych dla kluczowych metod programu, dla każdej z nich przewidziane są różne przypadki otrzymanych danych. 
 
-\subsection{Testy klas 1 i 2}
+\subsection{Testy klas MainWindow}
 
-\tab W tych dwóch nie trzeba wiele testować
+\tab Klasa ta jest punktem startowym programu i sama wywołuje inne klasy. Posiada metody ściśle związane z platformą \textit{WPF}, odpowiedzialne za interpretację klikania lewym lub prawym przyciskiem myszy bądź najeżdżania kursorem na konkretny element mapy, będą one jednak testowane manualnie. Należy zwrócić uwagę, czy przy dodawaniu punktu kluczowego lub punktu konturu, wstawiany element tworzony jest dokładnie w miejscu kliknięcia, a nie na przykład niżej od kursora o wartość wysokości górnego paska narzędzi.
 
-\subsection{Testy klasy 3}
+\subsection{Testy klasy Parser}
 
-\tab coś trzeba tu stestować
+\subsubsection{Metody ParseContourPoint, ParseKeyPoint, ParseCustomObjectType}
+\tab Wymienione metody jest najłatwiej przetestować, gdyż otrzymują one jako argument dokładnie jedną linijkę tekstu. Oczywiście dla każdej z nich należy spróbować podać w pierwszej kolejności poprawnie sformatowane dane, a następnie porównać je ze zwracanymi wartościami. W przypadku wczytywania punktu konturu, należy sprawdzić z ilu wyrazów składa się wczytywana linia. Spodziewamy się dokładnie trzech elementów - indeksu punktu konturu, oraz dwóch wartości liczbowych, odpowiadających jego współrzędnym. Przy wczytywaniu punktu kluczowego, nie możemy już sporządzać takich założeń, gdyż nazwa punktu może składać się z wielu wyrazów. 
 
-\subsection{Testy klasy 4}
+\subsection{Testy AreaDivider}
 
 \tab Tu testujemy coś
 
 
-\subsection{Testy klasy 5}
+\subsection{Testy klasy Map}
 
 \tab Ta klasa ma coś
 
-\subsection{Testy klasy 6}
+\subsection{Testy klasy Point oraz KeyPoint}
 
 \tab Ta klasa odpowiada za coś
 
+\subsection{Testy klasy Line}
 
+\subsection{Testy klasy CustomObjectType}
+
+\subsection{Testy klasy CustomObjectInstance}
 
 \end{document}
