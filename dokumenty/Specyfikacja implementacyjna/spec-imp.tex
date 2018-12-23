@@ -241,8 +241,20 @@ Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w po
 
 \subsection{Testy klasy Parser}
 
+\subsubsection{Metoda ParseFile}
+\tab Aby umożliwić przetestowanie tej metody, utworzone zostaną testowe pliki tekstowe. Należy jednak przetestować także zachowanie programu, gdy ścieżka do pliku wejściowego jest niepoprawna. Sprawdzone zostanie także zachowanie programu, gdy wczytane kontury terenu ułożone są w ten sposób, że linie się przecinają. Przetestowana zostanie także sytuacja, w której wśród definicji obiektów zabraknie obowiązkowych obiektów
+
 \subsubsection{Metody ParseContourPoint, ParseKeyPoint, ParseCustomObjectType}
-\tab Wymienione metody jest najłatwiej przetestować, gdyż otrzymują one jako argument dokładnie jedną linijkę tekstu. Oczywiście dla każdej z nich należy spróbować podać w pierwszej kolejności poprawnie sformatowane dane, a następnie porównać je ze zwracanymi wartościami. W przypadku wczytywania punktu konturu, należy sprawdzić z ilu wyrazów składa się wczytywana linia. Spodziewamy się dokładnie trzech elementów - indeksu punktu konturu, oraz dwóch wartości liczbowych, odpowiadających jego współrzędnym. Przy wczytywaniu punktu kluczowego, nie możemy już sporządzać takich założeń, gdyż nazwa punktu może składać się z wielu wyrazów. 
+\tab Wymienione metody jest najłatwiej przetestować, gdyż otrzymują one jako argument dokładnie jedną linijkę tekstu. Oczywiście dla każdej z nich należy spróbować podać w pierwszej kolejności poprawnie sformatowane dane, a następnie porównać oczekiwane wartości zwracane z faktycznie zwracanymi wartościami. W przypadku wczytywania punktu konturu, należy sprawdzić z ilu wyrazów składa się wczytywana linia. Spodziewamy się dokładnie trzech elementów - indeksu punktu konturu, oraz dwóch wartości liczbowych, odpowiadających jego współrzędnym. Przy wczytywaniu punktu kluczowego, nie możemy już sporządzać takich założeń, gdyż nazwa punktu może składać się z wielu wyrazów. 
+\\\tab Należy także dla każdej z metod przygotować niepoprawnie sformatowane ciągi znaków. Przy pomocy narzędzia testowego sprawdzone zostanie, czy wystąpił błąd którego się spodziewaliśmy. Podane zostaną:
+\begin{itemize}
+\item linie niezawierające informacji o położeniu obiektu,
+\item linie zawierające napis w miejscu na współrzędne liczbowe określające położenie obiektu,
+\item linie zawierające niepotrzebne informacje, na przykład punkt konturu posiadający nazwę,
+\item linie zawierające informacje o punkcie kluczowym lub o definicji obiektu bez nazwy,
+\item linie przyporządkowujące obiektowi położenie poza granicami terenu, to jest o współrzędnych ujemnych bądź większych od 600.
+
+\end{itemize}
 
 \subsection{Testy AreaDivider}
 
