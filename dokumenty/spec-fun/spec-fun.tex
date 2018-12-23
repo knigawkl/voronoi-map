@@ -70,16 +70,50 @@
 
 \section{Opis interakcji użytkownika z programem}
 
-\tab Na \textit{Rysunku 1} przedstawiono prototypowy wygląd okna głównego programu. W górnej części okna znajduje się pasek narzędzi, na którym umieszczono trzy szare przyciski. Kliknięcie pierwszego z nich otwiera eksplorator plików umożliwiający wybranie pliku tekstowego, z którego zostaną wczytane dane. Wybranie drugiego przycisku skutkuje otwarciem eksploratora umożliwiającego wybór pliku graficznego, który stanie się tłem dla planszy. Kliknięcie trzeciego z nich wywoła wyświetlenie w polach tekstowych, znajdujących się po prawej stronie mapy, instrukcji obsługi programu. Na pasku narzędzi umieszczonym na górze okna znajdują się także dwa kolorowe przyciski. Wybranie pierwszego z nich skutkuje faktem, iż kliknięcie lewym przyciskiem na mapie będzie prowadzić do ustawienia w miejscu kliknięcia punktu konturu. Kliknięcie drugiego poskutkuje wstawieniem w miejscu kliknięcia na mapie (lewym przyciskiem myszy) punktu kluczowego.
+\tab Na \textit{Rysunku 1} przedstawiono prototypowy wygląd okna głównego programu. W górnej części okna znajduje się pasek narzędzi, na którym umieszczono trzy szare przyciski. Kliknięcie pierwszego z nich otwiera eksplorator plików umożliwiający wybranie pliku tekstowego, z którego zostaną wczytane dane. Wybranie drugiego przycisku skutkuje otwarciem eksploratora umożliwiającego wybór pliku graficznego, który stanie się tłem dla planszy. Program oczekuje na plik graficzny w foramcie \textit{.png}. Kliknięcie trzeciego przycisków wywoła wyświetlenie w polach tekstowych, znajdujących się po prawej stronie mapy, instrukcji obsługi programu. Na pasku narzędzi umieszczonym na górze okna znajdują się także dwa kolorowe przyciski-przełączniki. Tylko jeden z nich może być wybrany w danej chwili, domyślnie jest to przycisk-przełącznik oznaczony etykietą \textit{Kontur}.
+W zależności od tego który z przycisków został wybrany, taki rodzaj elementu będzie dodawany na mapę po kliknięciu na niej lewym przyciskiem myszy. Element będzie dodany w miejscu w którym znajdował się kursor w momencie kliknięcia. Kliknięcie prawym przyciskiem myszy na punkt konturu lub punkt kluczowy usuwa dany punkt.
 \\\tab Poniżej, w centrum okna głównego, znajduje się mapa terenu, na której wyświetlane mogą być kontury terenu, punkty kluczowe oraz obiekty.
-\\\tab Po prawej stronie mapy znajdują się dwa pola tekstowe. Pierwsze z nich, wraz z najechaniem na dowolny punkt kluczowy, ukazuje listę obiektów danego obszaru. Pole umiejscowione niżej, po najechaniu przez użytkownika kursorem myszy na dowolny punkt kluczowy, wyświetla listę obiektów znajdujących się w danym obszarze, z grupowaniem po typie. 
-
+\\\tab Po prawej stronie mapy znajdują się dwa pola tekstowe. Pierwsze z nich, wraz z najechaniem na dowolny punkt kluczowy, ukazuje listę obiektów danego obszaru. Pole umiejscowione niżej, po najechaniu przez użytkownika kursorem myszy na dowolny punkt kluczowy, wyświetla listę obiektów znajdujących się w danym obszarze, z grupowaniem po typie. Te dwa pola tekstowe są także wykorzystywane przy wyświetlaniu pomocy.
+\\\tab W dolnej części okna głównego znajduje się pasek stanu, na którym wyświetlane są komunikaty o błędach.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=18cm] a
 \caption{Okno główne programu}
 \end{figure}
+
+Poniżej przedstawiono przykładowy plik wejściowy. Program oczekuje na plik tekstowy w formacie \textit{.txt}.
+
+\begin{lstlisting}
+# Kontury terenu (wymienione w kolejnosci laczenia): Lp. x y
+1. 0 0
+2. 0 20
+3. 20 30.5
+4. 40 20
+5. 40 0
+
+# Punkty kluczowe: Lp. x y Nazwa
+1. 1 1 KOK Krawczyka
+2. 1 19 KOK Kaczmarskiego
+3. 30 10 KOK Lazarewicza
+
+# Definicje obiektow: Lp. Typ_obiektu (Nazwa_zmiennej Typ_zmiennej)*
+1. SZKOlA Nazwa String X double Y double
+2. DOM X double Y double L_MIESZKANCOW int
+3. NIEDZWIEDZ X double Y double
+
+# Obiekty: Typ_obiektu (zgodnie z definicja)
+1. SZKOlA "Szkola robienia duzych pieniedzy" 4 1
+2. DOM 4 3 100
+3. DOM 4 17 120
+4. DOM 4 18 80
+5. NIEDZWIEDZ 20 20
+6. NIEDZWIEDZ 40 1
+7. NIEDZWIEDZ 39 1
+8. NIEDZWIEDZ 39 2
+\end{lstlisting}
+
+Strukturę pliku wejściowego można podzielić na 4 sekcje, gdzie każda zaczyna się od niezmiennej linii komentarza, rozpoczynającej się od znaku \textit{\#}.
 
 \section{Sytuacje wyjątkowe}
 
