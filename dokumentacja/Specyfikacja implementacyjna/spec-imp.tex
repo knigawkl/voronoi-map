@@ -94,15 +94,60 @@ Nie występują na nim także metody dostępowe ze względu na zastosowanie auto
 Po wybraniu opcji usuwania/dodawania punktów na mapie następuje wywołanie funkcji \textit{DivideIntoAreas} ponownie dzielącej mapę na obszary, z klasy \textit{AreaDivider}.
 
 
-\subsection{Klasa 2}
+\subsection{Klasa Parser}
 
-\tab wq
+\tab Ta klasa odpowiada za wczytanie danych z pliku tekstowego, które zostaną użyte w trakcie działania programu. Wszystkie metody w tej klasie są statyczne, przez co obiekt klasy Parser nie będzie powstawać w żadnym momencie trwania programu. Metody te w przypadku niepowodzenia korzystają z wyjątków, które przekazują do metody nadrzędnej -- metoda \textit{ParseFile} przekazuje te wyjątki do klasy \textit{MainWindow}, która odpowiada za przekazanie komunikatu o błędzie użytkownikowi.
 
-\subsubsection{Metoda 1}
+\subsubsection{Metoda ParseFile}
+\begin{itemize}
+\item \begin{lstlisting}
+Map ParseFile(string imputFilePath) 
+\end{lstlisting}
+\end{itemize}
+
+Metoda \textit{ParseFile} jest główną metodą tej klasy. Otrzymuje ona ścieżkę do pliku w postaci napisu, po czym ma za zadanie otworzyć ten plik, przeanalizować każdą jego linię oraz zapisać dane w postaci zrozumiałej dla programu. Na podstawie składni pliku oraz linii oddzielających etapy wczytywania, oznaczonych \# na początku, odczytuje linię tekstu i przekazuje ją do odpowiedniej metody parsującej. Po zakończeniu kolejnego etapu metoda sprawdza, czy żaden z warunków działania programu nie został złamany -- na przykład, czy użytkownik nie zamieścił przecinających się linii konturu lub nie zapomniał o którymś z obowiązkowych typów obiektów. Odczytane w ten sposób dane zapisuje do list w obiekcie klasy \textit{Map}, po czym w przypadku powodzenia zwraca referencję do tak przygotowanego obiektu. 
 
 
-\tab Mxq
+\subsubsection{Metoda ParseContourPoint}
 
+\begin{itemize}
+\item \begin{lstlisting}
+Point ParseContourPoint(string line)
+\end{lstlisting}
+\end{itemize}
+
+\tab Jest to pierwsza ze szczegółowych metod tej klasy, odpowiadających za odczytanie konkretnych elementów podanych w pliku. Ta konkretna metoda odczytuje linię zawierającą współrzędne punktów konturowych, po czym w przypadku powodzenia zwraca przygotowany obiekt klasy \textit{Point}.
+
+\subsubsection{Metoda ParseKeyPoint}
+
+\begin{itemize}
+\item \begin{lstlisting}
+KeyPoint ParseKeyPoint(string line)
+\end{lstlisting}
+\end{itemize}
+
+\tab Jest to kolejna metoda odczytująca linię. Odczytuje ona linię zawierającą współrzędne punktów kluczowych i ich nazwy, po czym w przypadku powodzenia zwraca przygotowany obiekt klasy \textit{KeyPoint}.
+
+\subsubsection{Metoda ParseCustomObjectType}
+
+\begin{itemize}
+\item \begin{lstlisting}
+CustomObjectType ParseCustomObjectType(string line)
+\end{lstlisting}
+\end{itemize}
+
+\tab Ta metoda odpowiada za odczytanie deklaracji typu obiektu przygotowanej przez użytkownika. Do jej zadań należy sprawdzenie, czy użytkownik napisał dla każdego parametru nazwę i typ, oraz czy program potrafi rozpoznać ten typ.
+
+\subsubsection{Metoda ParseCustomObjectInstance}
+
+\begin{itemize}
+\item \begin{lstlisting}
+CustomObjectInstance ParseCustomObjectInstance(string line,
+ List<CustomObjectType> customObjectTypes)
+\end{lstlisting}
+\end{itemize}
+
+\tab Ta metoda odczytuje obiekty wypisane przez użytkownika, zgodnie z zadeklarowanymi przez niego typami na poprzednim etapie odczytu. Do jej zadań należy sprawdzenie, czy podane obiekty są zgodne z deklaracjami dokonanymi wcześniej. Tak jak każda z wymienionych powyżej metod poprawnie odczytany obiekt zwraca do metody głównej tej klasy -- \textit{ParseFile}.
 
 \subsection{Klasa 3}
 \tab 

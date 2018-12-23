@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.1)  23 DEC 2018 17:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600 64-bit) (preloaded format=pdflatex 2018.3.1)  23 DEC 2018 18:00
 entering extended mode
 **./spec-imp.tex
 (spec-imp.tex
@@ -877,7 +877,7 @@ File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 42.
-<c.png, id=115, 679.78969pt x 533.44293pt>
+<c.png, id=135, 679.78969pt x 533.44293pt>
 File: c.png Graphic file (type png)
 <use c.png>
 Package pdftex.def Info: c.png  used on input line 75.
@@ -889,26 +889,26 @@ Package pdftex.def Info: c.png  used on input line 75.
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.80 \newpage
-              <./c.png>] [4] 
+              <./c.png>] [4] [5] 
 AED: lastpage setting LastPage
-[5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 171.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 171.
+[6]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 216.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 216.
  (spec-imp.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 171.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 171.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 216.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 216.
 Package rerunfilecheck Info: File `spec-imp.out' has not changed.
-(rerunfilecheck)             Checksum: 6B6590C39CD9CC3AF042030839E82374;1225.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 171.
+(rerunfilecheck)             Checksum: 6F36EB7B1FF800C4226FDEA8CD0F87E7;1586.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 216.
  ) 
 Here is how much of TeX's memory you used:
- 9092 strings out of 493303
- 129936 string characters out of 3128480
- 226990 words of memory out of 3000000
- 12482 multiletter control sequences out of 15000+200000
+ 9112 strings out of 493303
+ 130251 string characters out of 3128480
+ 229990 words of memory out of 3000000
+ 12486 multiletter control sequences out of 15000+200000
  51653 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,6n,43p,473b,1052s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 28i,6n,43p,881b,1058s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Mateeusz/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec
 .enc}{C:/Users/Mateeusz/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm
 -mathsy.enc}<C:/Users/Mateeusz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
@@ -920,9 +920,9 @@ ms/MiKTeX 2.9/fonts/type1/public/lm/lmr12.pfb><C:/Users/Mateeusz/AppData/Local/
 Programs/MiKTeX 2.9/fonts/type1/public/lm/lmri10.pfb><C:/Users/Mateeusz/AppData
 /Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/Mateeusz/
 AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmsy10.pfb>
-Output written on spec-imp.pdf (5 pages, 243473 bytes).
+Output written on spec-imp.pdf (6 pages, 254707 bytes).
 PDF statistics:
- 172 PDF objects out of 1000 (max. 8388607)
- 30 named destinations out of 1000 (max. 500000)
- 166 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 212 PDF objects out of 1000 (max. 8388607)
+ 46 named destinations out of 1000 (max. 500000)
+ 198 words of extra memory for PDF output out of 10000 (max. 10000000)
 
