@@ -5,4 +5,4 @@
 \contentsline {section}{\numberline {2}Funkcje programu}{2}{section.2}
 \contentsline {section}{\numberline {3}Opis interakcji u\IeC {\.z}ytkownika z programem}{3}{section.3}
 \contentsline {section}{\numberline {4}Sytuacje wyj\IeC {\k a}tkowe}{5}{section.4}
-\contentsline {section}{\numberline {5}Zarys test\IeC {\'o}w akceptacyjnych}{6}{section.5}
+\contentsline {section}{\numberline {5}Zarys test\IeC {\'o}w akceptacyjnych}{7}{section.5}
