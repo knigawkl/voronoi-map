@@ -68,7 +68,7 @@ Na diagramie klas nie zostały uwzględnione:
 \item metody wygenerowane przez WPF, odpowiadające za rysowanie na planszy oraz reakcję na zachowanie użytkownika.
 \end{itemize}
 
-Tu dopisać o tych właściwościach.
+Nie występują na nim także metody dostępowe ze względu na zastosowanie automatycznie generowanych właściwości klas występujące w wybranym przez nas środowisku.
 
 \begin{figure}[H]
 \centering
@@ -84,17 +84,15 @@ Tu dopisać o tych właściwościach.
 
 \subsection{Klasa MainWindow}
 
-\tab Jest to główna klasa tego programu. opisać ją
+\tab Jest to bazowa klasa tego programu, odpowiadająca przede wszystkim za interfejs graficzny. Składa się ona z wielu metod wygenerowanych przez WPF, odpowiadających za reakcję na działania użytkownika. Wśród najważniejszych logicznych implementacji, które muszą być zawarte w implementacjach tych metod, warto wspomnieć o:
+\begin{itemize}
+\item metodzie, która po kliknięciu w okolicy punktu kluczowego wypisze na panelach bocznych listy obiektów znajdujących się na obszarze wyznaczonym przez ten punkt kluczowy (pogrupowane i niepogrupowane według typu) oraz liczbę mieszkańców na tym obszarze,
+\item metodzie, która przy wybranej opcji punktu kluczowego po kliknięciu lewym przyciskiem myszy dodaje punkt kluczowy, a prawym przyciskiem usuwa najbliższy punkt kluczowy,
+\item analogicznej metodzie która dodaje i usuwa elementy konturu po wybraniu opcji konturu na pasku górnym.
+\end{itemize}
 
-\subsubsection{Metoda 1}
+Po wybraniu opcji usuwania/dodawania punktów na mapie następuje wywołanie funkcji \textit{DivideIntoAreas} ponownie dzielącej mapę na obszary, z klasy \textit{AreaDivider}.
 
-
-\tab Coś to robi
-
-\subsubsection{Metoda 2}
-
-
-\tab Pq
 
 \subsection{Klasa 2}
 

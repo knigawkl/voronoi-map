@@ -1,4 +1,4 @@
-\select@language {polish}
+\babel@toc {polish}{}
 \contentsline {section}{\numberline {1}Wst\IeC {\k e}p teoretyczny}{2}{section.1}
 \contentsline {subsection}{\numberline {1.1}S\IeC {\l }ownik poj\IeC {\k e}\IeC {\'c}}{2}{subsection.1.1}
 \contentsline {subsection}{\numberline {1.2}Za\IeC {\l }o\IeC {\.z}enia}{2}{subsection.1.2}
