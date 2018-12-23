@@ -86,7 +86,7 @@ Nie występują na nim także metody dostępowe ze względu na zastosowanie auto
 
 \tab Jest to bazowa klasa tego programu, odpowiadająca przede wszystkim za interfejs graficzny. Składa się ona z wielu metod wygenerowanych przez WPF, odpowiadających za reakcję na działania użytkownika. Wśród najważniejszych logicznych implementacji, które muszą być zawarte w implementacjach tych metod, warto wspomnieć o:
 \begin{itemize}
-\item metodzie, która po kliknięciu w okolicy punktu kluczowego wypisze na panelach bocznych listy obiektów znajdujących się na obszarze wyznaczonym przez ten punkt kluczowy (pogrupowane i niepogrupowane według typu) oraz liczbę mieszkańców na tym obszarze,
+\item metodzie, która po zbliżeniu kursora w okolicę punktu kluczowego wypisze na panelach bocznych listy obiektów znajdujących się na obszarze wyznaczonym przez ten punkt kluczowy (pogrupowane i niepogrupowane według typu) oraz liczbę mieszkańców na tym obszarze,
 \item metodzie, która przy wybranej opcji punktu kluczowego po kliknięciu lewym przyciskiem myszy dodaje punkt kluczowy, a prawym przyciskiem usuwa najbliższy punkt kluczowy,
 \item analogicznej metodzie która dodaje i usuwa elementy konturu po wybraniu opcji konturu na pasku górnym.
 \end{itemize}
@@ -149,38 +149,83 @@ CustomObjectInstance ParseCustomObjectInstance(string line,
 
 \tab Ta metoda odczytuje obiekty wypisane przez użytkownika, zgodnie z zadeklarowanymi przez niego typami na poprzednim etapie odczytu. Do jej zadań należy sprawdzenie, czy podane obiekty są zgodne z deklaracjami dokonanymi wcześniej. Tak jak każda z wymienionych powyżej metod poprawnie odczytany obiekt zwraca do metody głównej tej klasy -- \textit{ParseFile}.
 
-\subsection{Klasa 3}
-\tab 
+\subsection{Klasa AreaDivider}
 
-\subsubsection{metoda}
+\tab Ta klasa zawierać będzie logikę podziału mapy na obszary. W finalnej wersji programu będzie ona składać się z większej liczby metod, których ilość oraz treść zależeć będzie od wybranego algorytmu rozwiązującego problem podziału mapy. 
+
+\subsubsection{Metoda DivideIntoAreas}
+
 \begin{itemize}
 \item \begin{lstlisting}
-public CurrencyMatrix (int n)
+void DivideIntoAreas (Map map)
 \end{lstlisting}
 \end{itemize}
 
-\tab standard listingu
+\tab Ta metoda ma być kluczowym etapem dzielenia mapy na obszary. Dostaje ona obiekt typu \textit{Map}, który zawiera wszystkie odczytane z pliku lub zmodyfikowane w trakcie trwania programu dane, po czym wykonuje przetworzenie linii zgodnie z wybranym algorytmem oraz zapisuje je w postaci listy \textit{areaLines}, należącej do właściwości klasy \textit{Map}.
 
-\subsection{Klasa 4}
+\subsection{Klasa Map}
 
-\tab coś robi
+\tab Klasa \textit{Map} jest głównym kontenerem danych tego programu -- wszystkie inne klasy albo znajdują się w tej klasie, albo w pewien sposób się do niej odwołują. Składa się ona z pięciu list przechowujących wszystkie najważniejsze elementy prezentowanej na ekranie mapy:
 
+\begin{itemize}
+\item punkty konturu,
+\item punkty kluczowe,
+\item linie tworzące obszary,
+\item typy obiektów deklarowane przez użytkownika,
+\item obiekty podane przez użytkownika.
+\end{itemize}
 
-\subsection{Klasa 5}
+Poza tymi listami klasa zawiera także metody odwołujące się bezpośrednio do matematycznej reprezentacji mapy. Poniżej zostały opisane dwie takie metody.
 
-\tab xxx
+\subsubsection{Metoda FindKeyPointOfArea}
 
-\subsection{Klasa 6}
+\begin{itemize}
+\item \begin{lstlisting}
+KeyPoint FindKeyPointOfArea (double X, double Y)
+\end{lstlisting}
+\end{itemize}
 
-\tab W tej klasie coś
+Ta metoda ma na podstawie współrzędnych punktu określić, w jakim obszarze się on znajduje. Zwraca punkt kluczowy \textit{KeyPoint} reprezentujący dany obszar lub \textit{null} w przypadku, gdy punkt nie znajduje się w żadnym obszarze.
 
-\subsubsection{Metoda 1}
+\subsubsection{Metoda FindObjectsOfArea}
 
+\begin{itemize}
+\item \begin{lstlisting}
+List<CustomObjectInstance> ObjectsOfArea
+ (KeyPoint keyPoint)
+\end{lstlisting}
+\end{itemize}
 
+Ta metoda ma działanie odwrotne do poprzedniej metody -- przyjmuje punkt kluczowy jako argument, po czym zwraca listę wszystkich obiektów zawartych w wyznaczanym przez niego obszarze lub \textit{null}, gdy punkt kluczowy nie zostanie rozpoznany.
 
-\subsubsection{Metoda 2}
+\subsection{Klasy Point, KeyPoint}
 
+\tab Te dwie proste klasy reprezentują punkty na mapie. Klasa \textit{Point} przechowuje jedynie współrzędne X i Y danego punktu, zaś dziedzicząca po niej klasa \textit{KeyPoint} zyskuje dodatkowo nazwę danego punktu kluczowego. Nie posiadają one żadnych dodatkowych metod.
 
+\subsection{Klasa Line}
+
+\tab Jest to klasa reprezentująca linię, wykorzystywana do podziału mapy na obszary. Składa się ona z dwóch punktów reprezentujących początek i koniec linii.
+
+\subsection{Klasa CustomObjectType}
+
+\tab Klasa przechowuje dokładne dane o zadeklarowanych przez użytkownika parametrów obiektu. Oprócz nazwy będącej prostym napisem przechowuje ona słownik zmiennych -- każdy parametr musi mieć swoją charakterystyczną nazwę oraz przypisany do niej typ. Klasa ta będzie stanowić bazę do tworzenia konkretnych obiektów, które reprezentuje następna klasa -- \textit{CustomObjectInstance}.
+
+\subsection{Klasa CustomObjectInstance}
+
+\tab Ostatnia klasa tego programu ma prezentować konkretny obiekt na planszy, spełniający parametry zadeklarowanego typu. Dziedziczy ona po klasie \textit{Point}, co gwarantuje, że każdy podany przez użytkownika obiekt ma sens na mapie i posiada współrzędne, na podstawie których można go ulokować w konkretnym obszarze.
+
+Składa się on z dwóch istotnych właściwości -- jedną z nich jest typ obiektu, przechowywany w postaci referencji na dany typ. Drugą jest tablica \textit{objectProperties}, która ma przechowywać obiekty o typach zgodnych z zadeklarowanymi przez użytkownika w pliku. 
+
+\subsubsection{Konstruktor klasy CustomObjectInstance}
+
+\begin{itemize}
+\item \begin{lstlisting}
+CustomObjectInstance (CustomObjectType
+ customObjectType, string[] args)
+\end{lstlisting}
+\end{itemize}
+
+Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w postaci napisów \textit{string}, które następnie sam konwertuje na odpowiednie typy i zapisuje je do tablicy \textit{objectProperties}. W przypadku niezgodności typów wyrzuca wyjątek, który może być potem obsłużony w klasie \textit{Parser}, w metodzie \textit{ParseCustomObjectInstance}.
 
 \section{Działanie programu i zastosowanie algorytmu}
 
