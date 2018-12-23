@@ -227,9 +227,23 @@ CustomObjectInstance (CustomObjectType
 
 Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w postaci napisów \textit{string}, które następnie sam konwertuje na odpowiednie typy i zapisuje je do tablicy \textit{objectProperties}. W przypadku niezgodności typów wyrzuca wyjątek, który może być potem obsłużony w klasie \textit{Parser}, w metodzie \textit{ParseCustomObjectInstance}.
 
+\newpage
+
 \section{Działanie programu i zastosowanie algorytmu}
 
-\tab Pełna sekwencja. Opis algorytmu może być problematyczny na tym etapie
+\tab Działanie programu rozpoczyna się wraz z uruchomieniem funkcji \textit{main}. Platforma WPF od razu uruchamia główne okno interfejsu graficznego, choć początkowo większość funkcji nie jest dostępna. W tym momencie, w zależności od wybranej przez użytkownika opcji z pasku górnego program może:
+
+\begin{itemize}
+\item wczytać mapę na podstawie danych z pliku,
+\item wczytać obraz tła,
+\item wyświetlić pomoc.
+\end{itemize}
+
+W przypadku wybrania 2. lub 3. opcji program wykonuje pojedynczą czynność -- wczytanie obrazu z pliku lub wyświetlenie tekstu na panelu bocznym, za co odpowiadają pojedyncze metody z klasy \textit{MainWindow}. W przypadku wybrania wczytania obrazu sterowanie zostanie przekazane klasie \textit{Parser}, która podejmie próbę przekazania danych do przygotowanych struktur w obiekcie klasy \textit{Map}. W przypadku niepoprawnego pliku program wyświetli komunikat błędu na dolnym panelu tekstowym. Jeśli wczytanie odbędzie się poprawnie, \textit{Parser} zwróci tak przygotowany obiekt do \textit{MainWindow}, która z kolei prześle obiekt \textit{Map} do klasy dzielącej na obszary -- \textit{AreaDivider}.
+
+W tej klasie zastosowany będzie podział na diagram Woronoja za pomocą algorytmu Fortune'a. Metoda \textit{DivideIntoAreas}, która będzie łączyła mechanizm podziału z zewnętrznym programem, w otrzymanym obiekcie klasy \textit{Map} umieści listę linii dzielących mapę na obszary. Użytkownik w dowolnym momencie po wczytaniu mapy może dodawać i usuwać punkty kluczowe -- w takim przypadku symulacja krawędzi zostaje powtórzona i obiekt \textit{Map} ponownie otrzyma listę linii, już zaktualizowaną po zmianie.
+
+Użytkownik może w dowolnym momencie przerwać działanie programu, zamykając okno przyciskiem X znajdującym się w prawym górnym rogu. Może też w dowolnym momencie wczytać kolejny plik wybierając tą samą opcję z górnego paska, co poprzednio.
 
 \section{Testy jednostkowe}
 
@@ -273,6 +287,19 @@ Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w po
 
 \subsection{Testy klasy CustomObjectType}
 
+\tab Klasa \textit{CustomObjectType} przechowuje nazwy i typy zmiennych, dlatego musi zostać przetestowana pod kątem poprawnego zapisu tych typów. 
+Po wczytaniu danych zostanie sprawdzone poprawne działanie zapisanego słownika, przez próbę utworzenia danych na podstawie zapisanych wartości. Przeprowadzona zostanie też próba dodania wielu parametrów o tej samej nazwie.
+
 \subsection{Testy klasy CustomObjectInstance}
+
+\tab Klasa ma reprezentować pojedynczy obiekt tworzony na podstawie wzorca omówionego w poprzednim teście. Jej testy ograniczą się do przygotowania poprawnego obiektu \textit{CustomObjectType} oraz do uruchomienia konstruktora tej klasy, podając:
+
+\begin{itemize}
+\item dane poprawne,
+\item dane zawierające mniej danych niż we wzorcu,
+\item dane zawierające więcej danych niż we wzorcu,
+\item dane zawierające inne typy danych niż we wzorcu.
+\end{itemize}
+
 
 \end{document}
