@@ -43,7 +43,7 @@
 \begin{enumerate}
 \item Pod danymi współrzędnymi może znajdować się tylko jeden punkt kluczowy lub obiekt.
 \item Każdy punkt kluczowy lub obiekt zajmuje dokładnie jedną jednostkę terenu.
-\item Każdy punkt kluczowy lub obiekt musi znajdować się na co najmniej jednym obszarze. Znajduje się on na więcej niż jednym obszarze, gdy leży na granicy obszarów.
+\item Każdy obiekt musi znajdować się na co najmniej jednym obszarze. Znajduje się on na więcej niż jednym obszarze, gdy leży na granicy obszarów.
 \end{enumerate}
 
 \section{Funkcje programu}
@@ -51,16 +51,15 @@
 \tab Program posiada trzy główne funkcje:
 \begin{enumerate}
 \item rysowanie planszy na podstawie danych z pliku,
-\item modyfikowanie planszy za pomocą prostych narzędzi z przybornika,
+\item modyfikowanie planszy za pomocą prostych narzędzi z paska-przybornika,
 \item pokazywanie list mieszkańców oraz obiektów na wybranym przez użytkownika obszarze.
 \end{enumerate}
 \tab Użytkownik otrzymuje powyższe główne funkcje dzięki poniższym funkcjom pomocniczym:
 \begin{itemize}
 \item wczytanie danych z pliku tekstowego,
 \item wczytanie grafiki tła,
-\item dodawanie elementów konturu planszy,
-\item dodawanie punktów kluczowych dzielących kontur na obszary,
-\item dodawanie obiektów o typach zadeklarowanych w pliku tekstowym,
+\item dodawanie lub usuwanie elementów konturu planszy,
+\item dodawanie lub usuwanie punktów kluczowych dzielących kontur na obszary,
 \item wypisywanie list z liczbą mieszkańców na danym obszarze,
 \item wypisywanie list obiektów dla danego obszaru,
 \item możliwość pogrupowania obiektów z tej listy,
@@ -72,9 +71,9 @@
 
 \tab Na \textit{Rysunku 1} przedstawiono prototypowy wygląd okna głównego programu. W górnej części okna znajduje się pasek narzędzi, na którym umieszczono trzy szare przyciski. Kliknięcie pierwszego z nich otwiera eksplorator plików umożliwiający wybranie pliku tekstowego, z którego zostaną wczytane dane. Wybranie drugiego przycisku skutkuje otwarciem eksploratora umożliwiającego wybór pliku graficznego, który stanie się tłem dla planszy. Program oczekuje na plik graficzny w foramcie \textit{.png}. Kliknięcie trzeciego z przycisków wywoła wyświetlenie w polach tekstowych, znajdujących się po prawej stronie mapy, instrukcji obsługi programu. Na pasku narzędzi umieszczonym na górze okna znajdują się także dwa kolorowe przyciski-przełączniki. Tylko jeden z nich może być wybrany w danej chwili, domyślnie jest to przycisk-przełącznik oznaczony etykietą \textit{Kontur}.
 W zależności od tego który z przycisków został wybrany, taki rodzaj elementu będzie dodawany na mapę po kliknięciu na niej lewym przyciskiem myszy. Element będzie dodany w miejscu w którym znajdował się kursor w momencie kliknięcia. Kliknięcie prawym przyciskiem myszy na punkt konturu lub punkt kluczowy usuwa dany punkt. Jeśli usunięto punkt konturu, program odbudowuje strukturę linii konturu tak, iż połączone zostają punkt poprzedzający i następujący względem usuniętego.
-\\\tab Poniżej, w centrum okna głównego, znajduje się mapa terenu, na której wyświetlane mogą być kontury terenu, punkty kluczowe oraz obiekty.
+\\\tab Poniżej, w centrum okna głównego, znajduje się mapa terenu, na której wyświetlane mogą być granice obszarów, kontury terenu, punkty kluczowe oraz obiekty.
 \\\tab Po prawej stronie mapy znajdują się dwa pola tekstowe. Pierwsze z nich, wraz z najechaniem na dowolny punkt kluczowy, ukazuje listę obiektów danego obszaru. Pole umiejscowione niżej, po najechaniu przez użytkownika kursorem myszy na dowolny punkt kluczowy, wyświetla listę obiektów znajdujących się w danym obszarze, z grupowaniem po typie. Te dwa pola tekstowe są także wykorzystywane przy wyświetlaniu pomocy.
-\\\tab W dolnej części okna głównego znajduje się pasek stanu, na którym wyświetlane są komunikaty o błędach.
+\\\tab W dolnej części okna głównego znajduje się pasek stanu, na którym wyświetlane są komunikaty o błędach. Gdy użytkownik najedzie na wybrany punkt kluczowy, na pasku stanu zostanie wyświetlona informacja o liczbie ludności danego obszaru.
 \\\tab Użytkownik ma możliwość dodawania i usuwania punktów konturu lub punktów kluczowych po załadowaniu planszy z pliku wejściowego. Jeśli przycisk-przełącznik \textit{Kontur} jest aktywny, możliwe jest dodawanie dodatkowych punktów konturu. Aby funkcja ta była bardziej użyteczna i intuicyjna, po dodaniu konturu w dowolnym miejscu na mapie, dodany punkt zostaje połączony z dwoma najbliższymi mu punktami konturu.
 
 \begin{figure}[H]
@@ -117,7 +116,7 @@ Poniżej przedstawiono przykładowy plik wejściowy. Program oczekuje na plik te
 Strukturę pliku wejściowego można podzielić na 4 sekcje, gdzie każda zaczyna się od niezmiennej linii komentarza, rozpoczynającej się od znaku \textit{\#}.
 \\\tab W pierwszej części pliku wejściowego znajdują się informacje o umiejscowieniu punktów konturu na mapie. Kontur składa się z punktów konturu oraz linii konturu łączących podane punkty, przy czym istnieją połączenia pomiędzy punktami o kolejnych indeksach oraz pomiędzy punktem o pierwszym i ostatnim indeksie.
 \\\tab W kolejnej części pliku wejściowego należy opisać punkty kluczowe. Opis punktu kluczowego znajduje się w jednej linii i zawiera: indeks punktu kluczowego, jego położenie w poziomie, położenie w pionie oraz nazwę. Nazwa punktu kluczowego może składać się z więcej niż jednego słowa.
-\\\tab W trzeciej części pliku wejściowego znajdują się tak zwane definicje obiektów. W tym miejscu użytkownik informuje, jakiego rodzaju elementy chciałby móc umieścić na mapie. Definicja jednego typu obiektu zajmuje jedną linię w pliku wejściowym. Linia ta zaczyna się od indeksu definicji. Każda właściwość w definicji składa się z dwóch elementów: nazwy oraz typu danej właściwości. Możliwe do wybrania typy to \textit{int}, \textit{double} oraz \textit{string}. Po indeksie znajdują się co najmniej dwie właściwości obiektu - jego położenie w poziomie i pionie, którym odpowiadają nazwy właściwości kolejno \textit{X} oraz \textit{Y}. Wartości położenia w dowolnym kierunku muszą być typu \textit{double}. Jeżeli tworzony obiekt ma być traktowany jako obiekt mieszkalny, musi on posiadać właściwość o nazwie \textit{L\_MIESZKANCOW} typu \textit{int}.
+\\\tab W trzeciej części pliku wejściowego znajdują się tak zwane definicje obiektów. W tym miejscu użytkownik informuje, jakiego rodzaju elementy chciałby móc umieścić na mapie. Definicja jednego typu obiektu zajmuje jedną linię w pliku wejściowym. Linia ta zaczyna się od indeksu definicji, po którym należy podać nazwę tworzonego typu. Każda właściwość w definicji składa się z dwóch elementów: nazwy oraz typu danej właściwości. Możliwe do wybrania typy to \textit{int}, \textit{double} oraz \textit{string}. Po nazwie znajdują się co najmniej dwie właściwości obiektu - jego położenie w poziomie i pionie, którym odpowiadają nazwy właściwości kolejno \textit{X} oraz \textit{Y}. Wartości położenia w dowolnym kierunku muszą być typu \textit{double}. Jeżeli tworzony obiekt ma być traktowany jako obiekt mieszkalny, musi on posiadać właściwość o nazwie \textit{L\_MIESZKANCOW} typu \textit{int}.
 \\\tab W ostatniej części struktury pliku wejściowego należy umieścić opisy obiektów, które mają znaleźć się na mapie. Obiekty te powinny odpowiadać deklaracjom obiektów znajdujących się w poprzednim elemencie struktury. Można oczywiście tworzyć wiele obiektów danego typu, zadeklarowanego w poprzedniej części pliku wejściowego. Linia w tej części powinna składać się z indeksu, nazwy rodzaju obiektu tworzonego w danej linii oraz wartości kolejnych właściwości obiektu. Kolejność podawania wartości musi być zgodna z kolejnością uprzednio ustaloną w definicji obiektu. 
 
 \section{Sytuacje wyjątkowe}
