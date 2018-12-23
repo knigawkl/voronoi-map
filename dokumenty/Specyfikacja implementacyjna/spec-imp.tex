@@ -258,18 +258,18 @@ Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w po
 
 \subsection{Testy AreaDivider}
 
-\tab Tu testujemy coś
+\tab Test metody \textit{DivideIntoAreas} wymagał będzie utworzenia obiektu typu \textit{Map}. Należy utworzyć stosunkowo prostą planszę, na której łatwo jest przewidzieć podział na obszary. Skoro obszary podzielone są liniami, możemy sprawdzić ich zgodność z naszymi przewidywaniami, przy pomocy punktów startowych i końcowych linii, na przykład sprawdzając czy \textit{areaLines} zawierają linie o wskazanych wartościach.
 
 
 \subsection{Testy klasy Map}
 
-\tab Ta klasa ma coś
+\subsubsection{Metody FindKeyPointOfArea oraz FindObjectsOfArea}
 
-\subsection{Testy klasy Point oraz KeyPoint}
+\tab Obie metody są w gruncie rzeczy dość podobne w budowie. Podobnie będzie ze sporządzonymi dla nich testami jednostkowymi. Będą wymagały one utworzenia obiektu klasy macierzystej, który powinien być na tyle mało skomplikowany, aby dało się przewidzieć odpowiedź, którą powinna zwrócić jedna z funkcji szukających. Test powiedzie się, gdy zwracany poszukiwany punkt kluczowy lub lista obiektów będzie zgodna z przewidywaniami.
 
-\tab Ta klasa odpowiada za coś
+\subsection{Testy klasy Point, Line oraz KeyPoint}
 
-\subsection{Testy klasy Line}
+\tab Klasy te zostały skumulowane w jednej sekcji, gdyż wszystkie są nieskomplikowanej budowy i składają się z szeregu automatycznie zaimplementowanych właściwości, które pełnią rolę metod dostępowych. Możemy przetestować ich poprawność, po wcześniejszym utworzeniu obiektów danych klas.
 
 \subsection{Testy klasy CustomObjectType}
 
