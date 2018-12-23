@@ -39,7 +39,7 @@ Jeśli dane będą podane prawidłowo, program na ich podstawie generuje plansz�
 Projekt ,,LUPA'' zostanie napisany w języku C\# wersji 7.3 (.NET Framework 4.7.2), w środowisku Microsoft Visual Studio 15.9.4. Interfejs użytkownika zostanie utworzony dzięki platformie WPF. Implementacja oraz testowanie programu odbywać się będą na komputerach o następujących parametrach: 
 \begin{itemize}
 
-\item system operacyjny Windows 10 Home ver. 1803,
+\item 64-bitowy system operacyjny Windows 10 Home ver. 1803,
 \item procesor Intel Core i5-7200U,
 \item pamięć RAM 8,00 GB,
 \item karty graficzne Intel HD Graphics 620 + NVIDIA GeForce 940MX,
@@ -50,7 +50,7 @@ oraz:
 
 \begin{itemize}
 
-\item 64-bitowy system operacyjny Windows 10 Home,
+\item 64-bitowy system operacyjny Windows 10 Home ver. 1803,
 \item procesor Intel Core i7-6700HQ,
 \item pamięć RAM 16,00 GB,
 \item karty graficzne Intel HD Graphics 530 + NVIDIA GeForce 940MX,
@@ -59,9 +59,16 @@ oraz:
 
 \section{Diagram klas}
 
-\tab Program składać się będzie z n klas i n typów wyliczeniowych. Zależności pomiędzy poszczególnymi klasami obrazuje Rysunek 1.
+\tab Program składać się będzie z 9 klas. Zależności pomiędzy poszczególnymi klasami obrazuje Rysunek 1.
 
-W celu poprawy czytelności na diagramie klas nie zostały uwzględnione metody dostępowe dla klas x, y, z oraz konstruktory xy, xz, yz.
+Na diagramie klas nie zostały uwzględnione:
+
+\begin{itemize}
+\item zależności pomiędzy klasami Parser, MainWindow, AreaDivider oraz klasami będącymi składowymi klasy Map, w celu poprawy czytelności,
+\item metody wygenerowane przez WPF, odpowiadające za rysowanie na planszy oraz reakcję na zachowanie użytkownika.
+\end{itemize}
+
+Tu dopisać o tych właściwościach.
 
 \begin{figure}[H]
 \centering
