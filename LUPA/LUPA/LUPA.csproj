@@ -66,6 +66,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataContainers\CustomObjectInstance.cs" />
+    <Compile Include="DataContainers\CustomObjectType.cs" />
+    <Compile Include="DataContainers\KeyPoint.cs" />
+    <Compile Include="DataContainers\LineSegment.cs" />
+    <Compile Include="DataContainers\Point.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

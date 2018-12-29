@@ -12,3 +12,17 @@ D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.GenerateReso
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.CoreCompileInputs.cache
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.exe
 D:\Desktop\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.pdb
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\LUPA.exe.config
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\LUPA.exe
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\LUPA.pdb
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csprojAssemblyReference.cache
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\MainWindow.baml
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\MainWindow.g.cs
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\App.g.cs
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA_MarkupCompile.cache
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.g.resources
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.Properties.Resources.resources
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.GenerateResource.cache
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.CoreCompileInputs.cache
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.exe
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.pdb

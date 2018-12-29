@@ -26,7 +26,7 @@ namespace LUPA
             InitializeComponent();
         }
 
-        Point start;
+        System.Windows.Point start;
 
         private void Map_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -57,7 +57,7 @@ namespace LUPA
 
             foreach (var contourPoint in contour)
             {
-                start = new Point(contourPoint.X, contourPoint.Y);
+                start = new System.Windows.Point(contourPoint.X, contourPoint.Y);
 
                 var rec = new Rectangle()
                 {
