@@ -66,6 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataContainers\Map.cs" />
     <Compile Include="DataContainers\CustomObjectInstance.cs" />
     <Compile Include="DataContainers\CustomObjectType.cs" />
     <Compile Include="DataContainers\KeyPoint.cs" />
@@ -78,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Parser.cs" />
+    <Compile Include="ParserM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
