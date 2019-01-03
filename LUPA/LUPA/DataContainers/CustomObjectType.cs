@@ -10,7 +10,8 @@ namespace LUPA.DataContainers
     {
         public string Name { get; }
 
-        public Dictionary<string, string> Variables { set; get; }
+        public List<string> VariableNames { set; get; }
+        public List<string> VariableTypes { set; get; }
 
         public CustomObjectType (string name)
         {
@@ -32,7 +33,8 @@ namespace LUPA.DataContainers
             {
                 throw new Exception("Type is not recognised");
             }
-            Variables.Add(variableName, variableType);
+            VariableNames.Add(variableName);
+            VariableTypes.Add(variableType);
         }
     }
 }
