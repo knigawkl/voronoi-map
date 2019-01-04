@@ -109,22 +109,26 @@ namespace LUPA
 
         private CustomObjectInstance ParseCustomObject(string line, List<CustomObjectType> customObjectTypes)
         {
-            throw new NotImplementedException();
+            CustomObjectInstance obj = null;
+            return obj;
         }
 
         private CustomObjectType ParseCustomObjectType(string line)
         {
-            throw new NotImplementedException();
+            CustomObjectType type = null;
+            return type;
         }
 
         private KeyPoint ParseKeyPoint(string line)
         {
-            throw new NotImplementedException();
+            KeyPoint keyPoint = null;
+            return keyPoint;
         }
 
         private Point ParseContourPoint(string line)
         {
-            throw new NotImplementedException();
+            Point point = null;
+            return point;
         }
     }
 }
