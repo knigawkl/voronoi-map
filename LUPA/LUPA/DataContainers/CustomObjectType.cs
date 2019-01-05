@@ -18,7 +18,7 @@ namespace LUPA.DataContainers
             Name = name;
         }
 
-        public void AddVariable(string variableType, string variableName)
+        public void AddVariable(string variableName, string variableType)
         {
             string [] types = {"string", "int", "double", "float", "bool", "long" };
             bool isTypeRecognised = false;

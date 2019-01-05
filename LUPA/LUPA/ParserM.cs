@@ -15,12 +15,12 @@ namespace LUPA
             START, CONTOURPOINTS, KEYPOINTS, OBJECTSDEF, OBJECTS
         }
 
-        public Map ParseFile(string inputFilePath)
+        public static Map ParseFile(string inputFilePath)
         {
             ParserState state = ParserState.START;
             int lineCounter = 0;
             Map map = new Map();
-            var reader = new StreamReader(inputFilePath);
+            StreamReader reader = new StreamReader(inputFilePath);
             string line;
             while ((line = reader.ReadLine()) != null)
             {
@@ -107,28 +107,146 @@ namespace LUPA
             return map;
         }
 
-        private CustomObjectInstance ParseCustomObject(string line, List<CustomObjectType> customObjectTypes)
+        private static CustomObjectInstance ParseCustomObject(string line, List<CustomObjectType> customObjectTypes)
         {
-            CustomObjectInstance obj = null;
-            return obj;
+            string[] elements = line.Split();
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                string name = elements[1];
+                CustomObjectType cot = null;
+                for (int i = 0; i < customObjectTypes.Capacity; i++)
+                {
+                    if(customObjectTypes[i].Name == name)
+                    {
+                        cot = customObjectTypes[i];
+                        break;
+                    }
+                }
+                if(cot == null)
+                {
+                    throw new Exception("Unrecognised object type");
+                }
+                string [] args = new string[elements.Length - 2];
+                for(int i = 2; i < elements.Length; i++)
+                {
+                    args[i - 2] = elements[i];
+                }
+                try
+                {              
+                    return new CustomObjectInstance(cot, args);
+                }
+                catch(Exception e)
+                {
+                    throw e;
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
+            }
+            
         }
 
-        private CustomObjectType ParseCustomObjectType(string line)
+        private static CustomObjectType ParseCustomObjectType(string line)
         {
-            CustomObjectType type = null;
-            return type;
+            string[] elements = line.Split();
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                string name = elements[1];
+                CustomObjectType cot = new CustomObjectType(name);
+                for (int i = 2; i < elements.Length; i++)
+                {
+                    string variableName = elements[i++];
+                    if (i < elements.Length)
+                    {
+                        string variableType = elements[i];
+                        try
+                        {
+                            cot.AddVariable(variableName, variableType);
+                        }
+                        catch(Exception e)
+                        {
+                            throw e;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Incorrect number of arguments - variable does not have name or type");
+                    }
+                }
+                return cot;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
+            }
         }
 
-        private KeyPoint ParseKeyPoint(string line)
+        private static KeyPoint ParseKeyPoint(string line)
         {
-            KeyPoint keyPoint = null;
-            return keyPoint;
+            string[] elements = line.Split();
+            string name = "";
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                if (!double.TryParse(elements[1], out double x))
+                {
+                    throw new Exception("X position has to be a floating point number");
+                }
+                if (!double.TryParse(elements[2], out double y))
+                {
+                    throw new Exception("Y position has to be a floating point number");
+                }
+                for (int i = 3; i < elements.Length; i++)
+                {
+                    name += elements[i];
+                }
+                return new KeyPoint(x, y, name);
+            }
+            catch(IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
+            }                     
         }
 
-        private Point ParseContourPoint(string line)
+        private static Point ParseContourPoint(string line)
         {
-            Point point = null;
-            return point;
+            string[] elements = line.Split();
+            if(elements.Length > 3)
+            {
+                throw new Exception("Too many arguments");
+            }
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                if (!double.TryParse(elements[1], out double x))
+                {
+                    throw new Exception("X position has to be a floating point number");
+                }
+                if (!double.TryParse(elements[2], out double y))
+                {
+                    throw new Exception("Y position has to be a floating point number");
+                }
+                return new Point(x, y);
+            }
+            catch(IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
+            }
         }
     }
 }
