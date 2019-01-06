@@ -1,96 +1,249 @@
-﻿using System;
+﻿using LUPA.DataContainers;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LUPA
 {
-    public class Parser
+    class Parser
     {
-        public struct CountourPoint
+        private enum ParserState
         {
-            public string Id { get; set; }
-            public double X { get; set; }
-            public double Y { get; set; }
+            START, CONTOURPOINTS, KEYPOINTS, OBJECTSDEF, OBJECTS
+        }
 
-            public CountourPoint(string id, double x, double y)
+        public static Map ParseFile(string inputFilePath)
+        {
+            ParserState state = ParserState.START;
+            int lineCounter = 0;
+            Map map = new Map();
+            StreamReader reader = new StreamReader(inputFilePath);
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                Id = id;
-                X = x;
-                Y = y;
+                lineCounter++;
+                switch (state)
+                {
+                    case ParserState.START:
+                        if (line.Length > 0 && line[0] == '#')
+                        {
+                            state = ParserState.CONTOURPOINTS;                          
+                        }
+                        break;
+                    case ParserState.CONTOURPOINTS:
+                        if (line.Length > 0 && line[0] == '#')
+                        {
+                            state = ParserState.KEYPOINTS;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                map.ContourPoints.Add(ParseContourPoint(line));
+                            }
+                            catch (Exception e)
+                            {
+                                throw new Exception(e.Message + " in line " + lineCounter);
+                            }
+                        }
+                        break;
+                    case ParserState.KEYPOINTS:
+                        if (line.Length > 0 && line[0] == '#')
+                        {
+                            state = ParserState.OBJECTSDEF;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                map.KeyPoints.Add(ParseKeyPoint(line));
+                            }
+                            catch (Exception e)
+                            {
+                                throw new Exception(e.Message + " in line " + lineCounter);
+                            }
+                        }
+                        break;
+                    case ParserState.OBJECTSDEF:
+                        if (line.Length > 0 && line[0] == '#')
+                        {
+                            state = ParserState.OBJECTS;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                map.CustomObjectTypes.Add(ParseCustomObjectType(line));
+                            }
+                            catch (Exception e)
+                            {
+                                throw new Exception(e.Message + " in line " + lineCounter);
+                            }
+                        }
+                        break;
+                    case ParserState.OBJECTS:
+                        if (line.Length > 0 && line[0] == '#')
+                        {
+                            throw new Exception("File contains more than four comment lines. There should be four lines starting with a hash symbol. Please verify the file.");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                map.CustomObjects.Add(ParseCustomObject(line, map.CustomObjectTypes));
+                            }
+                            catch (Exception e)
+                            {
+                                throw new Exception(e.Message + " in line " + lineCounter);
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return map;
+        }
+
+        private static CustomObjectInstance ParseCustomObject(string line, List<CustomObjectType> customObjectTypes)
+        {
+            string[] elements = line.Split();
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                string name = elements[1];
+                CustomObjectType cot = null;
+                for (int i = 0; i < customObjectTypes.Capacity; i++)
+                {
+                    if(customObjectTypes[i].Name == name)
+                    {
+                        cot = customObjectTypes[i];
+                        break;
+                    }
+                }
+                if(cot == null)
+                {
+                    throw new Exception("Unrecognised object type");
+                }
+                string [] args = new string[elements.Length - 2];
+                for(int i = 2; i < elements.Length; i++)
+                {
+                    args[i - 2] = elements[i];
+                }
+                try
+                {              
+                    return new CustomObjectInstance(cot, args);
+                }
+                catch(Exception e)
+                {
+                    throw e;
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
+            }
+            
+        }
+
+        private static CustomObjectType ParseCustomObjectType(string line)
+        {
+            string[] elements = line.Split();
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                string name = elements[1];
+                CustomObjectType cot = new CustomObjectType(name);
+                for (int i = 2; i < elements.Length; i++)
+                {
+                    string variableName = elements[i++];
+                    if (i < elements.Length)
+                    {
+                        string variableType = elements[i];
+                        try
+                        {
+                            cot.AddVariable(variableName, variableType);
+                        }
+                        catch(Exception e)
+                        {
+                            throw e;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Incorrect number of arguments - variable does not have name or type");
+                    }
+                }
+                return cot;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
             }
         }
 
-        
-        public int width = 0;
-        public int height = 0;
-
-        public List<CountourPoint> ParseContour(string inputFilePath)
+        private static KeyPoint ParseKeyPoint(string line)
         {
-            List<CountourPoint> contour = new List<CountourPoint>();
+            string[] elements = line.Split();
+            string name = "";
             try
             {
-                var lines = new List<string>();
-                using (var reader = new StreamReader(inputFilePath))
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        lines.Add(line);
-                    }
+                    throw new Exception("Line index has to be an integer");
                 }
-
-                int hashCounter = 0;
-                foreach (var line in lines)
+                if (!double.TryParse(elements[1], out double x))
                 {
-                    if (line.StartsWith("#"))
-                    {
-                        hashCounter++;
-                    }
+                    throw new Exception("X position has to be a floating point number");
                 }
-                if (hashCounter != 4)
+                if (!double.TryParse(elements[2], out double y))
                 {
-                    throw new Exception("There should be four comment lines, each starting with a hash symbol. " +
-                        "Currently there are " + hashCounter + " such lines");
+                    throw new Exception("Y position has to be a floating point number");
                 }
-
-                int[] commentLinesIndices = new int[4];
-                int lineNumIterator = 0, commentLineIterator = 0;
-                foreach (var line in lines)
+                for (int i = 3; i < elements.Length; i++)
                 {
-                    if (line.StartsWith("#"))
-                    {
-                        commentLinesIndices[commentLineIterator] = lineNumIterator;
-                        commentLineIterator++;
-                    }
-                    lineNumIterator++;
+                    name += elements[i];
                 }
-
-                
-                for (int i = commentLinesIndices[0] + 1; i < commentLinesIndices[1] - 1; i++)
-                {
-                    string[] elems = lines[i].Split();
-                    string index = elems[0];
-                    if (!double.TryParse(elems[1], out var xPos))
-                    {
-                        throw new Exception("X position has to be a floating point number. Line: " + (i + 1));
-                    }
-                    if (!double.TryParse(elems[2], out var yPos))
-                    {
-                        throw new Exception("Y position has to be a floating point number. Line: " + (i + 1));
-                    }
-
-                    contour.Add(new CountourPoint(index, xPos, yPos));
-                }
-
+                return new KeyPoint(x, y, name);
             }
-            catch (Exception e)
+            catch(IndexOutOfRangeException)
             {
-                Console.WriteLine(e.Message + "Lukaszku" + e.StackTrace);
+                throw new Exception("Too few arguments");
+            }                     
+        }
+
+        private static Point ParseContourPoint(string line)
+        {
+            string[] elements = line.Split();
+            if(elements.Length > 3)
+            {
+                throw new Exception("Too many arguments");
             }
-            return contour;
+            try
+            {
+                if (!int.TryParse(elements[0].Substring(0, elements[0].Length - 1), out int index))
+                {
+                    throw new Exception("Line index has to be an integer");
+                }
+                if (!double.TryParse(elements[1], out double x))
+                {
+                    throw new Exception("X position has to be a floating point number");
+                }
+                if (!double.TryParse(elements[2], out double y))
+                {
+                    throw new Exception("Y position has to be a floating point number");
+                }
+                return new Point(x, y);
+            }
+            catch(IndexOutOfRangeException)
+            {
+                throw new Exception("Too few arguments");
+            }
         }
     }
 }

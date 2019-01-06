@@ -42,7 +42,7 @@
             </RadioButton>
         </ToolBar>
 
-        <Canvas  Name="Map" MouseDown="Map_MouseDown"  Width="600" Height="600" Grid.Row="1" Grid.Column="0">
+        <Canvas  Name="Map" MouseLeftButtonDown="Map_OnMouseLeftButtonDown"  Width="600" Height="600" Grid.Row="1" Grid.Column="0">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Resources/contour.jpg"/>
             </Canvas.Background>

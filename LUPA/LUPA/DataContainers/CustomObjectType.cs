@@ -10,12 +10,14 @@ namespace LUPA.DataContainers
     {
         public string Name { get; }
 
-        public List<string> VariableNames { set; get; }
-        public List<string> VariableTypes { set; get; }
+        public List<string> VariableNames { set; get; } 
+        public List<string> VariableTypes { set; get; } 
 
         public CustomObjectType (string name)
         {
             Name = name;
+            VariableNames = new List<string>();
+            VariableTypes = new List<string>();
         }
 
         public void AddVariable(string variableName, string variableType)
@@ -23,7 +25,7 @@ namespace LUPA.DataContainers
             string [] types = {"string", "int", "double", "float", "bool", "long" };
             bool isTypeRecognised = false;
             foreach(string type in types) {
-                if(type == variableType)
+                if(type.Equals(variableType))
                 {
                     isTypeRecognised = true;
                     break;
