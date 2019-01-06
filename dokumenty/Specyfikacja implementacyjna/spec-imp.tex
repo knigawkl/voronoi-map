@@ -1,0 +1,305 @@
+\documentclass[a4paper,11pt]{article}
+\newcommand\tab[1][0.6cm]{\hspace*{#1}}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+\rfoot{\thepage \hspace{lpt} / \pageref{LastPage}}
+
+\title{ \sc{Specyfikacja implementacyjna} \\
+\emph{Projekt zespołowy} }
+
+\author{Mateusz Smoliński \and Łukasz Knigawka}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\tableofcontents
+
+\newpage
+
+\section{Wstęp}
+
+\tab Celem projektu jest napisanie programu prezentującego interaktywną mapę na podstawie danych z pliku wejściowego. Program otrzymuje punkty tworzące kontur mapy, punkty kluczowe, na podstawie których kontur zostaje podzielony na obszary, a także definicje obiektów oraz listę takowych obiektów, które mają być brane pod uwagę przy analizie wyżej wspomnianych obszarów.
+
+Jeśli dane będą podane prawidłowo, program na ich podstawie generuje planszę, która dalej może być modyfikowana przez użytkownika. Może on dodawać i usuwać elementy konturu, zmieniając kształt mapy, a także dodawać i usuwać punkty kluczowe, wpływając tym samym na podział na obszary. Po kliknięciu na jeden z punktów kluczowych użytkownik otrzyma informacje o obiektach znajdujących się na wyznaczonym przez niego obszarze.
+
+Projekt ,,LUPA'' zostanie napisany w języku C\# wersji 7.3 (.NET Framework 4.7.2), w środowisku Microsoft Visual Studio 15.9.4. Interfejs użytkownika zostanie utworzony dzięki platformie WPF. Implementacja oraz testowanie programu odbywać się będą na komputerach o następujących parametrach: 
+\begin{itemize}
+
+\item 64-bitowy system operacyjny Windows 10 Home ver. 1803,
+\item procesor Intel Core i5-7200U,
+\item pamięć RAM 8,00 GB,
+\item karty graficzne Intel HD Graphics 620 + NVIDIA GeForce 940MX,
+
+\end{itemize}
+
+oraz:
+
+\begin{itemize}
+
+\item 64-bitowy system operacyjny Windows 10 Home ver. 1803,
+\item procesor Intel Core i7-6700HQ,
+\item pamięć RAM 16,00 GB,
+\item karty graficzne Intel HD Graphics 530 + NVIDIA GeForce 940MX.
+
+\end{itemize}
+
+\section{Diagram klas}
+
+\tab Program składać się będzie z 9 klas. Zależności pomiędzy poszczególnymi klasami obrazuje Rysunek 1.
+
+Na diagramie klas nie zostały uwzględnione:
+
+\begin{itemize}
+\item zależności pomiędzy klasami Parser, MainWindow, AreaDivider oraz klasami będącymi składowymi klasy Map, w celu poprawy czytelności,
+\item metody wygenerowane przez WPF, odpowiadające za rysowanie na planszy oraz reakcję na zachowanie użytkownika.
+\end{itemize}
+
+Nie występują na nim także metody dostępowe ze względu na zastosowanie automatycznie generowanych właściwości klas występujące w wybranym przez nas środowisku.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=18cm]c
+\caption{Diagram klas}
+\label{fig:obrazek c}
+\end{figure}
+
+\newpage
+
+\section{Opis klas/metod}
+
+
+\subsection{Klasa MainWindow}
+
+\tab Jest to bazowa klasa tego programu, odpowiadająca przede wszystkim za interfejs graficzny. Składa się ona z wielu metod wygenerowanych przez WPF, odpowiadających za reakcję na działania użytkownika. Wśród najważniejszych logicznych implementacji, które muszą być zawarte w implementacjach tych metod, warto wspomnieć o:
+\begin{itemize}
+\item metodzie, która po zbliżeniu kursora w okolicę punktu kluczowego wypisze na panelach bocznych listy obiektów znajdujących się na obszarze wyznaczonym przez ten punkt kluczowy (pogrupowane i niepogrupowane według typu) oraz liczbę mieszkańców na tym obszarze,
+\item metodzie, która przy wybranej opcji punktu kluczowego po kliknięciu lewym przyciskiem myszy dodaje punkt kluczowy, a prawym przyciskiem usuwa najbliższy punkt kluczowy,
+\item analogicznej metodzie która dodaje i usuwa elementy konturu po wybraniu opcji konturu na pasku górnym.
+\end{itemize}
+
+Po wybraniu opcji usuwania/dodawania punktów na mapie następuje wywołanie funkcji \textit{DivideIntoAreas} ponownie dzielącej mapę na obszary, z klasy \textit{AreaDivider}.
+
+
+\subsection{Klasa Parser}
+
+\tab Ta klasa odpowiada za wczytanie danych z pliku tekstowego, które zostaną użyte w trakcie działania programu. Wszystkie metody w tej klasie są statyczne, przez co obiekt klasy Parser nie będzie powstawać w żadnym momencie trwania programu. Metody te w przypadku niepowodzenia korzystają z wyjątków, które przekazują do metody nadrzędnej -- metoda \textit{ParseFile} przekazuje te wyjątki do klasy \textit{MainWindow}, która odpowiada za przekazanie komunikatu o błędzie użytkownikowi.
+
+\subsubsection{Metoda ParseFile}
+\begin{itemize}
+\item \begin{lstlisting}
+Map ParseFile(string imputFilePath) 
+\end{lstlisting}
+\end{itemize}
+
+Metoda \textit{ParseFile} jest główną metodą tej klasy. Otrzymuje ona ścieżkę do pliku w postaci napisu, po czym ma za zadanie otworzyć ten plik, przeanalizować każdą jego linię oraz zapisać dane w postaci zrozumiałej dla programu. Na podstawie składni pliku oraz linii oddzielających etapy wczytywania, oznaczonych \# na początku, odczytuje linię tekstu i przekazuje ją do odpowiedniej metody parsującej. Po zakończeniu kolejnego etapu metoda sprawdza, czy żaden z warunków działania programu nie został złamany -- na przykład, czy użytkownik nie zamieścił przecinających się linii konturu lub nie zapomniał o którymś z obowiązkowych typów obiektów. Odczytane w ten sposób dane zapisuje do list w obiekcie klasy \textit{Map}, po czym w przypadku powodzenia zwraca referencję do tak przygotowanego obiektu. 
+
+
+\subsubsection{Metoda ParseContourPoint}
+
+\begin{itemize}
+\item \begin{lstlisting}
+Point ParseContourPoint(string line)
+\end{lstlisting}
+\end{itemize}
+
+\tab Jest to pierwsza ze szczegółowych metod tej klasy, odpowiadających za odczytanie konkretnych elementów podanych w pliku. Ta konkretna metoda odczytuje linię zawierającą współrzędne punktów konturowych, po czym w przypadku powodzenia zwraca przygotowany obiekt klasy \textit{Point}.
+
+\subsubsection{Metoda ParseKeyPoint}
+
+\begin{itemize}
+\item \begin{lstlisting}
+KeyPoint ParseKeyPoint(string line)
+\end{lstlisting}
+\end{itemize}
+
+\tab Jest to kolejna metoda odczytująca linię. Odczytuje ona linię zawierającą współrzędne punktów kluczowych i ich nazwy, po czym w przypadku powodzenia zwraca przygotowany obiekt klasy \textit{KeyPoint}.
+
+\subsubsection{Metoda ParseCustomObjectType}
+
+\begin{itemize}
+\item \begin{lstlisting}
+CustomObjectType ParseCustomObjectType(string line)
+\end{lstlisting}
+\end{itemize}
+
+\tab Ta metoda odpowiada za odczytanie deklaracji typu obiektu przygotowanej przez użytkownika. Do jej zadań należy sprawdzenie, czy użytkownik napisał dla każdego parametru nazwę i typ, oraz czy program potrafi rozpoznać ten typ.
+
+\subsubsection{Metoda ParseCustomObjectInstance}
+
+\begin{itemize}
+\item \begin{lstlisting}
+CustomObjectInstance ParseCustomObjectInstance(string line,
+ List<CustomObjectType> customObjectTypes)
+\end{lstlisting}
+\end{itemize}
+
+\tab Ta metoda odczytuje obiekty wypisane przez użytkownika, zgodnie z zadeklarowanymi przez niego typami na poprzednim etapie odczytu. Do jej zadań należy sprawdzenie, czy podane obiekty są zgodne z deklaracjami dokonanymi wcześniej. Tak jak każda z wymienionych powyżej metod poprawnie odczytany obiekt zwraca do metody głównej tej klasy -- \textit{ParseFile}.
+
+\subsection{Klasa AreaDivider}
+
+\tab Ta klasa zawierać będzie logikę podziału mapy na obszary. W finalnej wersji programu będzie ona składać się z większej liczby metod, których ilość oraz treść zależeć będzie od wybranego algorytmu rozwiązującego problem podziału mapy. 
+
+\subsubsection{Metoda DivideIntoAreas}
+
+\begin{itemize}
+\item \begin{lstlisting}
+void DivideIntoAreas (Map map)
+\end{lstlisting}
+\end{itemize}
+
+\tab Ta metoda ma być kluczowym etapem dzielenia mapy na obszary. Dostaje ona obiekt typu \textit{Map}, który zawiera wszystkie odczytane z pliku lub zmodyfikowane w trakcie trwania programu dane, po czym wykonuje przetworzenie linii zgodnie z wybranym algorytmem oraz zapisuje je w postaci listy \textit{areaLines}, należącej do właściwości klasy \textit{Map}.
+
+\subsection{Klasa Map}
+
+\tab Klasa \textit{Map} jest głównym kontenerem danych tego programu -- wszystkie inne klasy albo znajdują się w tej klasie, albo w pewien sposób się do niej odwołują. Składa się ona z pięciu list przechowujących wszystkie najważniejsze elementy prezentowanej na ekranie mapy:
+
+\begin{itemize}
+\item punkty konturu,
+\item punkty kluczowe,
+\item linie tworzące obszary,
+\item typy obiektów deklarowane przez użytkownika,
+\item obiekty podane przez użytkownika.
+\end{itemize}
+
+Poza tymi listami klasa zawiera także metody odwołujące się bezpośrednio do matematycznej reprezentacji mapy. Poniżej zostały opisane dwie takie metody.
+
+\subsubsection{Metoda FindKeyPointOfArea}
+
+\begin{itemize}
+\item \begin{lstlisting}
+KeyPoint FindKeyPointOfArea (double X, double Y)
+\end{lstlisting}
+\end{itemize}
+
+Ta metoda ma na podstawie współrzędnych punktu określić, w jakim obszarze się on znajduje. Zwraca punkt kluczowy \textit{KeyPoint} reprezentujący dany obszar lub \textit{null} w przypadku, gdy punkt nie znajduje się w żadnym obszarze.
+
+\subsubsection{Metoda FindObjectsOfArea}
+
+\begin{itemize}
+\item \begin{lstlisting}
+List<CustomObjectInstance> ObjectsOfArea
+ (KeyPoint keyPoint)
+\end{lstlisting}
+\end{itemize}
+
+Ta metoda ma działanie odwrotne do poprzedniej metody -- przyjmuje punkt kluczowy jako argument, po czym zwraca listę wszystkich obiektów zawartych w wyznaczanym przez niego obszarze lub \textit{null}, gdy punkt kluczowy nie zostanie rozpoznany.
+
+\subsection{Klasy Point, KeyPoint}
+
+\tab Te dwie proste klasy reprezentują punkty na mapie. Klasa \textit{Point} przechowuje jedynie współrzędne X i Y danego punktu, zaś dziedzicząca po niej klasa \textit{KeyPoint} zyskuje dodatkowo nazwę danego punktu kluczowego. Nie posiadają one żadnych dodatkowych metod.
+
+\subsection{Klasa Line}
+
+\tab Jest to klasa reprezentująca linię, wykorzystywana do podziału mapy na obszary. Składa się ona z dwóch punktów reprezentujących początek i koniec linii.
+
+\subsection{Klasa CustomObjectType}
+
+\tab Klasa przechowuje dokładne dane o zadeklarowanych przez użytkownika parametrach obiektu. Oprócz nazwy będącej prostym napisem przechowuje ona słownik zmiennych -- każdy parametr musi mieć swoją charakterystyczną nazwę oraz przypisany do niej typ. Klasa ta będzie stanowić bazę do tworzenia konkretnych obiektów, które reprezentuje następna klasa -- \textit{CustomObjectInstance}.
+
+\subsection{Klasa CustomObjectInstance}
+
+\tab Ostatnia klasa tego programu ma prezentować konkretny obiekt na planszy, spełniający parametry zadeklarowanego typu. Dziedziczy ona po klasie \textit{Point}, co gwarantuje, że każdy podany przez użytkownika obiekt ma sens na mapie i posiada współrzędne, na podstawie których można go ulokować w konkretnym obszarze.
+
+Składa się on z dwóch istotnych właściwości -- jedną z nich jest typ obiektu, przechowywany w postaci referencji na dany typ. Drugą jest tablica \textit{objectProperties}, która ma przechowywać obiekty o typach zgodnych z zadeklarowanymi przez użytkownika w pliku. 
+
+\subsubsection{Konstruktor klasy CustomObjectInstance}
+
+\begin{itemize}
+\item \begin{lstlisting}
+CustomObjectInstance (CustomObjectType
+ customObjectType, string[] args)
+\end{lstlisting}
+\end{itemize}
+
+Warty odnotowania jest konstruktor tej klasy. Dostaje on listę argumentów w postaci napisów \textit{string}, które następnie sam konwertuje na odpowiednie typy i zapisuje je do tablicy \textit{objectProperties}. W przypadku niezgodności typów wyrzuca wyjątek, który może być potem obsłużony w klasie \textit{Parser}, w metodzie \textit{ParseCustomObjectInstance}.
+
+\newpage
+
+\section{Działanie programu i zastosowanie algorytmu}
+
+\tab Działanie programu rozpoczyna się wraz z uruchomieniem funkcji \textit{Main}. Platforma WPF od razu uruchamia główne okno interfejsu graficznego, choć początkowo część funkcji nie jest dostępna. Wygląd okna zdefiniowany jest w języku opisu interfejsu \textit{XAML}, co jest typowe dla wykorzystanej technologii \textit{WPF}. W tym momencie, w zależności od wybranej przez użytkownika opcji z pasku górnego program może:
+
+\begin{itemize}
+\item wczytać mapę na podstawie danych z pliku,
+\item wczytać obraz tła,
+\item wyświetlić pomoc.
+\end{itemize}
+
+W przypadku wybrania 2. lub 3. opcji program wykonuje pojedynczą czynność -- wczytanie obrazu z pliku lub wyświetlenie tekstu na panelu bocznym, za co odpowiadają pojedyncze metody z klasy \textit{MainWindow}. W przypadku wybrania wczytania obrazu sterowanie zostanie przekazane klasie \textit{Parser}, która podejmie próbę przekazania danych do przygotowanych struktur w obiekcie klasy \textit{Map}. W przypadku niepoprawnego pliku program wyświetli komunikat błędu na dolnym panelu tekstowym. Jeśli wczytanie odbędzie się poprawnie, \textit{Parser} zwróci tak przygotowany obiekt do \textit{MainWindow}, która z kolei prześle obiekt \textit{Map} do klasy dzielącej na obszary -- \textit{AreaDivider}.
+
+W tej klasie generowany będzie diagram Woronoja, za pomocą algorytmu Fortune'a. Złożoność czasowa tego algorytmu wynosi \textit{$O(n\log{}n)$}, a pamięciowa \textit{$O(n)$}. Metoda \textit{DivideIntoAreas}, która będzie łączyła mechanizm podziału z zewnętrznym programem, w otrzymanym obiekcie klasy \textit{Map} umieści listę linii dzielących mapę na obszary. Użytkownik w dowolnym momencie po wczytaniu mapy może dodawać i usuwać punkty kluczowe -- w takim przypadku symulacja krawędzi zostaje powtórzona i obiekt \textit{Map} ponownie otrzyma listę linii, już zaktualizowaną po zmianie. Metody obsługujące ruchy myszki w obrębie mapy znajdują się w klasie \textit{MainWindow}.
+
+Użytkownik może w dowolnym momencie przerwać działanie programu, zamykając okno przyciskiem X znajdującym się w prawym górnym rogu. Może też w dowolnym momencie wczytać kolejny plik wybierając tą samą opcję z górnego paska, co poprzednio.
+
+\section{Testy jednostkowe}
+
+\tab Projekty testów zakładają użycie narzędzia \textit{NUnit}. Testy zostaną wykonane według zasady AAA (Arrange Act Assert). Poniżej znajduje się lista testów planowanych dla kluczowych metod programu, dla każdej z nich przewidziane są różne przypadki otrzymanych danych. 
+
+\subsection{Testy klas MainWindow}
+
+\tab Klasa ta jest punktem startowym programu i sama wywołuje inne klasy. Posiada metody ściśle związane z platformą \textit{WPF}, odpowiedzialne za interpretację klikania lewym lub prawym przyciskiem myszy bądź najeżdżania kursorem na konkretny element mapy, będą one jednak testowane manualnie. Należy zwrócić uwagę, czy przy dodawaniu punktu kluczowego lub punktu konturu, wstawiany element tworzony jest dokładnie w miejscu kliknięcia, a nie na przykład niżej od kursora o wartość wysokości górnego paska narzędzi.
+
+\subsection{Testy klasy Parser}
+
+\subsubsection{Metoda ParseFile}
+\tab Aby umożliwić przetestowanie tej metody, utworzone zostaną testowe pliki tekstowe. Należy jednak przetestować także zachowanie programu, gdy ścieżka do pliku wejściowego jest niepoprawna. Sprawdzone zostanie także zachowanie programu, gdy wczytane kontury terenu ułożone są w ten sposób, że linie się przecinają. Przetestowana zostanie także sytuacja, w której wśród definicji obiektów zabraknie obowiązkowych obiektów -- domu, szkoły oraz niedźwiedzia.
+
+\subsubsection{Metody ParseContourPoint, ParseKeyPoint, ParseCustomObjectType}
+\tab Wymienione metody jest najłatwiej przetestować, gdyż otrzymują one jako argument dokładnie jedną linijkę tekstu. Oczywiście dla każdej z nich należy spróbować podać w pierwszej kolejności poprawnie sformatowane dane, a następnie porównać oczekiwane wartości zwracane z faktycznie zwracanymi wartościami. W przypadku wczytywania punktu konturu, należy sprawdzić z ilu wyrazów składa się wczytywana linia. Spodziewamy się dokładnie trzech elementów -- indeksu punktu konturu, oraz dwóch wartości liczbowych, odpowiadających jego współrzędnym. Przy wczytywaniu punktu kluczowego, nie możemy już sporządzać takich założeń, gdyż nazwa punktu może składać się z wielu wyrazów. 
+\\\tab Należy także dla każdej z metod przygotować niepoprawnie sformatowane ciągi znaków. Przy pomocy narzędzia testowego sprawdzone zostanie, czy wystąpił błąd którego się spodziewaliśmy. Podane zostaną:
+\begin{itemize}
+\item linie niezawierające informacji o położeniu obiektu,
+\item linie zawierające napis w miejscu na współrzędne liczbowe określające położenie obiektu,
+\item linie zawierające niepotrzebne informacje, na przykład punkt konturu posiadający nazwę,
+\item linie zawierające informacje o punkcie kluczowym lub o definicji obiektu bez nazwy,
+\item linie przyporządkowujące obiektowi położenie poza granicami terenu, to jest o współrzędnych ujemnych bądź większych od 600.
+
+\end{itemize}
+
+\subsection{Testy AreaDivider}
+
+\tab Test metody \textit{DivideIntoAreas} wymagał będzie utworzenia obiektu typu \textit{Map}. Należy utworzyć stosunkowo prostą planszę, na której łatwo jest przewidzieć podział na obszary. Skoro obszary podzielone są liniami, możemy sprawdzić ich zgodność z naszymi przewidywaniami, przy pomocy punktów startowych i końcowych linii, na przykład sprawdzając czy \textit{areaLines} zawierają linie o wskazanych wartościach.
+
+
+\subsection{Testy klasy Map}
+
+\subsubsection{Metody FindKeyPointOfArea oraz FindObjectsOfArea}
+
+\tab Obie metody są w gruncie rzeczy dość podobne w budowie. Podobnie będzie ze sporządzonymi dla nich testami jednostkowymi. Będą wymagały one utworzenia obiektu klasy macierzystej, który powinien być na tyle mało skomplikowany, aby dało się przewidzieć odpowiedź, którą powinna zwrócić jedna z funkcji szukających. Test powiedzie się, gdy zwracany poszukiwany punkt kluczowy lub lista obiektów będzie zgodna z przewidywaniami.
+
+\subsection{Testy klasy Point, Line oraz KeyPoint}
+
+\tab Klasy te zostały skumulowane w jednej sekcji, gdyż wszystkie są nieskomplikowanej budowy i składają się z szeregu automatycznie zaimplementowanych właściwości, które pełnią rolę metod dostępowych. Możemy przetestować ich poprawność, po wcześniejszym utworzeniu obiektów danych klas.
+
+\subsection{Testy klasy CustomObjectType}
+
+\tab Klasa \textit{CustomObjectType} przechowuje nazwy i typy zmiennych, dlatego musi zostać przetestowana pod kątem poprawnego zapisu tych typów. 
+Po wczytaniu danych zostanie sprawdzone poprawne działanie zapisanego słownika, przez próbę utworzenia danych na podstawie zapisanych wartości. Przeprowadzona zostanie też próba dodania wielu parametrów o tej samej nazwie.
+
+\subsection{Testy klasy CustomObjectInstance}
+
+\tab Klasa ma reprezentować pojedynczy obiekt tworzony na podstawie wzorca omówionego w poprzednim teście. Jej testy ograniczą się do przygotowania poprawnego obiektu \textit{CustomObjectType} oraz do uruchomienia konstruktora tej klasy, podając:
+
+\begin{itemize}
+\item dane poprawne,
+\item dane zawierające mniej danych niż we wzorcu,
+\item dane zawierające więcej danych niż we wzorcu,
+\item dane zawierające inne typy danych niż we wzorcu.
+\end{itemize}
+
+
+\end{document}
