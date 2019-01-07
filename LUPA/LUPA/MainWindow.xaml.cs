@@ -51,7 +51,7 @@ namespace LUPA
                 Filter = "TXT Files (*.txt)|*.txt",
             };
 
-            Nullable<bool> result = ofd.ShowDialog();
+            bool? result = ofd.ShowDialog();
 
             if (result == true)
             {
