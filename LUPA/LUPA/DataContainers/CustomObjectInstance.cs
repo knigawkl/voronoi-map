@@ -14,8 +14,7 @@ namespace LUPA.DataContainers
         public CustomObjectInstance (double x, double y, CustomObjectType objectType, object [] objectProperties) : base(x, y)
         {
             ObjectType = objectType;
-            this.objectProperties = objectProperties;
-            
+            this.objectProperties = objectProperties;           
         }
     }
 }

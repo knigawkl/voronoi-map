@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LUPA.DataContainers;
+using System.Collections.Generic;
 
 namespace LUPA
 {
@@ -126,6 +127,7 @@ namespace LUPA
         {
             DrawContourPoints();
             DrawKeyPoints();
+            DrawCustomObjects();
         }
 
         private void DrawContourPoints()
@@ -147,6 +149,17 @@ namespace LUPA
                 position.X = kp.X;
                 position.Y = kp.Y;
                 DrawPoint(Brushes.IndianRed, position);
+            }
+        }
+
+        private void DrawCustomObjects()
+        {
+            System.Windows.Point position = new System.Windows.Point();
+            foreach (var co in map.CustomObjects)
+            {
+                position.X = co.X;
+                position.Y = co.Y;
+                DrawPoint(Brushes.SaddleBrown, position);
             }
         }
 
