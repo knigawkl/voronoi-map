@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LUPA.DataContainers;
+using System.Text;
 
 namespace LUPA
 {
@@ -15,12 +16,14 @@ namespace LUPA
     /// </summary>
     public partial class MainWindow : Window
     {
-        Map map = new Map();
+        Map map;
         System.Windows.Point position;
+        public const int toolbarHeight = 30;
 
         public MainWindow()
         {
             InitializeComponent();
+            map = new Map();
         }
 
         /// <summary>
@@ -43,66 +46,26 @@ namespace LUPA
 
         private void Map_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is Shape clickedShape)
+            if (e.OriginalSource is Rectangle clickedShape)
             {
                 if (clickedShape.Stroke == Brushes.IndianRed && KeyPointBtn.IsChecked == true)
                 {
-                    Map.Children.Remove(clickedShape);
-                    //tu usunac z naszego map
-                    
+                    Map.Children.Remove(clickedShape);   
                 }
                 if (clickedShape.Stroke == Brushes.LightSeaGreen && ContourPointBtn.IsChecked == true)
                 {
                     Map.Children.Remove(clickedShape);
                 }
-            }
-        }
-        
-        private void OpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            var ofd = new OpenFileDialog
-            {
-                DefaultExt = ".txt",
-                Filter = "TXT Files (*.txt)|*.txt",
-            };
-
-            bool? result = ofd.ShowDialog();
-
-            if (result == true)
-            {
-                map = Parser.ParseFile(ofd.FileName);
-            }
-        }
-        
-        private void ChangeBackground_Click(object sender, RoutedEventArgs e)
-        {
-            var ofd = new OpenFileDialog
-            {
-                DefaultExt = ".png",
-                Filter = "PNG Files (*.png)|*.png",
-            };
-
-            Nullable<bool> result = ofd.ShowDialog();
-            if (result == true)
-            {
-                ImageBrush ib = new ImageBrush
-                {
-                    ImageSource = new BitmapImage(new Uri(ofd.FileName, UriKind.Relative))
-                };
-                Map.Background = ib;
+                RemovePointFromDataContainer(clickedShape);
             }
         }
 
-        private void KeyPointBtn_Checked(object sender, RoutedEventArgs e)
+        private void RemovePointFromDataContainer(Rectangle clickedShape)
         {
-            KeyPointBtn.Background = Brushes.IndianRed;
-            ContourPointBtn.Background = Brushes.Azure;
-        }
-
-        private void ContourBtn_Checked(object sender, RoutedEventArgs e)
-        {
-            ContourPointBtn.Background = Brushes.LightSeaGreen;
-            KeyPointBtn.Background = Brushes.Azure;
+            double x = Canvas.GetLeft(clickedShape);
+            double y = Canvas.GetTop(clickedShape) + toolbarHeight;
+            map.KeyPoints.RemoveAll(o => o.X == x && o.Y == y);
+            map.ContourPoints.RemoveAll(o => o.X == x && o.Y == y);
         }
 
         private void DrawPoint(Brush color, System.Windows.Point position)
@@ -125,6 +88,53 @@ namespace LUPA
         private void AddContourPoint(System.Windows.Point position)
         {
             map.ContourPoints.Add(new Point(position.X, position.Y));
+        }
+
+        private void KeyPointBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            KeyPointBtn.Background = Brushes.IndianRed;
+            ContourPointBtn.Background = Brushes.Azure;
+        }
+
+        private void ContourBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            ContourPointBtn.Background = Brushes.LightSeaGreen;
+            KeyPointBtn.Background = Brushes.Azure;
+        }
+
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                DefaultExt = ".txt",
+                Filter = "TXT Files (*.txt)|*.txt",
+            };
+
+            bool? result = ofd.ShowDialog();
+
+            if (result == true)
+            {
+                map = Parser.ParseFile(ofd.FileName);
+            }
+        }
+
+        private void ChangeBackground_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "PNG Files (*.png)|*.png",
+            };
+
+            bool? result = ofd.ShowDialog();
+            if (result == true)
+            {
+                ImageBrush ib = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri(ofd.FileName, UriKind.Relative))
+                };
+                Map.Background = ib;
+            }
         }
     }
 }

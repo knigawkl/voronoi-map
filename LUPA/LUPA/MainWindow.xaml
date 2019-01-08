@@ -49,10 +49,10 @@
         </Canvas>
 
         <StackPanel Name="SideToolbar" Height="600" Width="300" Grid.Row="1" Grid.Column="1"  Background="DarkGray">
-            <TextBox Margin="4,4,4,4" Background="LightGray" Width="292" Height="300" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
+            <TextBox Name="UpperSideToolbarTxt" Margin="4,4,4,4" Background="LightGray" Width="292" Height="300" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
                 Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów...
             </TextBox>
-            <TextBox Margin="4,0,4,4" Background="LightGray" Width="292" Height="288" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
+            <TextBox Name="LowerSideToolbarTxt" Margin="4,0,4,4" Background="LightGray" Width="292" Height="288" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
                 Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów z grupowaniem po typie...
             </TextBox>
         </StackPanel>
