@@ -177,7 +177,7 @@ namespace LUPA
                             {
                                 throw new ParseLineException(i + ". argument does not start with \" symbol when string expected");
                             }
-                            else if (!isStringLoading && elements[i][0] == '\"')
+                            else if (!isStringLoading && elements[i][0] == '\"' && elements[i][elements[i].Length - 1] != '\"')
                             {
                                 isStringLoading = true;
                                 loadingString = loadingString + elements[i];
@@ -193,7 +193,12 @@ namespace LUPA
                                 objectProperties[variableCounter] = loadingString;
                                 loadingString = "";
                                 variableCounter++;
-                            }                        
+                            }
+                            else
+                            {
+                                objectProperties[variableCounter] = elements[i];
+                                variableCounter++;
+                            }
                             break;
 
                         case "bool":
