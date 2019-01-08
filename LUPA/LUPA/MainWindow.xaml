@@ -32,23 +32,21 @@
             <Button Name="HelpBtn" Click="OpenFile_Click" Background="DarkGray" Height="30" Width="100">
                 Pomoc
             </Button>
-            <RadioButton Margin="10, 0"  GroupName="Obiekty"  
-                        Width="100" Height="30" Background="IndianRed">
+            <RadioButton Name="ContourPointBtn" Margin="10, 0"  GroupName="Objects"  
+                        Width="100" Height="30" Background="Azure" Checked="ContourBtn_Checked">
                 Kontur
             </RadioButton>
-            <RadioButton Margin="0, 0" GroupName="Obiekty" 
-                        Width="100" Height="30" Background="LightSeaGreen">
+            <RadioButton Name="KeyPointBtn" Margin="0, 0" GroupName="Objects" 
+                        Width="100" Height="30" Background="Azure" Checked="KeyPointBtn_Checked">
                 Punkt Kluczowy
             </RadioButton>
         </ToolBar>
 
-        <Canvas  Name="Map" MouseLeftButtonDown="Map_OnMouseLeftButtonDown"  Width="600" Height="600" Grid.Row="1" Grid.Column="0">
+        <Canvas  Name="Map" MouseLeftButtonDown="Map_OnMouseLeftButtonDown" MouseRightButtonDown="Map_OnMouseRightButtonDown" Width="600" Height="600" Grid.Row="1" Grid.Column="0">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Resources/contour.jpg"/>
             </Canvas.Background>
         </Canvas>
-
-        
 
         <StackPanel Name="SideToolbar" Height="600" Width="300" Grid.Row="1" Grid.Column="1"  Background="DarkGray">
             <TextBox Margin="4,4,4,4" Background="LightGray" Width="292" Height="300" TextWrapping="Wrap" FontStyle="Italic" Focusable="False">
@@ -58,8 +56,6 @@
                 Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów z grupowaniem po typie...
             </TextBox>
         </StackPanel>
-
-        
         
         <TextBox Name="OutputTxt" Height="38" Width="900" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
                  Focusable="False" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" 
