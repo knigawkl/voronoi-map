@@ -16,6 +16,9 @@ namespace LUPA
     /// </summary>
     public partial class MainWindow : Window
     {
+        public readonly SolidColorBrush keyPointColor = Brushes.IndianRed;
+        public readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
+        public readonly SolidColorBrush customObjectColor = Brushes.SaddleBrown;
         Map map;
         System.Windows.Point position;
 
@@ -34,12 +37,12 @@ namespace LUPA
             position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
-                DrawPoint(Brushes.IndianRed, position);
+                DrawPoint(keyPointColor, position);
                 AddKeyPoint(position);
             }
             else if (ContourPointBtn.IsChecked == true)
             {
-                DrawPoint(Brushes.LightSeaGreen, position);
+                DrawPoint(contourPointColor, position);
                 AddContourPoint(position);
             }
         }
@@ -51,11 +54,11 @@ namespace LUPA
         {
             if (e.OriginalSource is Rectangle clickedShape)
             {
-                if (clickedShape.Stroke == Brushes.IndianRed && KeyPointBtn.IsChecked == true)
+                if (clickedShape.Stroke == keyPointColor && KeyPointBtn.IsChecked == true)
                 {
                     Map.Children.Remove(clickedShape);   
                 }
-                if (clickedShape.Stroke == Brushes.LightSeaGreen && ContourPointBtn.IsChecked == true)
+                if (clickedShape.Stroke == contourPointColor && ContourPointBtn.IsChecked == true)
                 {
                     Map.Children.Remove(clickedShape);
                 }
@@ -83,6 +86,20 @@ namespace LUPA
             Canvas.SetLeft(rec, position.X);
         }
 
+        private void DrawLine(Brush color, System.Windows.Point startPosition, System.Windows.Point endPosition)
+        {
+            Line line = new Line()
+            {
+                Stroke = color,
+                StrokeThickness = 3,
+                X1 = startPosition.X,
+                Y1 = startPosition.Y,
+                X2 = endPosition.X,
+                Y2 = endPosition.Y
+            };
+            Map.Children.Add(line);
+        }
+
         private void AddKeyPoint(System.Windows.Point position)
         {
             map.KeyPoints.Add(new KeyPoint(position.X, position.Y, "defaultKeyPointName"));
@@ -95,13 +112,13 @@ namespace LUPA
 
         private void KeyPointBtn_Checked(object sender, RoutedEventArgs e)
         {
-            KeyPointBtn.Background = Brushes.IndianRed;
+            KeyPointBtn.Background = keyPointColor;
             ContourPointBtn.Background = Brushes.Azure;
         }
 
         private void ContourBtn_Checked(object sender, RoutedEventArgs e)
         {
-            ContourPointBtn.Background = Brushes.LightSeaGreen;
+            ContourPointBtn.Background = contourPointColor;
             KeyPointBtn.Background = Brushes.Azure;
         }
 
@@ -137,7 +154,7 @@ namespace LUPA
             {               
                 position.X = cp.X;
                 position.Y = cp.Y;
-                DrawPoint(Brushes.LightSeaGreen, position);
+                DrawPoint(contourPointColor, position);
             }
         }
 
@@ -148,7 +165,7 @@ namespace LUPA
             {
                 position.X = kp.X;
                 position.Y = kp.Y;
-                DrawPoint(Brushes.IndianRed, position);
+                DrawPoint(keyPointColor, position);
             }
         }
 
@@ -159,7 +176,7 @@ namespace LUPA
             {
                 position.X = co.X;
                 position.Y = co.Y;
-                DrawPoint(Brushes.SaddleBrown, position);
+                DrawPoint(customObjectColor, position);
             }
         }
 
