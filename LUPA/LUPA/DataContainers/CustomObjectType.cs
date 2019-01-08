@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LUPA.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LUPA.DataContainers
 {
-    class CustomObjectType
+    public class CustomObjectType
     {
         public string Name { get; }
 
@@ -22,7 +23,7 @@ namespace LUPA.DataContainers
 
         public void AddVariable(string variableName, string variableType)
         {
-            string [] types = {"string", "int", "double", "float", "bool", "long" };
+            string [] types = {"string", "String", "int", "double", "float", "bool", "long" };
             bool isTypeRecognised = false;
             foreach(string type in types) {
                 if(type.Equals(variableType))
@@ -33,7 +34,7 @@ namespace LUPA.DataContainers
             }
             if(!isTypeRecognised)
             {
-                throw new Exception("Type is not recognised");
+                throw new ObjectTypeDeclarationException("Type is not recognised");
             }
             VariableNames.Add(variableName);
             VariableTypes.Add(variableType);

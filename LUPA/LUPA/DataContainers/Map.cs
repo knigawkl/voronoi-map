@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LUPA.DataContainers
 {
-    class Map
+    public class Map
     {
         public List<Point> ContourPoints { set; get; }
         public List<KeyPoint> KeyPoints { set; get; }

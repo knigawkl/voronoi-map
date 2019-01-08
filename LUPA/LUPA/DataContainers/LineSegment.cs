@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LUPA
 {
-    class LineSegment
+    public class LineSegment
     {
         public Point StartPoint { set; get; }
         public Point EndPoint { set; get; }

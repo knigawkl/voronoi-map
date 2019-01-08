@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LUPA
 {
-    class Point
+    public class Point
     {
         public double X { set; get; }
         public double Y { set; get; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LUPA
 {
-    class KeyPoint : Point
+    public class KeyPoint : Point
     {
         public string Name { set; get; }
         public KeyPoint(double x, double y, string name) : base(x, y)

@@ -26,3 +26,7 @@ C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.Gener
 C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.CoreCompileInputs.cache
 C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.exe
 C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.pdb
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.dll
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.pdb
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\bin\Debug\nunit.framework.xml
+C:\Users\Mateeusz\2018Z_AISD_proj_zesp_gr9\LUPA\LUPA\obj\Debug\LUPA.csproj.CopyComplete
