@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LUPA.DataContainers;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LUPA
 {
@@ -37,18 +38,15 @@ namespace LUPA
             position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
-                DrawPoint(keyPointColor, position);
-                AddKeyPoint(position);
+                DrawPoint(keyPointColor, position);  // rysuje na canvasie
+                AddKeyPoint(position);    //dodaje do mapy
             }
             else if (ContourPointBtn.IsChecked == true)
             {
-                DrawPoint(contourPointColor, position);               
-                Dictionary<double, System.Windows.Point> contourPtsWithDist = CalculateContourPointsDistances(position);
-                List<double> shortestDistances = FindShortestDistances(contourPtsWithDist);
-                contourPtsWithDist.TryGetValue(shortestDistances[0], out System.Windows.Point srcPt);
-                contourPtsWithDist.TryGetValue(shortestDistances[1], out System.Windows.Point endPt);
-                DeleteContourLineBetween(srcPt, endPt);
-                AddContourPoint(position);
+                DeleteCurrentContour(); //usuwa obecny kontur
+                DrawPoint(contourPointColor, position);  //rysuje na canvasie
+                AddContourPoint(position);  //dodaje do mapy w dobrym miejscu
+                DrawContourLinesInOrder();   //rysuje linie na podstawie mapy w kolejnosci            
             }
         }
 
@@ -71,39 +69,58 @@ namespace LUPA
             }
         }
 
-        private void DeleteContourLineBetween(System.Windows.Point srcPt, System.Windows.Point endPt)
-        {
-            OutputTxt.Text = srcPt.X + " " + srcPt.Y + " " + endPt.X + " " + endPt.Y;
-        }
-
-        private List<double> FindShortestDistances(Dictionary<double, System.Windows.Point> closestContourPts)
-        {
-            var distances = new List<double> { 0, 0 };
-            foreach (var item in closestContourPts)
-            {
-                distances.Add(item.Key);
-            }
-            distances.Sort();
-            return new List<double> { distances[0], distances[1] };
-        }
-
-        private Dictionary<double, System.Windows.Point> CalculateContourPointsDistances(System.Windows.Point position)
-        {
-            var distances = new Dictionary<double, System.Windows.Point>();
-            double dist;
-            foreach (var cp in map.ContourPoints)
-            {
-                dist = CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
-                distances.Add(dist, new System.Windows.Point(position.X, position.Y));
-            }
-            return distances;
-        }
-
         private double CalculateDistBetweenPoints(System.Windows.Point srcPt, System.Windows.Point endPt)
         {
             return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
         }
 
+        private double CalculateDistBetweenPoints(Point srcPt, Point endPt)
+        {
+            return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
+        }
+
+        private double CalculateDistBetweenPoints(System.Windows.Point srcPt, Point endPt)
+        {
+            return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
+        }
+
+        private void DeleteCurrentContour()
+        {
+            var contourLines = Map.Children.OfType<Line>().ToList();
+            foreach (var line in contourLines)
+            {
+                Map.Children.Remove(line);
+            }
+        }
+        /*
+        private void DrawContourLines()
+        {
+            var contourPoints = GetContourPointsFromMap();
+            Polygon p = new Polygon
+            {
+                Stroke = contourPointColor,
+                StrokeThickness = 2,
+                Points = contourPoints
+            };
+            Map.Children.Add(p);
+        }
+
+        private PointCollection GetContourPointsFromMap()
+        {
+            PointCollection pc = new PointCollection();
+            var utilPoint = new System.Windows.Point(0, 0);
+            var contourPts = Map.Children.OfType<Rectangle>().Where(x => x.Stroke == contourPointColor).ToList();
+
+            foreach (var cp in contourPts)
+            {
+                double x, y;
+                x = Canvas.GetLeft(cp);
+                y = Canvas.GetTop(cp);
+                pc.Add(new System.Windows.Point(x, y));
+            }
+            return pc;
+        }
+        */
         private void RemovePointFromDataContainer(Rectangle clickedShape)
         {
             double x = Canvas.GetLeft(clickedShape);
@@ -145,7 +162,43 @@ namespace LUPA
 
         private void AddContourPoint(System.Windows.Point position)
         {
-            map.ContourPoints.Add(new Point(position.X, position.Y));
+            var distances = new List<double>();
+            double dist;
+            foreach (var cp in map.ContourPoints)
+            {
+                dist = CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
+                distances.Add(dist);
+            }
+            distances.Sort();
+            Point firstPt, scndPt;
+            firstPt = FindDistantPoint(position, distances[0]);
+            scndPt = FindDistantPoint(position, distances[1]);
+            int firstIndex = map.ContourPoints.IndexOf(firstPt);
+            int scndIndex = map.ContourPoints.IndexOf(scndPt);
+            if (firstIndex < scndIndex)
+            {
+                map.ContourPoints.Insert(scndIndex, new Point(position.X, position.Y));
+            }
+            else
+            {
+                map.ContourPoints.Insert(firstIndex, new Point(position.X, position.Y));
+            }
+        }
+
+
+        private Point FindDistantPoint(System.Windows.Point position, double distance)
+        {
+            Point point = new Point(0, 0);
+            double dist;
+            foreach (var cp in map.ContourPoints)
+            {
+                dist = CalculateDistBetweenPoints(position, cp);
+                if (dist == distance)
+                {
+                    return cp;
+                }
+            }
+            return point;
         }
 
         private void KeyPointBtn_Checked(object sender, RoutedEventArgs e)

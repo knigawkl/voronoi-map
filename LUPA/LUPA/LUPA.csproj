@@ -72,6 +72,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AreaDivider.cs" />
     <Compile Include="DataContainers\Map.cs" />
     <Compile Include="DataContainers\CustomObjectInstance.cs" />
     <Compile Include="DataContainers\CustomObjectType.cs" />
