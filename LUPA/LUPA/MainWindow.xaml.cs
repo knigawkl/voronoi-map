@@ -42,7 +42,12 @@ namespace LUPA
             }
             else if (ContourPointBtn.IsChecked == true)
             {
-                DrawPoint(contourPointColor, position);
+                DrawPoint(contourPointColor, position);               
+                Dictionary<double, System.Windows.Point> contourPtsWithDist = CalculateContourPointsDistances(position);
+                List<double> shortestDistances = FindShortestDistances(contourPtsWithDist);
+                contourPtsWithDist.TryGetValue(shortestDistances[0], out System.Windows.Point srcPt);
+                contourPtsWithDist.TryGetValue(shortestDistances[1], out System.Windows.Point endPt);
+                DeleteContourLineBetween(srcPt, endPt);
                 AddContourPoint(position);
             }
         }
@@ -66,6 +71,39 @@ namespace LUPA
             }
         }
 
+        private void DeleteContourLineBetween(System.Windows.Point srcPt, System.Windows.Point endPt)
+        {
+            OutputTxt.Text = srcPt.X + " " + srcPt.Y + " " + endPt.X + " " + endPt.Y;
+        }
+
+        private List<double> FindShortestDistances(Dictionary<double, System.Windows.Point> closestContourPts)
+        {
+            var distances = new List<double> { 0, 0 };
+            foreach (var item in closestContourPts)
+            {
+                distances.Add(item.Key);
+            }
+            distances.Sort();
+            return new List<double> { distances[0], distances[1] };
+        }
+
+        private Dictionary<double, System.Windows.Point> CalculateContourPointsDistances(System.Windows.Point position)
+        {
+            var distances = new Dictionary<double, System.Windows.Point>();
+            double dist;
+            foreach (var cp in map.ContourPoints)
+            {
+                dist = CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
+                distances.Add(dist, new System.Windows.Point(position.X, position.Y));
+            }
+            return distances;
+        }
+
+        private double CalculateDistBetweenPoints(System.Windows.Point srcPt, System.Windows.Point endPt)
+        {
+            return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
+        }
+
         private void RemovePointFromDataContainer(Rectangle clickedShape)
         {
             double x = Canvas.GetLeft(clickedShape);
@@ -86,16 +124,16 @@ namespace LUPA
             Canvas.SetLeft(rec, position.X);
         }
 
-        private void DrawLine(Brush color, System.Windows.Point startPosition, System.Windows.Point endPosition)
+        private void DrawLine(Brush color, double srcPtX, double srcPtY, double endPtX, double endPtY)
         {
             Line line = new Line()
             {
                 Stroke = color,
-                StrokeThickness = 3,
-                X1 = startPosition.X,
-                Y1 = startPosition.Y,
-                X2 = endPosition.X,
-                Y2 = endPosition.Y
+                StrokeThickness = 2,
+                X1 = srcPtX,
+                Y1 = srcPtY,
+                X2 = endPtX,
+                Y2 = endPtY
             };
             Map.Children.Add(line);
         }
@@ -145,6 +183,7 @@ namespace LUPA
             DrawContourPoints();
             DrawKeyPoints();
             DrawCustomObjects();
+            DrawContourLinesInOrder();
         }
 
         private void DrawContourPoints()
@@ -179,6 +218,31 @@ namespace LUPA
                 DrawPoint(customObjectColor, position);
             }
         }
+        
+        private void DrawContourLinesInOrder()
+        {
+            double srcPtX, srcPtY, endPtX, endPtY;
+            for (int i = 0; i < map.ContourPoints.Count - 1; i++)
+            {
+                srcPtX = map.ContourPoints[i].X;
+                srcPtY = map.ContourPoints[i].Y;
+                endPtX = map.ContourPoints[i + 1].X;
+                endPtY = map.ContourPoints[i + 1].Y;
+                DrawLine(contourPointColor, srcPtX, srcPtY, endPtX, endPtY);
+            }
+            DrawLastContourLine();
+        }
+
+        private void DrawLastContourLine()
+        {
+            double srcPtX, srcPtY, endPtX, endPtY;
+            int totalContourPointsNum = map.ContourPoints.Count - 1;
+            srcPtX = map.ContourPoints[0].X;
+            srcPtY = map.ContourPoints[0].Y;
+            endPtX = map.ContourPoints[totalContourPointsNum].X;
+            endPtY = map.ContourPoints[totalContourPointsNum].Y;
+            DrawLine(contourPointColor, srcPtX, srcPtY, endPtX, endPtY);
+        }        
 
         private void ChangeBackground_Click(object sender, RoutedEventArgs e)
         {
