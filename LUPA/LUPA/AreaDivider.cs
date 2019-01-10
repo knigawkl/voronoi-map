@@ -54,7 +54,11 @@ namespace LUPA
         public static void DivideIntoAreas(Map map)
         {
             List<LineSegment> contourLines = new List<LineSegment>();
-            //todo contourLines
+            for(int i = 0; i < map.ContourPoints.Count - 1; i++)
+            {
+                contourLines.Add(new LineSegment(map.ContourPoints[i], map.ContourPoints[i + 1]));
+            }
+            contourLines.Add(new LineSegment(map.ContourPoints[map.ContourPoints.Count - 1], map.ContourPoints[0]));
             foreach (KeyPoint keyPoint in map.KeyPoints)
             {
                 List<ADLine> bisectors = new List<ADLine>();
@@ -282,27 +286,54 @@ namespace LUPA
 
         private static double Distance(Point firstPoint, Point secondPoint)
         {
-            throw new NotImplementedException();
+            return Math.Sqrt(Math.Pow((secondPoint.X - firstPoint.X), 2) + Math.Pow((secondPoint.Y - firstPoint.Y), 2));
         }
 
-        private static bool TryGetIntersection(ADLine bisector, LineSegment contourLine, out Point intersectionPoint)
+        private static bool TryGetIntersection(ADLine firstLine, LineSegment contourLine, out Point intersectionPoint)
         {
-            throw new NotImplementedException();
+            double a = (contourLine.StartPoint.Y - contourLine.EndPoint.Y) / (contourLine.StartPoint.X - contourLine.EndPoint.X);
+            double b = contourLine.StartPoint.Y - a * contourLine.StartPoint.X;
+            ADLine secondLine = new ADLine(a, b);
+            if (!TryGetIntersection(firstLine, secondLine, out intersectionPoint))
+            {
+                return false;
+            }
+            
+            if(intersectionPoint.X < Math.Max(contourLine.StartPoint.X, contourLine.EndPoint.X) && intersectionPoint.X > Math.Min(contourLine.StartPoint.X, contourLine.EndPoint.X))
+            {
+                return true;
+            }
+            return false;
         }
 
-        private static bool TryGetIntersection(ADLine firstBisector, ADLine secondBisector, out Point intersectionPoint)
+        private static bool TryGetIntersection(ADLine firstLine, ADLine secondLine, out Point intersectionPoint)
         {
-            throw new NotImplementedException();
+            if(firstLine.A == secondLine.A)
+            {
+                intersectionPoint = new Point(0, 0);
+                return false;
+            }
+            double x = (secondLine.B - firstLine.B) / (firstLine.A - secondLine.B);
+            double y = firstLine.A * x + firstLine.B;
+            intersectionPoint = new Point(x, y);
+            return true;
         }
 
-        private static double Distance(Point point, ADLine bisector, out Point closestPoint)
+        private static double Distance(Point point, ADLine line, out Point closestPoint)
         {
-            throw new NotImplementedException();
+            ADLine perpendicular = new ADLine(-(1/line.A), point.Y + (point.X/line.A));
+            TryGetIntersection(line, perpendicular, out closestPoint);
+            return Math.Abs(line.A*point.X - point.Y + line.B) / Math.Sqrt(Math.Pow(line.A, 2) + 1);
         }
 
-        private static ADLine CreateBisector(KeyPoint keyPoint, KeyPoint anotherKeyPoint)
+        private static ADLine CreateBisector(KeyPoint firstKeyPoint, KeyPoint secondKeyPoint)
         {
-            throw new NotImplementedException();
+            double a = (firstKeyPoint.Y - secondKeyPoint.Y) / (firstKeyPoint.X - secondKeyPoint.X);
+            double b = firstKeyPoint.Y - a * firstKeyPoint.X;
+            Point midPoint = new Point((firstKeyPoint.X + secondKeyPoint.X) / 2, (firstKeyPoint.Y + secondKeyPoint.Y) / 2);
+            ADLine line = new ADLine(a, b);
+            return new ADLine (-(1 / line.A), midPoint.Y + (midPoint.X / line.A));
+
         }
     }
 }
