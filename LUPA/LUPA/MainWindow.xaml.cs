@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using LUPA.DataContainers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace LUPA
 {
@@ -275,11 +276,13 @@ namespace LUPA
 
         public void DrawAreaLines(List<LineSegment> areaLineSegments)
         {
+            StringBuilder sr = new StringBuilder();
             foreach (var als in map.AreaLineSegments)
             {
-                System.Console.WriteLine(als.StartPoint.X + " " + als.StartPoint.Y + " : " + als.EndPoint.X + " " + als.EndPoint.Y);
-                DrawLine(areaLinesColor, als.StartPoint, als.EndPoint);
+                sr.Append(als.StartPoint.X + " " + als.StartPoint.Y + " : " + als.EndPoint.X + " " + als.EndPoint.Y + "\n");
+                DrawLine(areaLinesColor, als.StartPoint.X, als.StartPoint.Y, als.EndPoint.X, als.EndPoint.Y);
             }
+            UpperSideToolbarTxt.Text = sr.ToString();
         }
 
         private void DrawContourLinesInOrder()
