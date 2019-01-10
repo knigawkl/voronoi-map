@@ -211,6 +211,7 @@ namespace LUPA
             {
                 Map.Children.Clear();
                 map = Parser.ParseFile(ofd.FileName);
+                AreaDivider.DivideIntoAreas(map);
                 DrawMap();
             }
         }

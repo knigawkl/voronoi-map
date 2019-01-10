@@ -16,5 +16,19 @@ namespace LUPA
             X = x;
             Y = y;
         }
+
+        public override bool Equals(object obj)
+        {
+            Point point = (Point)obj;
+            return point.X == X && point.Y == Y;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1861411795;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            return hashCode;
+        }
     }
 }
