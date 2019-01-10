@@ -19,7 +19,8 @@ namespace LUPA
     {
         public readonly SolidColorBrush keyPointColor = Brushes.IndianRed;
         public readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
-        public readonly SolidColorBrush customObjectColor = Brushes.SaddleBrown;
+        public readonly SolidColorBrush customObjectColor = Brushes.Gold;
+        public readonly SolidColorBrush areaLinesColor = Brushes.DarkOrange;
         Map map;
         System.Windows.Point position;
 
@@ -127,6 +128,20 @@ namespace LUPA
                 Y1 = srcPtY,
                 X2 = endPtX,
                 Y2 = endPtY
+            };
+            Map.Children.Add(line);
+        }
+
+        private void DrawLine(Brush color, Point src, Point end)
+        {
+            Line line = new Line()
+            {
+                Stroke = color,
+                StrokeThickness = 2,
+                X1 = src.X,
+                Y1 = src.Y,
+                X2 = end.X,
+                Y2 = end.Y
             };
             Map.Children.Add(line);
         }
@@ -256,7 +271,15 @@ namespace LUPA
                 DrawPoint(customObjectColor, position);
             }
         }
-        
+
+        public void DrawAreaLines(List<LineSegment> areaLineSegments)
+        {
+            foreach (var als in map.AreaLineSegments)
+            {
+                DrawLine(areaLinesColor, als.StartPoint, als.EndPoint);
+            }
+        }
+
         private void DrawContourLinesInOrder()
         {
             double srcPtX, srcPtY, endPtX, endPtY;
