@@ -228,6 +228,7 @@ namespace LUPA
                 map = Parser.ParseFile(ofd.FileName);
                 AreaDivider.DivideIntoAreas(map);
                 DrawMap();
+                DrawAreaLines(map.AreaLineSegments);
             }
         }
 
@@ -276,6 +277,7 @@ namespace LUPA
         {
             foreach (var als in map.AreaLineSegments)
             {
+                System.Console.WriteLine(als.StartPoint.X + " " + als.StartPoint.Y + " : " + als.EndPoint.X + " " + als.EndPoint.Y);
                 DrawLine(areaLinesColor, als.StartPoint, als.EndPoint);
             }
         }
