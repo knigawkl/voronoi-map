@@ -6,15 +6,32 @@ namespace LUPA
 {
     public class AreaDivider
     {
-        private class ADLine
+        public class ADLine
         {
             public double A { set; get; }
             public double B { set; get; }
+            public double C { set; get; }
 
-            public ADLine(double a, double b)
+            public ADLine(double a, double b, double c)
             {
                 A = a;
                 B = b;
+                C = c;
+            }
+
+            public override bool Equals(object obj)
+            {
+                ADLine adLine = (ADLine)obj;
+                return adLine.A == A && adLine.B == B && adLine.C == C;
+            }
+
+            public override int GetHashCode()
+            {
+                var hashCode = 793064651;
+                hashCode = hashCode * -1521134295 + A.GetHashCode();
+                hashCode = hashCode * -1521134295 + B.GetHashCode();
+                hashCode = hashCode * -1521134295 + C.GetHashCode();
+                return hashCode;
             }
         }
 
@@ -23,9 +40,27 @@ namespace LUPA
             Point firstPointRef = new Point(firstPoint.X - secondPoint.X, firstPoint.Y - secondPoint.Y);
             Point secondPointRef = new Point(0, 0);
             Point thirdPointRef = new Point(thirdPoint.X - secondPoint.X, thirdPoint.Y - secondPoint.Y);
-            double firstTan = firstPointRef.Y / firstPointRef.X;
-            double thirdTan = thirdPointRef.Y / thirdPointRef.X;
-            double firstAngle = Math.Atan(firstTan);
+            double firstAngle, thirdAngle;
+            if(firstPointRef.X != 0)
+            {
+                double firstTan = firstPointRef.Y / firstPointRef.X;
+                firstAngle = Math.Atan(firstTan);
+            }
+            else
+            {
+                firstAngle = firstPointRef.X > 0 ? 0 : Math.PI;
+            }
+
+            if (thirdPointRef.X != 0)
+            {
+                double thirdTan = thirdPointRef.Y / thirdPointRef.X;
+                thirdAngle = Math.Atan(thirdTan);
+            }
+            else
+            {
+                thirdAngle = thirdPointRef.X > 0 ? 0 : Math.PI;
+            }
+
             if (firstAngle < 0)
             {
                 firstAngle = Math.PI - firstAngle;
@@ -34,7 +69,7 @@ namespace LUPA
             {
                 firstAngle += Math.PI;
             }
-            double thirdAngle = Math.Atan(thirdTan);
+            
             if (firstAngle < 0)
             {
                 thirdAngle = Math.PI / 2 - thirdAngle;
@@ -48,7 +83,7 @@ namespace LUPA
             {
                 finalAngle -= 2 * Math.PI;
             }
-            return finalAngle > Math.PI ? false : true;
+            return finalAngle > Math.PI ? true : false;
         }
 
         public static void DivideIntoAreas(Map map)
@@ -284,55 +319,114 @@ namespace LUPA
             }
         }
 
-        private static double Distance(Point firstPoint, Point secondPoint)
+        public static double Distance(Point firstPoint, Point secondPoint)
         {
             return Math.Sqrt(Math.Pow((secondPoint.X - firstPoint.X), 2) + Math.Pow((secondPoint.Y - firstPoint.Y), 2));
         }
 
-        private static bool TryGetIntersection(ADLine firstLine, LineSegment contourLine, out Point intersectionPoint)
+        public static bool TryGetIntersection(ADLine firstLine, LineSegment contourLine, out Point intersectionPoint)
         {
-            double a = (contourLine.StartPoint.Y - contourLine.EndPoint.Y) / (contourLine.StartPoint.X - contourLine.EndPoint.X);
-            double b = contourLine.StartPoint.Y - a * contourLine.StartPoint.X;
-            ADLine secondLine = new ADLine(a, b);
+            double a, b, c;
+            if (contourLine.StartPoint.X != contourLine.EndPoint.X)
+            {
+                 a = (contourLine.StartPoint.Y - contourLine.EndPoint.Y) / (contourLine.StartPoint.X - contourLine.EndPoint.X);
+                 c = contourLine.StartPoint.Y - a * contourLine.StartPoint.X;
+                 b = -1;
+            }
+            else
+            {
+                 a = 1;
+                 c = -contourLine.StartPoint.X;
+                 b = 0;
+            }
+            ADLine secondLine = new ADLine(a, b, c);
             if (!TryGetIntersection(firstLine, secondLine, out intersectionPoint))
             {
                 return false;
             }
             
-            if(intersectionPoint.X < Math.Max(contourLine.StartPoint.X, contourLine.EndPoint.X) && intersectionPoint.X > Math.Min(contourLine.StartPoint.X, contourLine.EndPoint.X))
+            if(intersectionPoint.X <= Math.Max(contourLine.StartPoint.X, contourLine.EndPoint.X) && intersectionPoint.X >= Math.Min(contourLine.StartPoint.X, contourLine.EndPoint.X))
             {
                 return true;
             }
             return false;
         }
 
-        private static bool TryGetIntersection(ADLine firstLine, ADLine secondLine, out Point intersectionPoint)
+        public static bool TryGetIntersection(ADLine firstLine, ADLine secondLine, out Point intersectionPoint)
         {
             if(firstLine.A == secondLine.A)
             {
                 intersectionPoint = new Point(0, 0);
                 return false;
             }
-            double x = (secondLine.B - firstLine.B) / (firstLine.A - secondLine.B);
-            double y = firstLine.A * x + firstLine.B;
-            intersectionPoint = new Point(x, y);
-            return true;
+            else if (firstLine.B == 0)
+            {
+                double x = -firstLine.C;
+                double y = (-x * secondLine.A) - secondLine.C;
+                intersectionPoint = new Point(x, y);
+                return true;
+            }
+            else if (secondLine.B == 0)
+            {
+                double x = -secondLine.C;
+                double y = (-x * firstLine.A) - firstLine.C;
+                intersectionPoint = new Point(x, y);
+                return true;
+            }
+            else
+            {
+                double x = (secondLine.C - firstLine.C) / (firstLine.A - secondLine.A);
+                double y = firstLine.A * x + firstLine.C;
+                intersectionPoint = new Point(x, y);
+                return true;
+            }
+            
         }
 
-        private static double Distance(Point point, ADLine line, out Point closestPoint)
+        public static double Distance(Point point, ADLine line, out Point closestPoint)
         {
-            ADLine perpendicular = new ADLine(-(1/line.A), point.Y + (point.X/line.A));
-            TryGetIntersection(line, perpendicular, out closestPoint);
-            return Math.Abs(line.A*point.X - point.Y + line.B) / Math.Sqrt(Math.Pow(line.A, 2) + 1);
+            if (line.B != 0 && line.A != 0)
+            {
+                ADLine perpendicular = new ADLine(-(1 / line.A), -1,  point.Y + (point.X / line.A));
+                TryGetIntersection(line, perpendicular, out closestPoint);
+                return Math.Abs(line.A * point.X - point.Y + line.C) / Math.Sqrt(Math.Pow(line.A, 2) + 1);
+            }
+            else if(line.B != 0 && line.A == 0)
+            {
+                ADLine perpendicular = new ADLine(1, 0, -point.X);
+                TryGetIntersection(line, perpendicular, out closestPoint);
+                return Math.Abs(point.Y - line.C);
+            }
+            else
+            {
+                ADLine perpendicular = new ADLine(0, -1, point.Y);
+                TryGetIntersection(line, perpendicular, out closestPoint);
+                return Math.Abs(point.X - line.C);
+            }
         }
 
-        private static ADLine CreateBisector(KeyPoint firstKeyPoint, KeyPoint secondKeyPoint)
+        public static ADLine CreateBisector(KeyPoint firstKeyPoint, KeyPoint secondKeyPoint)
         {
-            double a = (firstKeyPoint.Y - secondKeyPoint.Y) / (firstKeyPoint.X - secondKeyPoint.X);
-            double b = firstKeyPoint.Y - a * firstKeyPoint.X;
+            double a, b, c;
             Point midPoint = new Point((firstKeyPoint.X + secondKeyPoint.X) / 2, (firstKeyPoint.Y + secondKeyPoint.Y) / 2);
-            ADLine line = new ADLine(a, b);
-            return new ADLine (-(1 / line.A), midPoint.Y + (midPoint.X / line.A));
+            if (firstKeyPoint.X != secondKeyPoint.X)
+            {
+                a = (firstKeyPoint.Y - secondKeyPoint.Y) / (firstKeyPoint.X - secondKeyPoint.X);
+                c = firstKeyPoint.Y - a * firstKeyPoint.X;
+                b = -1;
+                ADLine line = new ADLine(a, b, c);
+                return new ADLine(-(1 / line.A), -1, midPoint.Y + (midPoint.X / line.A));
+            }
+            else
+            {
+                a = 1;
+                c = -firstKeyPoint.X;
+                b = 0;
+                ADLine line = new ADLine(a, b, c);
+                return new ADLine(0, -1, midPoint.Y);
+            }
+            
+            
 
         }
     }

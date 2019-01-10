@@ -1,0 +1,25 @@
+# Kontury terenu (wymienione w kolejności łączenia): Lp. x y
+1. 40 150
+2. 40 206
+3. 205 505,5
+4. 402 560
+5. 550 300
+6. 402 50
+# Punkty kluczowe: Lp. x y Nazwa
+1. 0 0 KOK Krawczyka
+2. 150 0 KOK Kaczmarskiego
+3. 300 0 KOK Łazarewicza
+4. 0 150 lalalal
+# Definicje obiektów: Lp. Typ_obiektu (Nazwa_zmiennej Typ_zmiennej)*
+1. SZKOŁA Nazwa string X double Y double
+2. DOM X double Y double L_MIESZKAŃCÓW int
+3. NIEDŹWIEDŹ X double Y double
+# Obiekty: Typ_obiektu (zgodnie z definicją)
+1. SZKOŁA "skzola" 465 156
+2. DOM 40 32 100
+3. DOM 400 174 120
+4. DOM 123 182 80
+5. NIEDŹWIEDŹ 202 20
+6. NIEDŹWIEDŹ 402 193
+7. NIEDŹWIEDŹ 393 132
+8. NIEDŹWIEDŹ 39 245
