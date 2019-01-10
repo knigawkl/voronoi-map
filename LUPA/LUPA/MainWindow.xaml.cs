@@ -34,19 +34,29 @@ namespace LUPA
         /// </summary>
         private void Map_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            OutputTxt.Text = "";
             position = e.GetPosition(this);
             position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
-                DrawPoint(keyPointColor, position);  // rysuje na canvasie
-                AddKeyPoint(position);    //dodaje do mapy
+                DrawPoint(keyPointColor, position);
+                AddKeyPoint(position);
+                OutputTxt.Text = "Dodano punkt kluczowy (" + position.X + "; " + position.Y + ")";
             }
             else if (ContourPointBtn.IsChecked == true)
             {
-                DeleteCurrentContour(); //usuwa obecny kontur
-                DrawPoint(contourPointColor, position);  //rysuje na canvasie
-                AddContourPoint(position);  //dodaje do mapy w dobrym miejscu
-                DrawContourLinesInOrder();   //rysuje linie na podstawie mapy w kolejnosci            
+                if (map.ContourPoints.Count < 3)
+                {
+                    OutputTxt.Text = "Przed dodaniem punktu konturu wczytaj plik wejściowy zawierający co najmniej 3 punkty konturu";
+                }
+                else
+                {
+                    DeleteCurrentContour();
+                    DrawPoint(contourPointColor, position);
+                    AddContourPoint(position);
+                    DrawContourLinesInOrder();
+                    OutputTxt.Text = "Dodano punkt konturu (" + position.X + "; " + position.Y + ")";
+                }                         
             }
         }
 
@@ -55,33 +65,27 @@ namespace LUPA
         /// </summary>
         private void Map_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            OutputTxt.Text = "";
             if (e.OriginalSource is Rectangle clickedShape)
             {
                 if (clickedShape.Stroke == keyPointColor && KeyPointBtn.IsChecked == true)
                 {
-                    Map.Children.Remove(clickedShape);   
+                    Map.Children.Remove(clickedShape);
+                    OutputTxt.Text = "Usunięto punkt kluczowy (" + Canvas.GetLeft(clickedShape) + "; " + Canvas.GetTop(clickedShape) + ")";
                 }
-                if (clickedShape.Stroke == contourPointColor && ContourPointBtn.IsChecked == true)
+                if (clickedShape.Stroke == contourPointColor && ContourPointBtn.IsChecked == true && map.ContourPoints.Count < 4)
+                {
+                    OutputTxt.Text = "Nieudane usuwanie: muszą pozostać co najmniej 3 punkty konturu";
+                }
+                else if (clickedShape.Stroke == contourPointColor && ContourPointBtn.IsChecked == true)
                 {
                     Map.Children.Remove(clickedShape);
+                    RemovePointFromDataContainer(clickedShape);
+                    DeleteCurrentContour();
+                    DrawContourLinesInOrder();
+                    OutputTxt.Text = "Usunięto punkt konturu (" + Canvas.GetLeft(clickedShape) + "; " + Canvas.GetTop(clickedShape) + ")";
                 }
-                RemovePointFromDataContainer(clickedShape);
             }
-        }
-
-        private double CalculateDistBetweenPoints(System.Windows.Point srcPt, System.Windows.Point endPt)
-        {
-            return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
-        }
-
-        private double CalculateDistBetweenPoints(Point srcPt, Point endPt)
-        {
-            return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
-        }
-
-        private double CalculateDistBetweenPoints(System.Windows.Point srcPt, Point endPt)
-        {
-            return Math.Sqrt(Math.Pow((endPt.X - srcPt.X), 2) + Math.Pow((endPt.Y - srcPt.Y), 2));
         }
 
         private void DeleteCurrentContour()
@@ -92,39 +96,11 @@ namespace LUPA
                 Map.Children.Remove(line);
             }
         }
-        /*
-        private void DrawContourLines()
-        {
-            var contourPoints = GetContourPointsFromMap();
-            Polygon p = new Polygon
-            {
-                Stroke = contourPointColor,
-                StrokeThickness = 2,
-                Points = contourPoints
-            };
-            Map.Children.Add(p);
-        }
 
-        private PointCollection GetContourPointsFromMap()
-        {
-            PointCollection pc = new PointCollection();
-            var utilPoint = new System.Windows.Point(0, 0);
-            var contourPts = Map.Children.OfType<Rectangle>().Where(x => x.Stroke == contourPointColor).ToList();
-
-            foreach (var cp in contourPts)
-            {
-                double x, y;
-                x = Canvas.GetLeft(cp);
-                y = Canvas.GetTop(cp);
-                pc.Add(new System.Windows.Point(x, y));
-            }
-            return pc;
-        }
-        */
         private void RemovePointFromDataContainer(Rectangle clickedShape)
         {
             double x = Canvas.GetLeft(clickedShape);
-            double y = Canvas.GetTop(clickedShape) + TopToolbar.ActualHeight;
+            double y = Canvas.GetTop(clickedShape);
             map.KeyPoints.RemoveAll(o => o.X == x && o.Y == y);
             map.ContourPoints.RemoveAll(o => o.X == x && o.Y == y);
         }
@@ -166,7 +142,7 @@ namespace LUPA
             double dist;
             foreach (var cp in map.ContourPoints)
             {
-                dist = CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
+                dist = Util.Util.CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
                 distances.Add(dist);
             }
             distances.Sort();
@@ -175,11 +151,19 @@ namespace LUPA
             scndPt = FindDistantPoint(position, distances[1]);
             int firstIndex = map.ContourPoints.IndexOf(firstPt);
             int scndIndex = map.ContourPoints.IndexOf(scndPt);
-            if (firstIndex < scndIndex)
+            if (firstIndex == 0 && scndIndex == 1)
             {
                 map.ContourPoints.Insert(scndIndex, new Point(position.X, position.Y));
             }
-            else
+            else if (firstIndex == 0 && scndIndex == map.ContourPoints.Count - 1)
+            {
+                map.ContourPoints.Add(new Point(position.X, position.Y));
+            }
+            else if (firstIndex < scndIndex)
+            {
+                map.ContourPoints.Insert(scndIndex, new Point(position.X, position.Y));
+            }
+            else if (firstIndex > scndIndex)
             {
                 map.ContourPoints.Insert(firstIndex, new Point(position.X, position.Y));
             }
@@ -192,7 +176,7 @@ namespace LUPA
             double dist;
             foreach (var cp in map.ContourPoints)
             {
-                dist = CalculateDistBetweenPoints(position, cp);
+                dist = Util.Util.CalculateDistBetweenPoints(position, cp);
                 if (dist == distance)
                 {
                     return cp;
@@ -314,6 +298,7 @@ namespace LUPA
                 };
                 Map.Background = ib;
             }
+            OutputTxt.Text = "Zmieniono tło na: " + ofd.FileName.ToString();
         }
     }
 }
