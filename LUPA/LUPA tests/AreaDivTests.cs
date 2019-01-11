@@ -36,6 +36,20 @@ namespace LUPA_tests
             //Assert
             Assert.True(result);
         }
+
+        [Test]
+        public void TestIsPointOnRight2()
+        {
+            //Arrange
+            Point fPoint = new Point(1, 1);
+            Point sPoint = new Point(1, 10);
+            Point tPoint = new Point(0, 10);
+            //Act
+            bool result = IsPointOnRight(fPoint, sPoint, tPoint);
+            //Assert
+            Assert.True(result);
+        }
+
         [Test]
         public void TestIsPointOnLeft()
         {

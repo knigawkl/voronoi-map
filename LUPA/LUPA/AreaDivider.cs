@@ -48,7 +48,7 @@ namespace LUPA
             }
             else
             {
-                firstAngle = firstPointRef.X > 0 ? 0 : Math.PI;
+                firstAngle = firstPointRef.Y > 0 ? Math.PI/2 : 3 * Math.PI / 2;
             }
 
             if (thirdPointRef.X != 0)
@@ -58,26 +58,28 @@ namespace LUPA
             }
             else
             {
-                thirdAngle = thirdPointRef.X > 0 ? 0 : Math.PI;
+                thirdAngle = thirdPointRef.Y > 0 ? Math.PI / 2 : 3 * Math.PI / 2;
             }
 
-            if (firstAngle < 0)
-            {
-                firstAngle = Math.PI - firstAngle;
-            }
+            
             if (firstPointRef.X < 0)
             {
                 firstAngle += Math.PI;
             }
-            
             if (firstAngle < 0)
             {
-                thirdAngle = Math.PI / 2 - thirdAngle;
+                firstAngle += 2*Math.PI;
             }
-            if (firstPointRef.X < 0)
+
+            if (thirdPointRef.X < 0)
             {
                 thirdAngle += Math.PI;
             }
+            if (thirdAngle < 0)
+            {
+                thirdAngle += 2*Math.PI;
+            }
+            
             double finalAngle = thirdAngle + (2 * Math.PI - firstAngle);
             if (finalAngle > 2 * Math.PI)
             {
@@ -362,14 +364,14 @@ namespace LUPA
             else if (firstLine.B == 0)
             {
                 double x = -firstLine.C;
-                double y = (-x * secondLine.A) - secondLine.C;
+                double y = (-x * secondLine.A) + secondLine.C;
                 intersectionPoint = new Point(x, y);
                 return true;
             }
             else if (secondLine.B == 0)
             {
                 double x = -secondLine.C;
-                double y = (-x * firstLine.A) - firstLine.C;
+                double y = (-x * firstLine.A) + firstLine.C;
                 intersectionPoint = new Point(x, y);
                 return true;
             }
