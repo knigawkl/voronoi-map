@@ -329,5 +329,21 @@ namespace LUPA
             }
             OutputTxt.Text = "Zmieniono tło na: " + ofd.FileName.ToString();
         }
+        /* tu jest skopane co jest co ale to zadziala
+        private bool FindLineIntersection (Line first, Line second)
+        {
+            double a1 = second.Y1 - first.Y1;
+            double b1 = first.X1 - second.X1;
+            double c1 = a1 * first.X1 + b1 * first.X1;
+
+            double a2 = second.Y2 - first.Y2;
+            double b2 = first.X2 - second.X2;
+            double c2 = a2 * first.X2 + b2 * first.Y2;
+
+            double delta = a1 * b2 - a2 * b1;
+            return delta == 0 ? false
+                : true;
+        }
+        */
     }
 }
