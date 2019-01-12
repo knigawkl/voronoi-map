@@ -150,6 +150,9 @@ namespace LUPA
         private void AddKeyPoint(System.Windows.Point position)
         {
             map.KeyPoints.Add(new KeyPoint(position.X, position.Y, "defaultKeyPointName"));
+            AreaDivider.DivideIntoAreas(map);
+            DrawMap();
+            DrawAreaLines(map.AreaLineSegments);
         }
 
         private void AddContourPoint(System.Windows.Point position)

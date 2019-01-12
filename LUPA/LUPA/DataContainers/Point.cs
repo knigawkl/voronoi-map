@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static LUPA.AreaDivider;
 
 namespace LUPA
 {
@@ -20,7 +21,8 @@ namespace LUPA
         public override bool Equals(object obj)
         {
             Point point = (Point)obj;
-            return point.X == X && point.Y == Y;
+            //return point.X == X && point.Y == Y;
+            return Distance(this, point) < 0.01 ? true : false;
         }
 
         public override int GetHashCode()

@@ -121,6 +121,7 @@ namespace LUPA
                 }
                 List<Point> intersectionPoints = new List<Point>();
                 List<bool> isPointContourPoint = new List<bool>();
+                List<ADLine> bisectorsIntersecting = new List<ADLine>();
                 foreach (ADLine bisector in bisectors)
                 {
                     if (!closestBisector.Equals(bisector))
@@ -129,6 +130,7 @@ namespace LUPA
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(false);
+                            bisectorsIntersecting.Add(bisector);
                         }
                     }
                 }
@@ -138,6 +140,7 @@ namespace LUPA
                     {
                         intersectionPoints.Add(intersectionPoint);
                         isPointContourPoint.Add(true);
+                        bisectorsIntersecting.Add(null);
                     }
                 }
                 Point closestIntersectionPoint = intersectionPoints[0];
@@ -219,11 +222,13 @@ namespace LUPA
                 //not working with three in a row
                 prevLeftPoint = prevRightPoint = closestPoint;
                 map.AreaLineSegments.Add(new LineSegment(leftPoint, rightPoint));
+                Point originalLeftPoint = leftPoint;
                 while (!isLeftFinished)
                 {
-                    ADLine currentBisector = bisectors[closestIntersectionPointIteratorLeft];
+                    ADLine currentBisector = bisectorsIntersecting[closestIntersectionPointIteratorLeft];
                     intersectionPoints.Clear();
                     isPointContourPoint.Clear();
+                    bisectorsIntersecting.Clear();
                     foreach (ADLine bisector in bisectors)
                     {
                         if (!currentBisector.Equals(bisector))
@@ -232,6 +237,7 @@ namespace LUPA
                             {
                                 intersectionPoints.Add(intersectionPoint);
                                 isPointContourPoint.Add(false);
+                                bisectorsIntersecting.Add(bisector);
                             }
                         }
                     }
@@ -241,6 +247,7 @@ namespace LUPA
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(true);
+                            bisectorsIntersecting.Add(null);
                         }
                     }
                     closestIntersectionPointDistance = double.PositiveInfinity;
@@ -266,12 +273,18 @@ namespace LUPA
                         isLeftFinished = true;
                     }
                     map.AreaLineSegments.Add(new LineSegment(prevLeftPoint, leftPoint));
+                    if (leftPoint == rightPoint)
+                    {
+                        isLeftFinished = true;
+                        isRightFinished = true;
+                    }
                 }
                 while (!isRightFinished)
                 {
-                    ADLine currentBisector = bisectors[closestIntersectionPointIteratorRight];
+                    ADLine currentBisector = bisectorsIntersecting[closestIntersectionPointIteratorRight];
                     intersectionPoints.Clear();
                     isPointContourPoint.Clear();
+                    bisectorsIntersecting.Clear();
                     foreach (ADLine bisector in bisectors)
                     {
                         if (!currentBisector.Equals(bisector))
@@ -280,6 +293,7 @@ namespace LUPA
                             {
                                 intersectionPoints.Add(intersectionPoint);
                                 isPointContourPoint.Add(false);
+                                bisectorsIntersecting.Add(bisector);
                             }
                         }
                     }
@@ -289,6 +303,7 @@ namespace LUPA
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(true);
+                            bisectorsIntersecting.Add(null);
                         }
                     }
                     closestIntersectionPointDistance = double.PositiveInfinity;
@@ -314,6 +329,7 @@ namespace LUPA
                         isRightFinished = true;
                     }
                     map.AreaLineSegments.Add(new LineSegment(prevRightPoint, rightPoint));
+
                 }
 
 

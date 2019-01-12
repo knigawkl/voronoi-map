@@ -25,6 +25,22 @@ namespace LUPA_tests
         }
 
         [Test]
+        public void TestDistance1()
+        {
+            //Arrange
+            Point pointA1 = new Point(200, 200);
+            Point pointB1 = new Point(300, 200);
+            Point pointA2 = new Point(200, 200);
+            Point pointB2 = new Point(200, 100);
+            //Act
+            double distance1 = Distance(pointA1, pointB1);
+            double distance2 = Distance(pointA2, pointB2);
+            //Assert
+             Assert.AreEqual(distance1, distance2);
+        }
+
+
+        [Test]
         public void TestIsPointOnRight()
         {
             //Arrange
