@@ -1,4 +1,5 @@
 ﻿using LUPA.DataContainers;
+using LUPA.Mathematics;
 using System;
 using System.Collections.Generic;
 
@@ -6,35 +7,7 @@ namespace LUPA
 {
     public class AreaDivider
     {
-        public class ADLine
-        {
-            public double A { set; get; }
-            public double B { set; get; }
-            public double C { set; get; }
-
-            public ADLine(double a, double b, double c)
-            {
-                A = a;
-                B = b;
-                C = c;
-            }
-
-            public override bool Equals(object obj)
-            {
-                ADLine adLine = (ADLine)obj;
-                return adLine.A == A && adLine.B == B && adLine.C == C;
-            }
-
-            public override int GetHashCode()
-            {
-                var hashCode = 793064651;
-                hashCode = hashCode * -1521134295 + A.GetHashCode();
-                hashCode = hashCode * -1521134295 + B.GetHashCode();
-                hashCode = hashCode * -1521134295 + C.GetHashCode();
-                return hashCode;
-            }
-        }
-
+       
         public static bool IsPointOnRight(Point firstPoint, Point secondPoint, Point thirdPoint)
         {
             Point firstPointRef = new Point(firstPoint.X - secondPoint.X, firstPoint.Y - secondPoint.Y);
@@ -85,7 +58,7 @@ namespace LUPA
             {
                 finalAngle -= 2 * Math.PI;
             }
-            return finalAngle > Math.PI ? true : false;
+            return finalAngle > Math.PI;
         }
 
         public static void DivideIntoAreas(Map map)
@@ -98,7 +71,7 @@ namespace LUPA
             contourLines.Add(new LineSegment(map.ContourPoints[map.ContourPoints.Count - 1], map.ContourPoints[0]));
             foreach (KeyPoint keyPoint in map.KeyPoints)
             {
-                List<ADLine> bisectors = new List<ADLine>();
+                List<StraightLine> bisectors = new List<StraightLine>();
                 foreach (KeyPoint anotherKeyPoint in map.KeyPoints)
                 {
                     if (!keyPoint.Equals(anotherKeyPoint))
@@ -107,7 +80,7 @@ namespace LUPA
                     }
                 }
 
-                ADLine closestBisector = bisectors[0];
+                StraightLine closestBisector = bisectors[0];
                 double closestBisectorDistance = Distance(keyPoint, closestBisector, out Point closestPoint);
                 for (int i = 1; i < bisectors.Count; i++)
                 {
@@ -121,12 +94,12 @@ namespace LUPA
                 }
                 List<Point> intersectionPoints = new List<Point>();
                 List<bool> isPointContourPoint = new List<bool>();
-                List<ADLine> bisectorsIntersecting = new List<ADLine>();
-                foreach (ADLine bisector in bisectors)
+                List<StraightLine> bisectorsIntersecting = new List<StraightLine>();
+                foreach (StraightLine bisector in bisectors)
                 {
                     if (!closestBisector.Equals(bisector))
                     {
-                        if (TryGetIntersection(closestBisector, bisector, out Point intersectionPoint))
+                        if (Mathematics.Mathematics.TryGetIntersection(closestBisector, bisector, out Point intersectionPoint))
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(false);
@@ -136,7 +109,7 @@ namespace LUPA
                 }
                 foreach (LineSegment contourLine in contourLines)
                 {
-                    if (TryGetIntersection(closestBisector, contourLine, out Point intersectionPoint))
+                    if (Mathematics.Mathematics.TryGetIntersection(closestBisector, contourLine, out Point intersectionPoint))
                     {
                         intersectionPoints.Add(intersectionPoint);
                         isPointContourPoint.Add(true);
@@ -144,11 +117,11 @@ namespace LUPA
                     }
                 }
                 Point closestIntersectionPoint = intersectionPoints[0];
-                double closestIntersectionPointDistance = Distance(intersectionPoints[0], closestPoint);
+                double closestIntersectionPointDistance = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[0], closestPoint);
                 int closestIntersectionPointIterator = 0;
                 for (int i = 1; i < intersectionPoints.Count; i++)
                 {
-                    double dst = Distance(intersectionPoints[i], closestPoint);
+                    double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
                     if (dst < closestIntersectionPointDistance)
                     {
                         closestIntersectionPoint = intersectionPoints[i];
@@ -173,7 +146,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(rightPoint))
                         {
-                            double dst = Distance(intersectionPoints[i], closestPoint);
+                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
                             if (dst < closestIntersectionPointDistance && !IsPointOnRight(keyPoint, closestPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -203,7 +176,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(leftPoint))
                         {
-                            double dst = Distance(intersectionPoints[i], closestPoint);
+                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
                             if (dst < closestIntersectionPointDistance && IsPointOnRight(keyPoint, closestPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -225,15 +198,15 @@ namespace LUPA
                 Point originalLeftPoint = leftPoint;
                 while (!isLeftFinished)
                 {
-                    ADLine currentBisector = bisectorsIntersecting[closestIntersectionPointIteratorLeft];
+                    StraightLine currentBisector = bisectorsIntersecting[closestIntersectionPointIteratorLeft];
                     intersectionPoints.Clear();
                     isPointContourPoint.Clear();
                     bisectorsIntersecting.Clear();
-                    foreach (ADLine bisector in bisectors)
+                    foreach (StraightLine bisector in bisectors)
                     {
                         if (!currentBisector.Equals(bisector))
                         {
-                            if (TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
+                            if (Mathematics.Mathematics.TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
                             {
                                 intersectionPoints.Add(intersectionPoint);
                                 isPointContourPoint.Add(false);
@@ -243,7 +216,7 @@ namespace LUPA
                     }
                     foreach (LineSegment contourLine in contourLines)
                     {
-                        if (TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
+                        if (Mathematics.Mathematics.TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(true);
@@ -256,7 +229,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(leftPoint))
                         {
-                            double dst = Distance(intersectionPoints[i], leftPoint);
+                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], leftPoint);
                             if (dst < closestIntersectionPointDistance && !IsPointOnRight(prevLeftPoint, leftPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -273,7 +246,7 @@ namespace LUPA
                         isLeftFinished = true;
                     }
                     map.AreaLineSegments.Add(new LineSegment(prevLeftPoint, leftPoint));
-                    if (leftPoint == rightPoint)
+                    if (leftPoint.Equals(rightPoint))
                     {
                         isLeftFinished = true;
                         isRightFinished = true;
@@ -281,15 +254,15 @@ namespace LUPA
                 }
                 while (!isRightFinished)
                 {
-                    ADLine currentBisector = bisectorsIntersecting[closestIntersectionPointIteratorRight];
+                    StraightLine currentBisector = bisectorsIntersecting[closestIntersectionPointIteratorRight];
                     intersectionPoints.Clear();
                     isPointContourPoint.Clear();
                     bisectorsIntersecting.Clear();
-                    foreach (ADLine bisector in bisectors)
+                    foreach (StraightLine bisector in bisectors)
                     {
                         if (!currentBisector.Equals(bisector))
                         {
-                            if (TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
+                            if (Mathematics.Mathematics.TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
                             {
                                 intersectionPoints.Add(intersectionPoint);
                                 isPointContourPoint.Add(false);
@@ -299,7 +272,7 @@ namespace LUPA
                     }
                     foreach (LineSegment contourLine in contourLines)
                     {
-                        if (TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
+                        if (Mathematics.Mathematics.TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(true);
@@ -311,8 +284,8 @@ namespace LUPA
                     for (int i = 0; i < intersectionPoints.Count; i++)
                     {
                         if (!intersectionPoints[i].Equals(rightPoint))
-                        {
-                            double dst = Distance(intersectionPoints[i], rightPoint);
+                        { 
+                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], rightPoint);
                             if (dst < closestIntersectionPointDistance && IsPointOnRight(prevRightPoint, rightPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -337,93 +310,29 @@ namespace LUPA
             }
         }
 
-        public static double Distance(Point firstPoint, Point secondPoint)
-        {
-            return Math.Sqrt(Math.Pow((secondPoint.X - firstPoint.X), 2) + Math.Pow((secondPoint.Y - firstPoint.Y), 2));
-        }
-
-        public static bool TryGetIntersection(ADLine firstLine, LineSegment contourLine, out Point intersectionPoint)
-        {
-            double a, b, c;
-            if (contourLine.StartPoint.X != contourLine.EndPoint.X)
-            {
-                 a = (contourLine.StartPoint.Y - contourLine.EndPoint.Y) / (contourLine.StartPoint.X - contourLine.EndPoint.X);
-                 c = contourLine.StartPoint.Y - a * contourLine.StartPoint.X;
-                 b = -1;
-            }
-            else
-            {
-                 a = 1;
-                 c = -contourLine.StartPoint.X;
-                 b = 0;
-            }
-            ADLine secondLine = new ADLine(a, b, c);
-            if (!TryGetIntersection(firstLine, secondLine, out intersectionPoint))
-            {
-                return false;
-            }
-            
-            if(intersectionPoint.X <= Math.Max(contourLine.StartPoint.X, contourLine.EndPoint.X) && intersectionPoint.X >= Math.Min(contourLine.StartPoint.X, contourLine.EndPoint.X))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static bool TryGetIntersection(ADLine firstLine, ADLine secondLine, out Point intersectionPoint)
-        {
-            if(firstLine.A == secondLine.A)
-            {
-                intersectionPoint = new Point(0, 0);
-                return false;
-            }
-            else if (firstLine.B == 0)
-            {
-                double x = -firstLine.C;
-                double y = (-x * secondLine.A) + secondLine.C;
-                intersectionPoint = new Point(x, y);
-                return true;
-            }
-            else if (secondLine.B == 0)
-            {
-                double x = -secondLine.C;
-                double y = (-x * firstLine.A) + firstLine.C;
-                intersectionPoint = new Point(x, y);
-                return true;
-            }
-            else
-            {
-                double x = (secondLine.C - firstLine.C) / (firstLine.A - secondLine.A);
-                double y = firstLine.A * x + firstLine.C;
-                intersectionPoint = new Point(x, y);
-                return true;
-            }
-            
-        }
-
-        public static double Distance(Point point, ADLine line, out Point closestPoint)
+        public static double Distance(Point point, StraightLine line, out Point closestPoint)
         {
             if (line.B != 0 && line.A != 0)
             {
-                ADLine perpendicular = new ADLine(-(1 / line.A), -1,  point.Y + (point.X / line.A));
-                TryGetIntersection(line, perpendicular, out closestPoint);
+                StraightLine perpendicular = new StraightLine(-(1 / line.A), -1, point.Y + (point.X / line.A));
+                Mathematics.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
                 return Math.Abs(line.A * point.X - point.Y + line.C) / Math.Sqrt(Math.Pow(line.A, 2) + 1);
             }
-            else if(line.B != 0 && line.A == 0)
+            else if (line.B != 0 && line.A == 0)
             {
-                ADLine perpendicular = new ADLine(1, 0, -point.X);
-                TryGetIntersection(line, perpendicular, out closestPoint);
+                StraightLine perpendicular = new StraightLine(1, 0, -point.X);
+                Mathematics.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
                 return Math.Abs(point.Y - line.C);
             }
             else
             {
-                ADLine perpendicular = new ADLine(0, -1, point.Y);
-                TryGetIntersection(line, perpendicular, out closestPoint);
+                StraightLine perpendicular = new StraightLine(0, -1, point.Y);
+                Mathematics.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
                 return Math.Abs(point.X - line.C);
             }
         }
 
-        public static ADLine CreateBisector(KeyPoint firstKeyPoint, KeyPoint secondKeyPoint)
+        public static StraightLine CreateBisector(KeyPoint firstKeyPoint, KeyPoint secondKeyPoint)
         {
             double a, b, c;
             Point midPoint = new Point((firstKeyPoint.X + secondKeyPoint.X) / 2, (firstKeyPoint.Y + secondKeyPoint.Y) / 2);
@@ -432,16 +341,16 @@ namespace LUPA
                 a = (firstKeyPoint.Y - secondKeyPoint.Y) / (firstKeyPoint.X - secondKeyPoint.X);
                 c = firstKeyPoint.Y - a * firstKeyPoint.X;
                 b = -1;
-                ADLine line = new ADLine(a, b, c);
-                return new ADLine(-(1 / line.A), -1, midPoint.Y + (midPoint.X / line.A));
+                StraightLine line = new StraightLine(a, b, c);
+                return new StraightLine(-(1 / line.A), -1, midPoint.Y + (midPoint.X / line.A));
             }
             else
             {
                 a = 1;
                 c = -firstKeyPoint.X;
                 b = 0;
-                ADLine line = new ADLine(a, b, c);
-                return new ADLine(0, -1, midPoint.Y);
+                StraightLine line = new StraightLine(a, b, c);
+                return new StraightLine(0, -1, midPoint.Y);
             }
             
             

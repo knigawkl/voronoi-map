@@ -22,7 +22,7 @@ namespace LUPA
         {
             Point point = (Point)obj;
             //return point.X == X && point.Y == Y;
-            return Distance(this, point) < 0.01 ? true : false;
+            return CalculateDistBetweenPoints(this, point) < 0.01;
         }
 
         public override int GetHashCode()

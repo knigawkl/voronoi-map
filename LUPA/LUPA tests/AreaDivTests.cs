@@ -17,7 +17,7 @@ namespace LUPA_tests
         {
             //Arrange
             Point point = new Point(1, 1);
-            ADLine aDLine = new ADLine(0, -1, 10);
+            StraightLine aDLine = new StraightLine(0, -1, 10);
             //Act
             Distance(point, aDLine, out Point result);
             //Assert
@@ -33,8 +33,8 @@ namespace LUPA_tests
             Point pointA2 = new Point(200, 200);
             Point pointB2 = new Point(200, 100);
             //Act
-            double distance1 = Distance(pointA1, pointB1);
-            double distance2 = Distance(pointA2, pointB2);
+            double distance1 = CalculateDistBetweenPoints(pointA1, pointB1);
+            double distance2 = CalculateDistBetweenPoints(pointA2, pointB2);
             //Assert
              Assert.AreEqual(distance1, distance2);
         }
