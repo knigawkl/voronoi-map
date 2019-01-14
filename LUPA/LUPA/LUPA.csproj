@@ -64,8 +64,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Util\StraightLine.cs" />
-    <Compile Include="Util\Util.cs" />
+    <Compile Include="Mathematics\StraightLine.cs" />
+    <Compile Include="Mathematics\Mathematics.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
