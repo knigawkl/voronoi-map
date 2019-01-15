@@ -13,13 +13,14 @@ namespace LUPA
             START, CONTOURPOINTS, KEYPOINTS, OBJECTSDEF, OBJECTS
         }
 
-        public static Map ParseFile(string inputFilePath)
+        public static Map ParseFile(string inputFilePath, out List<string> feedback)
         {
             ParserState state = ParserState.START;
             int lineCounter = 0;
             Map map = new Map();
             StreamReader reader = new StreamReader(inputFilePath);
             string line;
+            feedback = new List<string>();
             while ((line = reader.ReadLine()) != null)
             {
                 lineCounter++;
@@ -30,10 +31,15 @@ namespace LUPA
                         {
                             state = ParserState.CONTOURPOINTS;
                         }
+                        else
+                        {
+                            throw new ParseFileException("File does not start with proper commentary line");
+                        }
                         break;
                     case ParserState.CONTOURPOINTS:
                         if (line.Length > 0 && line[0] == '#')
                         {
+                            VerifyContourPoints(map.ContourPoints);
                             state = ParserState.KEYPOINTS;
                         }
                         else
@@ -44,7 +50,7 @@ namespace LUPA
                             }
                             catch (ParseLineException e)
                             {
-                                throw new ParseFileException(e.Message + " in line " + lineCounter);
+                                feedback.Add(e.Message + " in line " + lineCounter);
                             }
                         }
                         break;
@@ -61,7 +67,7 @@ namespace LUPA
                             }
                             catch (ParseLineException e)
                             {
-                                throw new ParseFileException(e.Message + " in line " + lineCounter);
+                                feedback.Add(e.Message + " in line " + lineCounter);
                             }
                         }
                         break;
@@ -69,6 +75,7 @@ namespace LUPA
                         if (line.Length > 0 && line[0] == '#')
                         {
                             state = ParserState.OBJECTS;
+                            VerifyObjectsDef(map.CustomObjectTypes);
                         }
                         else
                         {
@@ -78,7 +85,7 @@ namespace LUPA
                             }
                             catch (ParseLineException e)
                             {
-                                throw new ParseFileException(e.Message + " in line " + lineCounter);
+                                feedback.Add(e.Message + " in line " + lineCounter);
                             }
                         }
                         break;
@@ -95,7 +102,7 @@ namespace LUPA
                             }
                             catch (ParseLineException e)
                             {
-                                throw new ParseFileException(e.Message + " in line " + lineCounter);
+                                feedback.Add(e.Message + " in line " + lineCounter);
                             }
                         }
                         break;
@@ -103,6 +110,71 @@ namespace LUPA
             }
 
             return map;
+        }
+
+        private static void VerifyObjectsDef(List<CustomObjectType> customObjectTypes)
+        {
+
+            bool isNiedzwiedz = false, isDom = false, isSzkola = false;
+            foreach(CustomObjectType cot in customObjectTypes)
+            {                
+                if (cot.Name.Length == 6 && cot.Name.Substring(0, 4) == "SZKO")
+                {
+                    isSzkola = true;
+                }
+                if (cot.Name.Length == 10 && cot.Name.Substring(0, 4) == "NIED")
+                {
+                    isNiedzwiedz = true;
+                }
+                if (cot.Name == "DOM")
+                {
+                    bool isLMieszk = false;
+                    for (int i = 0; i < cot.VariableNames.Count; i++)
+                    {
+                        if (cot.VariableNames[i].Length == 13 && cot.VariableNames[i].Substring(0, 8) == "L_MIESZK" && cot.VariableTypes[i] == "int")
+                        {
+                            isLMieszk = true;
+                        }
+                    }
+                    if (!isLMieszk)
+                    {
+                        throw new ParseFileException("Object DOM needs to have variable L_MIESZKAŃCÓW with integer type");
+                    }
+                    isDom = true;
+                }
+            }
+            if(!(isNiedzwiedz && isDom && isSzkola))
+            {
+                throw new ParseFileException("You need to declare Niedźwiedz, Dom and Szkoła types to run program");
+            }
+        }
+
+        public static void VerifyContourPoints(List<Point> contourPoints)
+        {
+            if(contourPoints.Count < 3)
+            {
+                throw new ParseFileException("You need at least 3 contour points to run program");
+            }
+            List<LineSegment> contourLines = new List<LineSegment>();
+            for (int i = 0; i < contourPoints.Count - 1; i++)
+            {
+                contourLines.Add(new LineSegment(contourPoints[i], contourPoints[i + 1]));
+            }
+            contourLines.Add(new LineSegment(contourPoints[contourPoints.Count - 1], contourPoints[0]));
+
+            for (int i = 0; i < contourLines.Count; i++)
+            {
+                for(int j = 0; j < contourLines.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        if(contourLines[i].IsIntersecting(contourLines[j]))
+                        {
+                            throw new ParseFileException("Contour lines are intersecting, verify your file");
+                        }
+                    }
+                }
+            }
         }
 
         public static CustomObjectInstance ParseCustomObject(string line, List<CustomObjectType> customObjectTypes)

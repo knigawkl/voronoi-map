@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static LUPA.AreaDivider;
+using LUPA.Util;
 
 namespace LUPA
 {
@@ -22,7 +22,7 @@ namespace LUPA
         {
             Point point = (Point)obj;
             //return point.X == X && point.Y == Y;
-            return CalculateDistBetweenPoints(this, point) < 0.01;
+            return Mathematics.CalculateDistBetweenPoints(this, point) < 0.01;
         }
 
         public override int GetHashCode()

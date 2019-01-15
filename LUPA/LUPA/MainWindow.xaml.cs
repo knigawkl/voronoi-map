@@ -161,7 +161,7 @@ namespace LUPA
             double dist;
             foreach (var cp in map.ContourPoints)
             {
-                dist = Mathematics.Mathematics.CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
+                dist = Util.Mathematics.CalculateDistBetweenPoints(position, new System.Windows.Point(cp.X, cp.Y));
                 distances.Add(dist);
             }
             distances.Sort();
@@ -195,7 +195,7 @@ namespace LUPA
             double dist;
             foreach (var cp in map.ContourPoints)
             {
-                dist = Mathematics.Mathematics.CalculateDistBetweenPoints(position, cp);
+                dist = Util.Mathematics.CalculateDistBetweenPoints(position, cp);
                 if (dist == distance)
                 {
                     return cp;
@@ -229,7 +229,7 @@ namespace LUPA
             if (result == true)
             {
                 Map.Children.Clear();
-                map = Parser.ParseFile(ofd.FileName);
+                map = Parser.ParseFile(ofd.FileName, out List<string> feedback);
                 AreaDivider.DivideIntoAreas(map);
                 DrawMap();
                 DrawAreaLines(map.AreaLineSegments);

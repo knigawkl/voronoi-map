@@ -1,5 +1,5 @@
 ﻿using LUPA.DataContainers;
-using LUPA.Mathematics;
+using LUPA.Util;
 using System;
 using System.Collections.Generic;
 
@@ -99,7 +99,7 @@ namespace LUPA
                 {
                     if (!closestBisector.Equals(bisector))
                     {
-                        if (Mathematics.Mathematics.TryGetIntersection(closestBisector, bisector, out Point intersectionPoint))
+                        if (Util.Mathematics.TryGetIntersection(closestBisector, bisector, out Point intersectionPoint))
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(false);
@@ -109,7 +109,7 @@ namespace LUPA
                 }
                 foreach (LineSegment contourLine in contourLines)
                 {
-                    if (Mathematics.Mathematics.TryGetIntersection(closestBisector, contourLine, out Point intersectionPoint))
+                    if (Util.Mathematics.TryGetIntersection(closestBisector, contourLine, out Point intersectionPoint))
                     {
                         intersectionPoints.Add(intersectionPoint);
                         isPointContourPoint.Add(true);
@@ -117,11 +117,11 @@ namespace LUPA
                     }
                 }
                 Point closestIntersectionPoint = intersectionPoints[0];
-                double closestIntersectionPointDistance = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[0], closestPoint);
+                double closestIntersectionPointDistance = Util.Mathematics.CalculateDistBetweenPoints(intersectionPoints[0], closestPoint);
                 int closestIntersectionPointIterator = 0;
                 for (int i = 1; i < intersectionPoints.Count; i++)
                 {
-                    double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
+                    double dst = Util.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
                     if (dst < closestIntersectionPointDistance)
                     {
                         closestIntersectionPoint = intersectionPoints[i];
@@ -146,7 +146,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(rightPoint))
                         {
-                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
+                            double dst = Util.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
                             if (dst < closestIntersectionPointDistance && !IsPointOnRight(keyPoint, closestPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -176,7 +176,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(leftPoint))
                         {
-                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
+                            double dst = Util.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], closestPoint);
                             if (dst < closestIntersectionPointDistance && IsPointOnRight(keyPoint, closestPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -206,7 +206,7 @@ namespace LUPA
                     {
                         if (!currentBisector.Equals(bisector))
                         {
-                            if (Mathematics.Mathematics.TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
+                            if (Util.Mathematics.TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
                             {
                                 intersectionPoints.Add(intersectionPoint);
                                 isPointContourPoint.Add(false);
@@ -216,7 +216,7 @@ namespace LUPA
                     }
                     foreach (LineSegment contourLine in contourLines)
                     {
-                        if (Mathematics.Mathematics.TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
+                        if (Util.Mathematics.TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(true);
@@ -229,7 +229,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(leftPoint))
                         {
-                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], leftPoint);
+                            double dst = Util.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], leftPoint);
                             if (dst < closestIntersectionPointDistance && !IsPointOnRight(prevLeftPoint, leftPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -262,7 +262,7 @@ namespace LUPA
                     {
                         if (!currentBisector.Equals(bisector))
                         {
-                            if (Mathematics.Mathematics.TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
+                            if (Util.Mathematics.TryGetIntersection(currentBisector, bisector, out Point intersectionPoint))
                             {
                                 intersectionPoints.Add(intersectionPoint);
                                 isPointContourPoint.Add(false);
@@ -272,7 +272,7 @@ namespace LUPA
                     }
                     foreach (LineSegment contourLine in contourLines)
                     {
-                        if (Mathematics.Mathematics.TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
+                        if (Util.Mathematics.TryGetIntersection(currentBisector, contourLine, out Point intersectionPoint))
                         {
                             intersectionPoints.Add(intersectionPoint);
                             isPointContourPoint.Add(true);
@@ -285,7 +285,7 @@ namespace LUPA
                     {
                         if (!intersectionPoints[i].Equals(rightPoint))
                         { 
-                            double dst = Mathematics.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], rightPoint);
+                            double dst = Util.Mathematics.CalculateDistBetweenPoints(intersectionPoints[i], rightPoint);
                             if (dst < closestIntersectionPointDistance && IsPointOnRight(prevRightPoint, rightPoint, intersectionPoints[i]))
                             {
                                 closestIntersectionPoint = intersectionPoints[i];
@@ -315,19 +315,19 @@ namespace LUPA
             if (line.B != 0 && line.A != 0)
             {
                 StraightLine perpendicular = new StraightLine(-(1 / line.A), -1, point.Y + (point.X / line.A));
-                Mathematics.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
+                Util.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
                 return Math.Abs(line.A * point.X - point.Y + line.C) / Math.Sqrt(Math.Pow(line.A, 2) + 1);
             }
             else if (line.B != 0 && line.A == 0)
             {
                 StraightLine perpendicular = new StraightLine(1, 0, -point.X);
-                Mathematics.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
+                Util.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
                 return Math.Abs(point.Y - line.C);
             }
             else
             {
                 StraightLine perpendicular = new StraightLine(0, -1, point.Y);
-                Mathematics.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
+                Util.Mathematics.TryGetIntersection(line, perpendicular, out closestPoint);
                 return Math.Abs(point.X - line.C);
             }
         }

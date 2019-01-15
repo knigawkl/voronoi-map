@@ -1,4 +1,5 @@
-﻿using LUPA;
+﻿using LUPA.Util;
+using LUPA.DataContainers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static LUPA.AreaDivider;
+using LUPA;
 
 namespace LUPA_tests
 {
@@ -24,20 +26,6 @@ namespace LUPA_tests
             Assert.AreEqual(1, result.X);
         }
 
-        [Test]
-        public void TestDistance1()
-        {
-            //Arrange
-            Point pointA1 = new Point(200, 200);
-            Point pointB1 = new Point(300, 200);
-            Point pointA2 = new Point(200, 200);
-            Point pointB2 = new Point(200, 100);
-            //Act
-            double distance1 = CalculateDistBetweenPoints(pointA1, pointB1);
-            double distance2 = CalculateDistBetweenPoints(pointA2, pointB2);
-            //Assert
-             Assert.AreEqual(distance1, distance2);
-        }
 
 
         [Test]
