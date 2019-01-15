@@ -38,6 +38,8 @@ namespace LUPA
         {
             OutputTxt.Text = "";
             position = e.GetPosition(this);
+            position.X = (int)position.X;
+            position.Y = (int)position.Y;
             position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
@@ -333,7 +335,31 @@ namespace LUPA
             OutputTxt.Text = "Zmieniono tło na: " + ofd.FileName.ToString();
         }
 
+        private enum MapObjects
+        {
+            KeyPoint, ContourPoint, CustomObject
+        }
+
         private void ColorAreas()
+        {
+            //int[,] mapPixels = new int[600][600];
+
+        }
+
+        private void AddKeyPointsToMapPixels(int[] mapPixels)
+        {
+            foreach (var kp in map.KeyPoints)
+            {
+                
+            }
+        }
+
+        private void ContourPointsToMapPixels()
+        {
+
+        }
+
+        private void AddCustomObjectsToMapPixels()
         {
 
         }
