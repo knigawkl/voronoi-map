@@ -302,40 +302,18 @@ namespace LUPA
 
         private void ColorAreas()
         {
-            int[,] mapPixels = new int[600, 600];
-            AddKeyPointsToMapPixels(ref mapPixels);
-            AddContourPointsToMapPixels(ref mapPixels);
-            AddCustomObjectsToMapPixels(ref mapPixels);
-
-            map.KeyPoints[0].BrushColor = Brushes.Green;
-            map.KeyPoints[1].BrushColor = Brushes.HotPink;
-            map.KeyPoints[2].BrushColor = Brushes.Thistle;
-
-
-            /*
-            foreach (var kp in map.KeyPoints)
+            for (int i = 0; i < map.KeyPoints.Count; i++)
             {
-                //int r = (int)(kp.X * 0.4);
-                //int g = (int)(kp.Y * 0.4);
-                //int b = 123;
-                //Random r = new Random();
-                //kp.BrushColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(kp.X), (byte)r.Next(kp.Y), (byte)r.Next(kp.X)));//contourPointColor;//new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-            }
-            */
-            foreach (var kp in map.KeyPoints)
-            {
-                OutputTxt.AppendText(kp.BrushColor.ToString() + "  ");
+                map.KeyPoints[i].Id = i;
             }
 
-            SolidColorBrush[,] colors = new SolidColorBrush[600, 600];
+            int[,] identificators = new int[600, 600];
 
-            for (int row = 0; row < 600; row++)
+            for (int row = 0; row < Map.ActualHeight; row++)
             {
-                for (int column = 0; column < 600; column++)
+                for (int column = 0; column < Map.ActualWidth; column++)
                 {
-                    colors[row, column] = FindClosestKeyPoint(row, column).BrushColor;
-                    //DrawTransparentPoint(color, new System.Windows.Point(row, column));
-                    
+                    identificators[row, column] = FindClosestKeyPoint(row, column).Id;
                 }
             }
 
@@ -343,14 +321,13 @@ namespace LUPA
             {
                 for (int column = 1; column < 599; column++)
                 {
-                    if (colors[row, column] != colors[row - 1, column] || colors[row, column] != colors[row + 1, column]
-                        || colors[row, column] != colors[row, column - 1] || colors[row, column] != colors[row + 1, column])
+                    if (identificators[row, column] != identificators[row - 1, column] 
+                        || identificators[row, column] != identificators[row + 1, column]
+                        || identificators[row, column] != identificators[row, column - 1] 
+                        || identificators[row, column] != identificators[row + 1, column])
                     {
                         DrawTransparentPoint(areaLinesColor, new System.Windows.Point(row, column));
                     }
-
-                    //DrawTransparentPoint(colors[row, column], new System.Windows.Point(row, column));
-
                 }
             }
         }
@@ -367,30 +344,6 @@ namespace LUPA
             distances.Sort();
             return FindDistantPointFromKeyPoint(new Point(x, y), distances[0]);
 
-        }
-
-        private void AddKeyPointsToMapPixels(ref int[,] mapPixels)
-        {
-            foreach (var kp in map.KeyPoints)
-            {
-                mapPixels[kp.X, kp.Y] = (int)MapObjects.KeyPoint;
-            }
-        }
-
-        private void AddContourPointsToMapPixels(ref int[,] mapPixels)
-        {
-            foreach (var cp in map.ContourPoints)
-            {
-                mapPixels[cp.X, cp.Y] = (int)MapObjects.ContourPoint;
-            }
-        }
-
-        private void AddCustomObjectsToMapPixels(ref int[,] mapPixels)
-        {
-            foreach (var co in map.CustomObjects)
-            {
-                mapPixels[co.X, co.Y] = (int)MapObjects.CustomObject;
-            }
         }
 
         private void DrawPoint(Brush color, System.Windows.Point position)
