@@ -1,0 +1,302 @@
+\documentclass[a4paper,12pt]{article}
+\newcommand\tab[1][0.6cm]{\hspace*{#1}}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+
+\title{ \sc{Sprawozdanie końcowe} \\
+\emph{Projekt zespołowy}}
+\author{Mateusz Smoliński \and Łukasz Knigawka}
+
+\begin{document}
+
+
+\maketitle
+\thispagestyle{empty}
+
+\tableofcontents
+
+\newpage
+
+\section{Wstęp}
+
+\tab Sprawozdanie powstało w celu podsumowania projektu ,,LUPA''. Zawiera ono opis zastosowanego rozwiązania i algorytmu rozwiązującego problem podziału mapy na obszary, jak i pomysłów i koncepcji testowanych we wcześniejszych fazach projektu. Opisane zostały także zmiany względem specyfikacji funkcjonalnej i implementacyjnej, które zostały podjęte już w trakcie implementacji projektu. Na końcu dokument zawiera wnioski wyciągnięte w trakcie i po ukończeniu projektu, a także podsumowanie zajęć laboratoryjnych i subiektywna opinia co do tematów zadań.
+
+Projekt ,,Lupa'' ma za zadanie wczytanie z pliku tekstowego mapy, podanej w postaci punktów konturu i punktów kluczowych, a następnie wydzielenie obszarów na mapie na podstawie tych punktów kluczowych. W pliku otrzymujemy także deklarację obiektów, jakie mają być umieszczone na mapie, żeby umożliwić podsumowanie obiektów na danych obszarach. Program ma umożliwiać także dodawanie i usuwanie punktów kluczowych i konturowych w trakcie trwania programu.
+
+Plik tekstowy z danymi przyjmuje następującą postać: 
+
+\begin{lstlisting}
+# Kontury terenu (wymienione w kolejnosci laczenia): Lp. x y
+1. 0 0
+2. 0 20
+3. 20 30.5
+4. 40 20
+5. 40 0
+
+# Punkty kluczowe: Lp. x y Nazwa
+1. 1 1 KOK Krawczyka
+2. 1 19 KOK Kaczmarskiego
+3. 30 10 KOK Lazarewicza
+
+# Definicje obiektow: Lp. Typ_obiektu (Nazwa_zmiennej Typ_zmiennej)*
+1. SZKOLA Nazwa String X double Y double
+2. DOM X double Y double L_MIESZKANCOW int
+3. NIEDZWIEDZ X double Y double
+
+# Obiekty: Typ_obiektu (zgodnie z definicja)
+1. SZKOLA "Szkola robienia duzych pieniedzy" 4 1
+2. DOM 4 3 100
+3. DOM 4 17 120
+4. DOM 4 18 80
+5. NIEDZWIEDZ 20 20
+6. NIEDZWIEDZ 40 1
+7. NIEDZWIEDZ 39 1
+8. NIEDZWIEDZ 39 2
+\end{lstlisting}
+
+Program ma postać aplikacji z graficznym interfejsem użytkownika, co umożliwia wypełnienie wszystkich założeń projektowych. Został napisany w języku C\#, na sprzęcie komputerowym zgodnym z tym zadeklarowanym w specyfikacji implementacyjnej. 
+
+
+\newpage
+
+\section{Opis algorytmu}
+
+\tab Poszukiwanie algorytmu dzielącego mapę na obszary okazało się największym wyzwaniem w toku realizacji projektu. Można je podzielić na trzy części:
+
+\begin{itemize}
+\item próby wykorzystania algorytmu Fortune'a,
+\item próby napisania własnego algorytmu opartego na podziale symetralnych,
+\item próby rozwiązania problemu na podstawie analizy pikseli.
+\end{itemize}
+
+Pierwsza część, czyli eksperymenty z algorytmem Fortune'a, była pierwszym założeniem, przyjętym jeszcze w fazie planowania projektu. Algorytm ten został wybrany ze względu na najlepszą złożoność czasową $O(n log n$). Algorytm okazał się jednak dużo bardziej złożony niż początkowo zakładaliśmy, a jego samodzielna implementacja byłaby trudna i czasochłonna. Stąd też pojawił się pomysł rozwiązania problemu algorytmem alternatywnym, napisanym przez nas na potrzeby tego konkretnego projektu. 
+
+Kolejny algorytm opierał się na własnościach diagramu Woronoja -- w szczególności na tym, że dzieli on planszę na figury wypukłe. Logika algorytmu opierała się na analizie planszy z perspektywy pojedynczych punktów kluczowych, żeby wyznaczyć krawędzie ograniczające obszar wyznaczany przez dany punkt kluczowy. Analiza rozpoczynała się od matematycznego wyznaczenia najbliższej symetralnej spośród symetralnych pomiędzy tym punktem kluczowym a wszystkimi pozostałymi. Następnie program miał analizować wszystkie punkty przecięcia pozostałych symetralnych z wyznaczoną i wybierać najbliższe punkty, powtarzając tą czynność dla kolejnych symetralnych przecinających poprzednie aż do utworzenia zamkniętej figury lub napotkania konturu z obu stron. Ten algorytm jednakże również okazał się trudny do zaimplementowania i dopiero po kilku dniach możliwe było zobaczenie pierwszych rezultatów. Algorytm okazał się jednak nieskuteczny, czy to z powodu błędnej jego implementacji czy błędnych założeń matematycznych (algorytm nie przewidywał kilku przypadków) i choć działał poprawnie dla danych przykładowych, to przy większych planszach powodował błędy nie tylko w rysowaniu granic obszarów, ale także prowadząc do zapętlenia programu z przyczyn, których nie udało się ustalić.
+
+Ostatnie podejście zakładało rozstrzygnięcie problemu najprostszą metodą, bardzo kosztowną czasowo dla programu, jednak nie wymagającą długiej implementacji. Tym razem rysowanie miało się odbywać na podstawie odległości dzielące punkty (piksele) na mapie, i na podstawie matematycznie wyznaczanej odległości od punktów kluczowych program miał przypisywać kolory do każdego punktu na mapie tym samym wyznaczając obszary w obrębie konturu. Ta metoda okazała się skuteczna i została zastosowana w ostatecznej wersji programu.
+
+\section{Działanie programu}
+
+\tab Poniższe przykłady zostały wykonane na komputerze opisanym w specyfikacji implementacyjnej, uruchomione w cmd.exe.  
+
+Pierwszy rysunek ukazuje poprawne działanie programu dla pliku z danymi dane.txt zawierającego dokładnie te same dane, które zostały umieszczone we wstępie tego sprawozdania.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] a
+\caption{Uruchomienie programu z wyszukiwaniem ścieżki}
+\label{fig:obrazek 1}
+\end{figure}
+
+Kolejny obraz przedstawia uruchomienie programu dla tych samych danych, ale z poszukiwaniem dowolnego arbitrażu.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] b
+\caption{Uruchomienie programu -- dowolny arbitraż}
+\label{fig:obrazek 2}
+\end{figure}
+
+Na trzecim rysunku widzimy uruchomienie programu w trzeciej opcji -- szukania arbitrażu dla konkretnej waluty.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] g
+\caption{Uruchomienie programu -- konkretny arbitraż}
+\label{fig:obrazek 3}
+\end{figure}
+
+Kolejny obrazek to już niepoprawne uruchomienie programu -- w tym wypadku użytkownik podał za mało danych, zabrakło przynajmniej podania kwoty wejściowej.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] c
+\caption{Uruchomienie programu -- za mało danych}
+\label{fig:obrazek 4}
+\end{figure}
+
+Piąty rysunek to próba uruchomienia programu dla pliku, który nie istnieje.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] d
+\caption{Uruchomienie programu -- niepoprawne dane}
+\label{fig:obrazek 5}
+\end{figure}
+
+Dwa kolejne obrazki to przykłady uruchomienia programu dla plików, które nie zostały poprawnie zapisane. Są to pliki użyte do testowania programu, których treść zamieszczono poniżej. Obrazki ukazują reakcję programu na konkretne błędy w pliku tekstowym.
+
+Pierwszy plik to data3.txt: 
+
+\begin{lstlisting}
+# Waluty (id | symbol | pelna nazwa) 
+0 EUR Euro
+1 PLN Zloty
+ Kursy walut (id | symbol (waluta wejsciowa)... 
+0 EUR PLN 0.8889 PROC 0.0001
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] e
+\caption{Działanie programu z błędem krytycznym w pliku}
+\label{fig:obrazek 6}
+\end{figure}
+
+Kolejny plik to data4.txt:
+\begin{lstlisting}
+# Waluty (id | symbol | pelna nazwa) 
+0 EUR Euro
+1 PLN
+# Kursy walut (id | symbol (waluta wejsciowa)...
+0 EUR PLN 0.8889 PROC 0.0001
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] f
+\caption{Działanie programu z mniej ważnym błędem w pliku}
+\label{fig:obrazek 7}
+\end{figure}
+
+
+\section{Zmiany względem specyfikacji funkcjonalnej}
+
+
+\subsection{Graficzny interfejs użytkownika}
+
+\tab Wygląd programu nie uległ dużej zmianie względem wstępnych projektów. Punkty kluczowe, kontur i obiekty uzyskały odmienne kolory, by ułatwić ich odróżnianie i poprawić ogólny efekt wizualny projektu.
+
+\subsection{Sytuacje wyjątkowe}
+
+\tab Wiele wyjątków związanych z tekstowym plikiem wejściowym zostało zinterpretowane dużo dokładniej, niż początkowo zakładano. System wyjątków zastosowany w implementacji \textit{Parsera} pozwolił nam na precyzyjne wypisywanie komunikatem z informacją o liniach, w których wystąpiły błędy.
+ Wyjątki wewnętrzne, dotyczące pojedynczych linii (nazwane w programie \textit{ParseLineException}) przekazują do głównej metody \textit{Parsera} informację, jakiego rodzaju błąd nastąpił. Jeśli uniemożliwia on kontynuowanie programu, wyjątek zostaje przekazany do funkcji wywołującej wczytywanie pliku z klasy \textit{MainWindow} w postaci wyjątku \textit{ParseFileException} i wypisywany na ekranie, wraz z precyzyjną informacją. Większość wyjątków jednak umożliwia kontynuację działania programu przy ominięciu błędnego punktu lub obiektu -- w takim wypadku wyjątek zostaje jedynie dopisany do listy napisów nazwanej \textit{feedback} i wyświetlony w programie w charakterze ostrzeżenia.
+
+W specyfikacji funkcjonalnej pominięte zostało kilka oczywistych błędów, takich jak niedobór (lub nadmiar) argumentów przy deklaracji instancji obiektów czy też brak współrzędnych przy wczytywaniu dowolnych punktów. Wszystkie takie niestandardowe kombinacje argumentów zostały uwzględnione w ostatecznej wersji projektu i w przypadku ich wystąpienia użytkownik zostanie stosownie poinformowany przez program.
+
+\section{Zmiany względem specyfikacji implementacyjnej}
+
+\tab W strukturze całego programu nastąpiła jedna istotna zmiana -- ze względu na wielkość pakietu \textit{groupofvisionaires} przechowującego pierwotnie wszystkie klasy programu został wydzielony drugi pakiet, nazwany \textit{filereader}, przechowujący klasę \textit{DataReader} oraz wyjątki \textit{ReadDataException} oraz \textit{ParseLineException} używane przez program przy obsłudze błędów związanych właśnie z odczytem pliku. Ich dokładniejsze zastosowanie opisano poniżej, w sekcjach opisujących metody klasy \textit{DataReader}.
+
+\subsection{Klasa CurrencyMatrix}
+
+\tab Klasa odpowiedzialna za przechowywanie danych wczytanych z pliku nie uległa dużej zmianie względem specyfikacji implementacyjnej. Otrzymała jedynie jedno dodatkowe pole w postaci podawanej na początku istnienia klasy liczby n, odpowiadającej za ilość walut. Do metod dostępowych doszła zatem metoda \textit{getN}, która wypisuje tą liczbę w innym miejscu kodu -- w szczególności w trakcie iterowania po tablicy walut \textit{currencies}, która jest prywatna i nie można dostać jej długości z zewnątrz.
+
+\subsection{Klasa DataReader}
+
+\tab Klasa wczytująca dane z pliku została rozbudowana i ostatecznie składa się ona z trzech metod.
+
+\subsubsection{Metoda readData}
+
+\begin{itemize}
+\item \begin{lstlisting}
+public static CurrencyMatrix readData (File f)
+throws ReadDataException
+\end{lstlisting}
+\end{itemize}
+
+\tab Metoda \textit{readData} zgodnie ze wcześniejszym założeniem zwraca przygotowany obiekt klasy \textit{CurrencyMatrix} w przypadku powodzenia. Jeżeli w trakcie wczytywania wystąpi problem uniemożliwiający poprawne działanie programu, metoda wyrzuca wyjątek \textit{ReadDataException}, który jest odczytywany w metodzie \textit{main} klasy \textit{GroupOfVisionaires}.
+
+\subsubsection{Metoda parseCurrency}
+
+\begin{itemize}
+\item \begin{lstlisting}
+private static Currency parseCurrency(String line,
+int lineCounter) throws ParseLineException
+\end{lstlisting}
+\end{itemize}
+
+\tab Metoda \textit{parseCurrency} powstała na późniejszym etapie projektu, w celu poprawy czytelności i usprawnienia obsługi błędów w klasie \textit{DataReader}. Otrzymuje ona wczytaną linię z pliku z danymi oraz numer linii, która jest aktualnie wczytywana. W przypadku poprawnej analizy linii metoda zwraca obiekt klasy \textit{Currency}, gotowy do użycia w dalszej części programu. 
+
+Jeśli w trakcie wczytywania nastąpi problem, metoda wyrzuca wyjątek \textit{ParseLineException}, który jest odbierany przez metodę \textit{readData}. W przeciwieństwie do wyjątku \textit{ReadDataException} nie powoduje on zakończenia próby wczytania pliku, a jedynie zignorowanie błędnej linii i przejście do kolejnego etapu programu.
+
+\subsubsection{Metoda parseRate}
+
+\begin{itemize}
+\item \begin{lstlisting}
+private static void parseRate(String line,
+int lineCounter, CurrencyMatrix currencyMatrix)
+throws ParseLineException
+\end{lstlisting}
+\end{itemize}
+
+\tab Metoda \textit{parseRate} powstała na późniejszym etapie projektu, podobnie jak poprzednia metoda, w celu oddzielenia obszernej procedury analizy linii z wymianą dwóch walut. W przeciwieństwie do metody \textit{parseCurrency} nie zwraca ona przygotowanego obiektu, gdyż wybór indeksów w macierzy  \textit{CurrencyMatrix} jest bezpośrednio powiązane z odczytem tej linii oraz obsługą błędów. Otrzymuje ona wczytaną linię z pliku z danymi, numer linii, która jest aktualnie wczytywana oraz macierz \textit{CurrencyMatrix}.
+
+Jeśli w trakcie wczytywania nastąpi problem, metoda wyrzuca wyjątek \textit{ParseLineException}, który jest odbierany przez metodę \textit{readData}. Podobnie jak w przypadku metody \textit{parseCurrency} nie powoduje on zakończenia próby wczytania pliku, a jedynie zignorowanie błędnej linii i przejście do kolejnego etapu programu.
+
+\subsection{Klasa ExchangeSearcher}
+
+\begin{itemize}
+\item \begin{lstlisting}
+public String SearchForArbitrage(double amount,
+CurrencyMatrix cm, Currency currency)
+\end{lstlisting}
+
+\item \begin{lstlisting}
+public String SearchForBestExchange(double amount,
+CurrencyMatrix cm, Currency inputCurrency,
+Currency outputCurrency)
+\end{lstlisting}
+\end{itemize}
+
+\tab Metody znajdujące się w tej klasie nie uległy dużej zmianie. Wykonują one dokładnie takie same czynności, jakie były przewidziane na wcześniejszym etapie projektu. Jedyną różnicą jest to, że metody nie wypisują na standardowym wyjściu odnalezionych ścieżek (lub komunikatów), ale zwracają je do metody \textit{main} w postaci obiektu klasy String.
+
+\subsection{Klasa GroupOfVisionaires} 
+
+\tab Również klasa główna projektu przeszła pewne zmiany w stosunku do planów ze specyfikacji implementacyjnej. Podstawową różnicą jest to, że zyskała ona pola odpowiadające danym odbieranym od użytkownika -- zarówno tych z argumentów wywołania, jak i odczytywanych z pliku, co ułatwiło przekazywanie tych danych w programie.
+
+\subsubsection{Metoda checkArgs}
+
+\begin{itemize}
+\item \begin{lstlisting}
+public boolean checkArgs(String[] args)
+\end{lstlisting}
+\end{itemize}
+
+\tab Metoda sprawdzająca argumenty wywołania została przygotowana tak, żeby realizować wykonanie programu także dla dwóch argumentów -- dla wyszukiwania dowolnego arbitrażu. Ze względu na testy jednostkowe w programie w finalnej wersji programu metoda ta jest dostępna publicznie.
+
+\subsubsection{Metoda main}
+
+\begin{itemize}
+\item \begin{lstlisting}
+public static void main(String[] args)
+\end{lstlisting}
+\end{itemize}
+
+\tab Metoda \textit{main} nie zmieniła się znacząco, poza obsługą wyszukiwania dowolnego arbitrażu dla dwóch podanych przez użytkownika argumentów. Występuje w niej obiekt klasy \textit{GroupOfVisionaires}, który funkcjonuje jak kontener dla danych i to na nim uruchamiana jest metoda \textit{checkArgs}.
+
+\section{Wnioski}
+
+\begin{enumerate}
+
+\item Zagadnienie diagramu Woronoja pomimo prostych założeń nie było oczywiste do rozwiązania w programie.
+
+\item Popularny w rozwiązaniach zagadnień związanych z tym diagramem algorytm Fortune'a mógł być najlepszym rozwiązaniem pomimo swojej matematycznej złożoności. Zastosowanie go zdecydowanie poprawiłoby wydajność programu.
+
+\item W przeciwieństwie do projektu indywidualnego, opracowanie algorytmu okazało się kluczowym problemem w trakcie projektu i pochłonęło ono zdecydowanie najwięcej czasu.
+
+\item Tworzenie algorytmu od podstaw było ciekawym i kształcącym doświadczeniem, zarówno z perspektywy programistycznej, jak i algorytmicznej. Okazało się ono jednak ryzykowne i w związku z niepowodzeniem wymusiło na nas szybkie przygotowanie alternatywnego rozwiązania problemu.
+
+\item Projekt zespołowy okazał się doskonałą okazją do rozwijania umiejętności korzystania z systemu kontroli wersji. Git posiada wiele narzędzi, które pomogły rozwiązać nam konflikty, przydatne okazało się także cofanie do wcześniejszych wersji kodu.
+
+\end{enumerate}
+
+
+\section{Komentarz do zajęć laboratoryjnych}
+
+\tab Laboratorium składało się z trzech części. Pierwsza z nich to ćwiczenia bezpośrednio związane z implementacją pojedynczych algorytmów w języku Java. Uważamy, że były one rozwijające i całkiem interesujące, adekwatne do naszego kierunku studiów. Jako uwagę do tej części można zauważyć sporą rozbieżność tematów z wykładu i laboratorium -- zagadnienia z ćwiczeń były omawiane na wykładzie dopiero 2-3 tygodnie po zajęciach laboratoryjnych, co wymagało od nas więcej pracy samodzielnej i uniemożliwiało zweryfikowanie informacji, z których przygotowywaliśmy się na zajęcia. Na przykład, wykład o kopcu jako strukturze danych znacznie zmienił nasze podejście względem tego, czego nauczyliśmy się samodzielnie i być może gdyby ten wykład odbył się wcześniej mielibyśmy szansę na uzyskanie lepszej noty z tego ćwiczenia.
+
+Kolejną częścią był projekt indywidualny, który postawił nas przed zagadnieniem wyszukiwania optymalnej wymiany walut. Uważamy, że był to najciekawszy etap zajęć i był on najlepiej zrównoważony pod względem czasu spędzonego na wykonywaniu zadań oraz wymaganych umiejętności do wykonania ćwiczenia. Kolejnym dużym plusem tej części była możliwość wyboru języka programowania, w którym projekt był wykonywany.
+
+Ostatni etap to projekt grupowy, który postawił nas przed trudniejszym zagadnieniem, jakim był podział planszy ograniczonej konturami na obszary i przypisanie obiektów do obszarów. Pełna ocena tego etapu jest dla nas trudna z uwagi na to, że nasza praca nie została jeszcze zweryfikowana i oceniona. Trudnością, na jaką napotkaliśmy była implementacja algorytmu dzielącego -- próby z algorytmem Fortune'a oraz algorytmem autorskim zakończyły się niepowodzeniem, co pochłonęło dużo naszego czasu i ostatecznie spowodowało wybór algorytmu dużo bardziej czasochłonnego niż dwa wcześniejsze, ale prostszego do napisania.
+
+
+\end{document}
