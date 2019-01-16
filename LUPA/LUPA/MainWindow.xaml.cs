@@ -46,8 +46,10 @@ namespace LUPA
             position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
-                DrawPoint(keyPointColor, position);
+                Map.Children.Clear();
                 AddKeyPoint(position);
+                DrawMap();
+                DrawAreaLines();
                 OutputTxt.Text = "Dodano punkt kluczowy (" + position.X + "; " + position.Y + ")";
             }
             else if (ContourPointBtn.IsChecked == true)
@@ -58,11 +60,6 @@ namespace LUPA
                 }
                 else
                 {
-                    //DeleteCurrentContour();
-                    //DrawPoint(contourPointColor, position);
-                    //AddContourPoint(position);
-                    //DrawContourLinesInOrder();
-                    //wywal area lines
                     Map.Children.Clear();
                     AddContourPoint(position);
                     DrawMap();
