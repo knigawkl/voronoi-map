@@ -147,7 +147,6 @@ namespace LUPA
             }
         }
 
-
         private Point FindDistantPoint(System.Windows.Point position, double distance)
         {
             Point point = new Point(0, 0);
@@ -205,7 +204,7 @@ namespace LUPA
                 Map.Children.Clear();
                 map = Parser.ParseFile(ofd.FileName, out List<string> feedback);
                 DrawMap();
-                ColorAreas();
+                DrawAreaLines();
             }
         }
 
@@ -295,12 +294,7 @@ namespace LUPA
             OutputTxt.Text = "Zmieniono tło na: " + ofd.FileName.ToString();
         }
 
-        private enum MapObjects
-        {
-            Blank = 0, KeyPoint, ContourPoint, CustomObject
-        }
-
-        private void ColorAreas()
+        private void DrawAreaLines()
         {
             for (int i = 0; i < map.KeyPoints.Count; i++)
             {
@@ -321,6 +315,11 @@ namespace LUPA
             {
                 for (int column = 1; column < 599; column++)
                 {
+                    if(!Util.Mathematics.IsPointInPolygon(map.ContourPoints, new Point(row, column)))
+                    {
+                        break;
+                    }
+
                     if (identificators[row, column] != identificators[row - 1, column] 
                         || identificators[row, column] != identificators[row + 1, column]
                         || identificators[row, column] != identificators[row, column - 1] 
@@ -381,20 +380,6 @@ namespace LUPA
                 Y1 = srcPtY,
                 X2 = endPtX,
                 Y2 = endPtY
-            };
-            Map.Children.Add(line);
-        }
-
-        private void DrawLine(Brush color, Point src, Point end)
-        {
-            Line line = new Line()
-            {
-                Stroke = color,
-                StrokeThickness = 2,
-                X1 = src.X,
-                Y1 = src.Y,
-                X2 = end.X,
-                Y2 = end.Y
             };
             Map.Children.Add(line);
         }

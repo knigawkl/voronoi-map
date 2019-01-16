@@ -64,8 +64,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Util\RandomPastelColorGenerator.cs" />
-    <Compile Include="Util\RandomInteger.cs" />
     <Compile Include="Util\StraightLine.cs" />
     <Compile Include="Util\Mathematics.cs" />
     <Page Include="MainWindow.xaml">
