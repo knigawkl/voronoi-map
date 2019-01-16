@@ -22,6 +22,9 @@ namespace LUPA
         public readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
         public readonly SolidColorBrush customObjectColor = Brushes.Gold;
         public readonly SolidColorBrush areaLinesColor = Brushes.Black;
+        public readonly int pointThickness = 5;
+        public readonly int transparentPointThickness = 1;
+        public readonly int contourLineThickness = 2;
         Map map;
         bool isMapLoaded = false;
         System.Windows.Point position;
@@ -77,9 +80,16 @@ namespace LUPA
             OutputTxt.Text = "";
             if (e.OriginalSource is Rectangle clickedShape)
             {
-                if (clickedShape.Stroke == keyPointColor && KeyPointBtn.IsChecked == true)
+                if (clickedShape.Stroke == keyPointColor && KeyPointBtn.IsChecked == true && map.KeyPoints.Count == 1)
                 {
-                    Map.Children.Remove(clickedShape);
+                    OutputTxt.Text = "Nieudane usuwanie: Musi zostac co najmniej jednen punkt kluczowy na planszy";
+                }
+                else if (clickedShape.Stroke == keyPointColor && KeyPointBtn.IsChecked == true)
+                {
+                    Map.Children.Clear();
+                    RemovePointFromDataContainer(clickedShape);
+                    DrawMap();
+                    DrawAreaLines();
                     OutputTxt.Text = "Usunięto punkt kluczowy (" + Canvas.GetLeft(clickedShape) + "; " + Canvas.GetTop(clickedShape) + ")";
                 }
                 if (clickedShape.Stroke == contourPointColor && ContourPointBtn.IsChecked == true && map.ContourPoints.Count < 4)
@@ -327,7 +337,7 @@ namespace LUPA
                 map.KeyPoints[i].Id = i;
             }
 
-            int[,] identificators = new int[600, 600];
+            int[,] identificators = new int[(int)Map.Height, (int)Map.Width];
 
             for (int row = 0; row < Map.ActualHeight; row++)
             {
@@ -337,9 +347,9 @@ namespace LUPA
                 }
             }
 
-            for (int row = 1; row < 599; row++)
+            for (int row = 1; row < (int)Map.Height - 1; row++)
             {
-                for (int column = 1; column < 599; column++)
+                for (int column = 1; column < (int)Map.Width - 1; column++)
                 {
                     if(!Util.Mathematics.IsPointInPolygon(map.ContourPoints, new Point(row, column)))
                     {
@@ -375,7 +385,7 @@ namespace LUPA
         {
             var rec = new Rectangle()
             {
-                StrokeThickness = 5,
+                StrokeThickness = pointThickness,
                 Stroke = color
             };
             Map.Children.Add(rec);
@@ -387,7 +397,7 @@ namespace LUPA
         {
             var rec = new Rectangle()
             {
-                StrokeThickness = 1,
+                StrokeThickness = transparentPointThickness,
                 Stroke = color,
                 Opacity = .80
             };
@@ -401,7 +411,7 @@ namespace LUPA
             Line line = new Line()
             {
                 Stroke = color,
-                StrokeThickness = 2,
+                StrokeThickness = contourLineThickness,
                 X1 = srcPtX,
                 Y1 = srcPtY,
                 X2 = endPtX,
