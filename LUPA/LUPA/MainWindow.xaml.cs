@@ -9,7 +9,6 @@ using System.Windows.Shapes;
 using LUPA.DataContainers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LUPA
 {
@@ -21,7 +20,6 @@ namespace LUPA
         public readonly SolidColorBrush keyPointColor = Brushes.IndianRed;
         public readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
         public readonly SolidColorBrush customObjectColor = Brushes.Gold;
-        public readonly SolidColorBrush areaLinesColor = Brushes.DarkOrange;
         Map map;
         System.Windows.Point position;
 
@@ -60,7 +58,7 @@ namespace LUPA
                     AddContourPoint(position);
                     DrawContourLinesInOrder();
                     OutputTxt.Text = "Dodano punkt konturu (" + position.X + "; " + position.Y + ")";
-                }                         
+                }
             }
         }
 
@@ -109,52 +107,10 @@ namespace LUPA
             map.ContourPoints.RemoveAll(o => o.X == x && o.Y == y);
         }
 
-        private void DrawPoint(Brush color, System.Windows.Point position)
-        {           
-            var rec = new Rectangle()
-            {
-                StrokeThickness = 5,
-                Stroke = color
-            };
-            Map.Children.Add(rec);
-            Canvas.SetTop(rec, position.Y);
-            Canvas.SetLeft(rec, position.X);
-        }
-
-        private void DrawLine(Brush color, double srcPtX, double srcPtY, double endPtX, double endPtY)
-        {
-            Line line = new Line()
-            {
-                Stroke = color,
-                StrokeThickness = 2,
-                X1 = srcPtX,
-                Y1 = srcPtY,
-                X2 = endPtX,
-                Y2 = endPtY
-            };
-            Map.Children.Add(line);
-        }
-
-        private void DrawLine(Brush color, Point src, Point end)
-        {
-            Line line = new Line()
-            {
-                Stroke = color,
-                StrokeThickness = 2,
-                X1 = src.X,
-                Y1 = src.Y,
-                X2 = end.X,
-                Y2 = end.Y
-            };
-            Map.Children.Add(line);
-        }
-
         private void AddKeyPoint(System.Windows.Point position)
         {
-            map.KeyPoints.Add(new KeyPoint(position.X, position.Y, "defaultKeyPointName"));
-            AreaDivider.DivideIntoAreas(map);
+            map.KeyPoints.Add(new KeyPoint((int)position.X, (int)position.Y, "defaultKeyPointName"));
             DrawMap();
-            DrawAreaLines(map.AreaLineSegments);
         }
 
         private void AddContourPoint(System.Windows.Point position)
@@ -206,6 +162,21 @@ namespace LUPA
             return point;
         }
 
+        private KeyPoint FindDistantPointFromKeyPoint(Point position, double distance)
+        {
+            KeyPoint point = new KeyPoint(0, 0, "");
+            double dist;
+            foreach (var kp in map.KeyPoints)
+            {
+                dist = Util.Mathematics.CalculateDistBetweenPoints(position, kp);
+                if (dist == distance)
+                {
+                    return kp;
+                }
+            }
+            return point;
+        }
+
         private void KeyPointBtn_Checked(object sender, RoutedEventArgs e)
         {
             KeyPointBtn.Background = keyPointColor;
@@ -232,9 +203,8 @@ namespace LUPA
             {
                 Map.Children.Clear();
                 map = Parser.ParseFile(ofd.FileName, out List<string> feedback);
-                AreaDivider.DivideIntoAreas(map);
                 DrawMap();
-                DrawAreaLines(map.AreaLineSegments);
+                ColorAreas();
             }
         }
 
@@ -250,7 +220,7 @@ namespace LUPA
         {
             System.Windows.Point position = new System.Windows.Point();
             foreach (var cp in map.ContourPoints)
-            {               
+            {
                 position.X = cp.X;
                 position.Y = cp.Y;
                 DrawPoint(contourPointColor, position);
@@ -279,17 +249,6 @@ namespace LUPA
             }
         }
 
-        public void DrawAreaLines(List<LineSegment> areaLineSegments)
-        {
-            StringBuilder sr = new StringBuilder();
-            foreach (var als in map.AreaLineSegments)
-            {
-                sr.Append(als.StartPoint.X + " " + als.StartPoint.Y + " : " + als.EndPoint.X + " " + als.EndPoint.Y + "\n");
-                DrawLine(areaLinesColor, als.StartPoint.X, als.StartPoint.Y, als.EndPoint.X, als.EndPoint.Y);
-            }
-            UpperSideToolbarTxt.Text = sr.ToString();
-        }
-
         private void DrawContourLinesInOrder()
         {
             double srcPtX, srcPtY, endPtX, endPtY;
@@ -313,7 +272,7 @@ namespace LUPA
             endPtX = map.ContourPoints[totalContourPointsNum].X;
             endPtY = map.ContourPoints[totalContourPointsNum].Y;
             DrawLine(contourPointColor, srcPtX, srcPtY, endPtX, endPtY);
-        }        
+        }
 
         private void ChangeBackground_Click(object sender, RoutedEventArgs e)
         {
@@ -337,31 +296,135 @@ namespace LUPA
 
         private enum MapObjects
         {
-            KeyPoint, ContourPoint, CustomObject
+            Blank = 0, KeyPoint, ContourPoint, CustomObject
         }
 
         private void ColorAreas()
         {
-            //int[,] mapPixels = new int[600][600];
+            int[,] mapPixels = new int[600, 600];
+            AddKeyPointsToMapPixels(ref mapPixels);
+            AddContourPointsToMapPixels(ref mapPixels);
+            AddCustomObjectsToMapPixels(ref mapPixels);
+
+            map.KeyPoints[0].BrushColor = Brushes.Green;
+            map.KeyPoints[1].BrushColor = Brushes.HotPink;
+            map.KeyPoints[2].BrushColor = Brushes.Thistle;
+
+
+            /*
+            foreach (var kp in map.KeyPoints)
+            {
+                //int r = (int)(kp.X * 0.4);
+                //int g = (int)(kp.Y * 0.4);
+                //int b = 123;
+                //Random r = new Random();
+                //kp.BrushColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(kp.X), (byte)r.Next(kp.Y), (byte)r.Next(kp.X)));//contourPointColor;//new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
+            }
+            */
+            foreach (var kp in map.KeyPoints)
+            {
+                OutputTxt.AppendText(kp.BrushColor.ToString() + "  ");
+            }
+            
+            for (int row = 0; row < 600; row++)
+            {
+                for (int column = 0; column < 600; column++)
+                {
+                    SolidColorBrush color = FindClosestKeyPoint(row, column).BrushColor;
+                    DrawTransparentPoint(color, new System.Windows.Point(row, column));
+                }
+            } 
+        }
+
+        private KeyPoint FindClosestKeyPoint(int x, int y)
+        {
+            var distances = new List<double>();
+            double dist;
+            foreach (var kp in map.KeyPoints)
+            {
+                dist = Util.Mathematics.CalculateDistBetweenPoints(new Point(x, y), kp);
+                distances.Add(dist);
+            }
+            distances.Sort();
+            return FindDistantPointFromKeyPoint(new Point(x, y), distances[0]);
 
         }
 
-        private void AddKeyPointsToMapPixels(int[] mapPixels)
+        private void AddKeyPointsToMapPixels(ref int[,] mapPixels)
         {
             foreach (var kp in map.KeyPoints)
             {
-                
+                mapPixels[kp.X, kp.Y] = (int)MapObjects.KeyPoint;
             }
         }
 
-        private void ContourPointsToMapPixels()
+        private void AddContourPointsToMapPixels(ref int[,] mapPixels)
         {
-
+            foreach (var cp in map.ContourPoints)
+            {
+                mapPixels[cp.X, cp.Y] = (int)MapObjects.ContourPoint;
+            }
         }
 
-        private void AddCustomObjectsToMapPixels()
+        private void AddCustomObjectsToMapPixels(ref int[,] mapPixels)
         {
+            foreach (var co in map.CustomObjects)
+            {
+                mapPixels[co.X, co.Y] = (int)MapObjects.CustomObject;
+            }
+        }
 
+        private void DrawPoint(Brush color, System.Windows.Point position)
+        {
+            var rec = new Rectangle()
+            {
+                StrokeThickness = 5,
+                Stroke = color
+            };
+            Map.Children.Add(rec);
+            Canvas.SetTop(rec, position.Y);
+            Canvas.SetLeft(rec, position.X);
+        }
+
+        private void DrawTransparentPoint(Brush color, System.Windows.Point position)
+        {
+            var rec = new Rectangle()
+            {
+                StrokeThickness = 1,
+                Stroke = color,
+                Opacity = .20
+            };
+            Map.Children.Add(rec);
+            Canvas.SetTop(rec, position.Y);
+            Canvas.SetLeft(rec, position.X);
+        }
+
+        private void DrawLine(Brush color, double srcPtX, double srcPtY, double endPtX, double endPtY)
+        {
+            Line line = new Line()
+            {
+                Stroke = color,
+                StrokeThickness = 2,
+                X1 = srcPtX,
+                Y1 = srcPtY,
+                X2 = endPtX,
+                Y2 = endPtY
+            };
+            Map.Children.Add(line);
+        }
+
+        private void DrawLine(Brush color, Point src, Point end)
+        {
+            Line line = new Line()
+            {
+                Stroke = color,
+                StrokeThickness = 2,
+                X1 = src.X,
+                Y1 = src.Y,
+                X2 = end.X,
+                Y2 = end.Y
+            };
+            Map.Children.Add(line);
         }
     }
 }
