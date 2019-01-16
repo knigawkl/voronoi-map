@@ -88,10 +88,10 @@ namespace LUPA
                 }
                 else if (clickedShape.Stroke == contourPointColor && ContourPointBtn.IsChecked == true)
                 {
-                    Map.Children.Remove(clickedShape);
+                    Map.Children.Clear();
                     RemovePointFromDataContainer(clickedShape);
-                    DeleteCurrentContour();
-                    DrawContourLinesInOrder();
+                    DrawMap();
+                    DrawAreaLines();
                     OutputTxt.Text = "Usunięto punkt konturu (" + Canvas.GetLeft(clickedShape) + "; " + Canvas.GetTop(clickedShape) + ")";
                 }
             }
