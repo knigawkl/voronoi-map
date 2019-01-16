@@ -83,17 +83,39 @@ Kolejny algorytm opierał się na własnościach diagramu Woronoja -- w szczegó
 
 Ostatnie podejście zakładało rozstrzygnięcie problemu najprostszą metodą, bardzo kosztowną czasowo dla programu, jednak nie wymagającą długiej implementacji. Tym razem rysowanie miało się odbywać na podstawie odległości dzielące punkty (piksele) na mapie, i na podstawie matematycznie wyznaczanej odległości od punktów kluczowych program miał przypisywać kolory do każdego punktu na mapie tym samym wyznaczając obszary w obrębie konturu. Ta metoda okazała się skuteczna i została zastosowana w ostatecznej wersji programu.
 
+\newpage
+
 \section{Działanie programu}
 
-\tab Poniższe przykłady zostały wykonane na komputerze opisanym w specyfikacji implementacyjnej, uruchomione w cmd.exe.  
+\subsection{Działanie pierwszego algorytmu}
 
-Pierwszy rysunek ukazuje poprawne działanie programu dla pliku z danymi dane.txt zawierającego dokładnie te same dane, które zostały umieszczone we wstępie tego sprawozdania.
+\tab Na rysunku 1. widać przykład działania programu jeszcze w czasie prób wykorzystywania pierwszego algorytmu. Zdjęcie wykazuje, że algorytm sprawdzał się w prostych przypadkach i rysował poprawny diagram Woronoja ograniczony konturami. Panel po lewej został wykorzystany do wypisania odcinków, po których przechodzi algorytm.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] q
+\caption{Uruchomienie programu z przykładowymi danymi, stary algorytm}
+\label{fig:obrazek 1}
+\end{figure}
+
+Kolejny obrazek ukazuje, że algorytm przy dodawaniu kolejnych punktów zaczął powodować błędy.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15cm] w
+\caption{Uruchomienie programu z zmienionymi danymi, stary algorytm}
+\label{fig:obrazek 2}
+\end{figure}
+
+Ze względu na dużą ilość zróżnicowanych błędów, jakie pojawiały się przy kolejnych próbach poprawy algorytmu zrezygnowaliśmy z tego podejścia do problemu. Kolejne grafiki przedstawiać będą ostateczną wersję programu.
+
+\subsection{Działanie finalnej wersji programu}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=15cm] a
 \caption{Uruchomienie programu z wyszukiwaniem ścieżki}
-\label{fig:obrazek 1}
+\label{fig:obrazek 3}
 \end{figure}
 
 Kolejny obraz przedstawia uruchomienie programu dla tych samych danych, ale z poszukiwaniem dowolnego arbitrażu.
@@ -102,7 +124,7 @@ Kolejny obraz przedstawia uruchomienie programu dla tych samych danych, ale z po
 \centering
 \includegraphics[width=15cm] b
 \caption{Uruchomienie programu -- dowolny arbitraż}
-\label{fig:obrazek 2}
+\label{fig:obrazek 4}
 \end{figure}
 
 Na trzecim rysunku widzimy uruchomienie programu w trzeciej opcji -- szukania arbitrażu dla konkretnej waluty.
@@ -111,7 +133,7 @@ Na trzecim rysunku widzimy uruchomienie programu w trzeciej opcji -- szukania ar
 \centering
 \includegraphics[width=15cm] g
 \caption{Uruchomienie programu -- konkretny arbitraż}
-\label{fig:obrazek 3}
+\label{fig:obrazek 5}
 \end{figure}
 
 Kolejny obrazek to już niepoprawne uruchomienie programu -- w tym wypadku użytkownik podał za mało danych, zabrakło przynajmniej podania kwoty wejściowej.
@@ -120,7 +142,7 @@ Kolejny obrazek to już niepoprawne uruchomienie programu -- w tym wypadku użyt
 \centering
 \includegraphics[width=15cm] c
 \caption{Uruchomienie programu -- za mało danych}
-\label{fig:obrazek 4}
+\label{fig:obrazek 6}
 \end{figure}
 
 Piąty rysunek to próba uruchomienia programu dla pliku, który nie istnieje.
@@ -129,7 +151,7 @@ Piąty rysunek to próba uruchomienia programu dla pliku, który nie istnieje.
 \centering
 \includegraphics[width=15cm] d
 \caption{Uruchomienie programu -- niepoprawne dane}
-\label{fig:obrazek 5}
+\label{fig:obrazek 7}
 \end{figure}
 
 Dwa kolejne obrazki to przykłady uruchomienia programu dla plików, które nie zostały poprawnie zapisane. Są to pliki użyte do testowania programu, których treść zamieszczono poniżej. Obrazki ukazują reakcję programu na konkretne błędy w pliku tekstowym.
@@ -148,7 +170,7 @@ Pierwszy plik to data3.txt:
 \centering
 \includegraphics[width=15cm] e
 \caption{Działanie programu z błędem krytycznym w pliku}
-\label{fig:obrazek 6}
+\label{fig:obrazek 8}
 \end{figure}
 
 Kolejny plik to data4.txt:
@@ -164,7 +186,7 @@ Kolejny plik to data4.txt:
 \centering
 \includegraphics[width=15cm] f
 \caption{Działanie programu z mniej ważnym błędem w pliku}
-\label{fig:obrazek 7}
+\label{fig:obrazek 9}
 \end{figure}
 
 
@@ -184,53 +206,34 @@ W specyfikacji funkcjonalnej pominięte zostało kilka oczywistych błędów, ta
 
 \section{Zmiany względem specyfikacji implementacyjnej}
 
-\tab W strukturze całego programu nastąpiła jedna istotna zmiana -- ze względu na wielkość pakietu \textit{groupofvisionaires} przechowującego pierwotnie wszystkie klasy programu został wydzielony drugi pakiet, nazwany \textit{filereader}, przechowujący klasę \textit{DataReader} oraz wyjątki \textit{ReadDataException} oraz \textit{ParseLineException} używane przez program przy obsłudze błędów związanych właśnie z odczytem pliku. Ich dokładniejsze zastosowanie opisano poniżej, w sekcjach opisujących metody klasy \textit{DataReader}.
+\tab Struktura programu w ostatecznej wersji nie korzysta z zakładanej wcześniej klasy \textit{AreaDivider}. Pozostała ona w projekcie w celu pokazania wcześniejszej koncepcji rozwiązania problemu autorskim algorytmem, jednak ostateczna logika dzielenia na obszary znalazła się w klasie głównej \textit{MainWindow} w celu uproszczenia interakcji z rzeczywistą planszą w programie. 
 
-\subsection{Klasa CurrencyMatrix}
+\subsection{Klasy Mathematics i StraightLine}
 
-\tab Klasa odpowiedzialna za przechowywanie danych wczytanych z pliku nie uległa dużej zmianie względem specyfikacji implementacyjnej. Otrzymała jedynie jedno dodatkowe pole w postaci podawanej na początku istnienia klasy liczby n, odpowiadającej za ilość walut. Do metod dostępowych doszła zatem metoda \textit{getN}, która wypisuje tą liczbę w innym miejscu kodu -- w szczególności w trakcie iterowania po tablicy walut \textit{currencies}, która jest prywatna i nie można dostać jej długości z zewnątrz.
+\tab To są zupełnie nowe klasy, które nie wystąpiły w specyfikacji implementacyjnej. Pierwsza z nich pełni funkcję wewnętrznej biblioteki matematycznej programu. Wykonuje obliczenia, takie jak obliczanie dystansu pomiędzy punktami, sprawdza czy linie się przecinają albo czy punkt znajduje się wewnątrz konturu. Wszystkie operacje wykonywane są statycznie, metody przyjmują zarówno obiekty klas systemowych jak i tych stworzonych na potrzeby tego programu.
 
-\subsection{Klasa DataReader}
+Druga z tych klas jest abstrakcyjnym przedstawieniem prostej i jest wykorzystywana właśnie do wyżej wspomnianych kalkulacji matematycznych.
 
-\tab Klasa wczytująca dane z pliku została rozbudowana i ostatecznie składa się ona z trzech metod.
+\subsection{Klasa Parser}
 
-\subsubsection{Metoda readData}
-
-\begin{itemize}
-\item \begin{lstlisting}
-public static CurrencyMatrix readData (File f)
-throws ReadDataException
-\end{lstlisting}
-\end{itemize}
-
-\tab Metoda \textit{readData} zgodnie ze wcześniejszym założeniem zwraca przygotowany obiekt klasy \textit{CurrencyMatrix} w przypadku powodzenia. Jeżeli w trakcie wczytywania wystąpi problem uniemożliwiający poprawne działanie programu, metoda wyrzuca wyjątek \textit{ReadDataException}, który jest odczytywany w metodzie \textit{main} klasy \textit{GroupOfVisionaires}.
-
-\subsubsection{Metoda parseCurrency}
+\tab Klasa wczytująca dane z pliku została rozbudowana i ostatecznie składa się z większej liczby metod, niż zakładała specyfikacja implementacyjna. Do nowych metod należą: 
 
 \begin{itemize}
 \item \begin{lstlisting}
-private static Currency parseCurrency(String line,
-int lineCounter) throws ParseLineException
+private static void VerifyObjectsDef
+(List<CustomObjectType> customObjectTypes)
 \end{lstlisting}
-\end{itemize}
-
-\tab Metoda \textit{parseCurrency} powstała na późniejszym etapie projektu, w celu poprawy czytelności i usprawnienia obsługi błędów w klasie \textit{DataReader}. Otrzymuje ona wczytaną linię z pliku z danymi oraz numer linii, która jest aktualnie wczytywana. W przypadku poprawnej analizy linii metoda zwraca obiekt klasy \textit{Currency}, gotowy do użycia w dalszej części programu. 
-
-Jeśli w trakcie wczytywania nastąpi problem, metoda wyrzuca wyjątek \textit{ParseLineException}, który jest odbierany przez metodę \textit{readData}. W przeciwieństwie do wyjątku \textit{ReadDataException} nie powoduje on zakończenia próby wczytania pliku, a jedynie zignorowanie błędnej linii i przejście do kolejnego etapu programu.
-
-\subsubsection{Metoda parseRate}
-
-\begin{itemize}
 \item \begin{lstlisting}
-private static void parseRate(String line,
-int lineCounter, CurrencyMatrix currencyMatrix)
-throws ParseLineException
+private static void VerifyContourPoints
+(List<Point> contourPoints)
+\end{lstlisting}
+\item \begin{lstlisting}
+private static void VerifyKeyPoints
+(List<Point> contour, List<Point> keyPoints)
 \end{lstlisting}
 \end{itemize}
 
-\tab Metoda \textit{parseRate} powstała na późniejszym etapie projektu, podobnie jak poprzednia metoda, w celu oddzielenia obszernej procedury analizy linii z wymianą dwóch walut. W przeciwieństwie do metody \textit{parseCurrency} nie zwraca ona przygotowanego obiektu, gdyż wybór indeksów w macierzy  \textit{CurrencyMatrix} jest bezpośrednio powiązane z odczytem tej linii oraz obsługą błędów. Otrzymuje ona wczytaną linię z pliku z danymi, numer linii, która jest aktualnie wczytywana oraz macierz \textit{CurrencyMatrix}.
-
-Jeśli w trakcie wczytywania nastąpi problem, metoda wyrzuca wyjątek \textit{ParseLineException}, który jest odbierany przez metodę \textit{readData}. Podobnie jak w przypadku metody \textit{parseCurrency} nie powoduje on zakończenia próby wczytania pliku, a jedynie zignorowanie błędnej linii i przejście do kolejnego etapu programu.
+Ich zadaniem jest weryfikacja argumentów po zakończeniu wczytywania danej części pliku -- na przykład, gdy cały kontur zostanie wczytany, metoda sprawdzi, czy ma on potrzebną liczbę punktów oraz linie tworzone przez te punkty nie przecinają się. Punkty konturowe są sprawdzane pod kątem umieszczenia ich poza granicami konturu korzystając ze stosownej funkcji matematycznej z klasy opisanej wyżej, a definicje obiektów -- czy są w nich zawarte trzy obowiązkowe typy obiektów (szkoła, dom i niedźwiedź).
 
 \subsection{Klasa ExchangeSearcher}
 
@@ -249,29 +252,42 @@ Currency outputCurrency)
 
 \tab Metody znajdujące się w tej klasie nie uległy dużej zmianie. Wykonują one dokładnie takie same czynności, jakie były przewidziane na wcześniejszym etapie projektu. Jedyną różnicą jest to, że metody nie wypisują na standardowym wyjściu odnalezionych ścieżek (lub komunikatów), ale zwracają je do metody \textit{main} w postaci obiektu klasy String.
 
-\subsection{Klasa GroupOfVisionaires} 
+\subsection{Klasy przechowujące dane} 
 
-\tab Również klasa główna projektu przeszła pewne zmiany w stosunku do planów ze specyfikacji implementacyjnej. Podstawową różnicą jest to, że zyskała ona pola odpowiadające danym odbieranym od użytkownika -- zarówno tych z argumentów wywołania, jak i odczytywanych z pliku, co ułatwiło przekazywanie tych danych w programie.
+\tab W tej grupie klas nastąpiły najmniejsze zmiany. Wynikały one głównie z przyjętych sposobów implementacji algorytmu oraz ułatwiły porównywanie niektórych obiektów.
 
-\subsubsection{Metoda checkArgs}
+\subsubsection{Klasa Point}
+
+\tab W tej klasie nastąpiła zmiana typu podstawowych zmiennych X i Y na typ całkowity. Ma to znaczenie przy graficznej reprezentacji tych punktów na mapie złożonej z pojedynczych pikseli, ułatwiając tym samym wdrożenie algorytmu dzielącego na obszary.
+
+\subsubsection{Klasa LineSegment}
+
+\tab Ta klasa zmieniła nazwę na \textit{LineSegment} z dwóch powodów: 
+
+\begin{itemize}
+\item żeby uniknąć konfliktów z nazwami używanymi lokalnie przy generowaniu reprezentacji graficznej naszej mapy,
+\item żeby podkreślić jej skończoną reprezentację w programie, odróżniając między innymi od abstrakcyjnej prostej wykorzystywanej w matematyce.
+\end{itemize}
+
+Nie jest to jedyna zmiana wykonana w tej klasie. Zyskała ona jeszcze jedną metodę:
 
 \begin{itemize}
 \item \begin{lstlisting}
-public boolean checkArgs(String[] args)
+public bool IsIntersecting(LineSegment secondLine)
 \end{lstlisting}
 \end{itemize}
 
-\tab Metoda sprawdzająca argumenty wywołania została przygotowana tak, żeby realizować wykonanie programu także dla dwóch argumentów -- dla wyszukiwania dowolnego arbitrażu. Ze względu na testy jednostkowe w programie w finalnej wersji programu metoda ta jest dostępna publicznie.
+Zadaniem tej metody jest sprawdzenie, czy dany odcinek przecina się z innym odcinkiem, do którego referencja jest podana jako parametr. Metoda zwraca prawdę w przypadku, gdy linie się przecinają.
 
-\subsubsection{Metoda main}
+\subsection{Klasa MainWindow} 
+
+\tab Zgodnie z oczekiwaniami, klasa \textit{MainWindow} zyskała wiele metod bezpośrednio powiązanych z działaniem biblioteki graficznej WPF oraz reakcją na działanie użytkownika. W jej skład wchodzą: 
 
 \begin{itemize}
-\item \begin{lstlisting}
-public static void main(String[] args)
-\end{lstlisting}
+\item liczne metody rozpoczynające się od \textit{Draw}, odpowiadające za rysowanie elementów na ekranie,
+\item metody reagujące na zdarzenia myszy oraz aktywowane przez użytkownika przyciski,
+\item metody pomocnicze, przeprowadzające drobne obliczenia oraz porządkujące dane w obiektach je przechowujących.
 \end{itemize}
-
-\tab Metoda \textit{main} nie zmieniła się znacząco, poza obsługą wyszukiwania dowolnego arbitrażu dla dwóch podanych przez użytkownika argumentów. Występuje w niej obiekt klasy \textit{GroupOfVisionaires}, który funkcjonuje jak kontener dla danych i to na nim uruchamiana jest metoda \textit{checkArgs}.
 
 \section{Wnioski}
 
