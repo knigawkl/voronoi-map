@@ -58,10 +58,15 @@ namespace LUPA
                 }
                 else
                 {
-                    DeleteCurrentContour();
-                    DrawPoint(contourPointColor, position);
+                    //DeleteCurrentContour();
+                    //DrawPoint(contourPointColor, position);
+                    //AddContourPoint(position);
+                    //DrawContourLinesInOrder();
+                    //wywal area lines
+                    Map.Children.Clear();
                     AddContourPoint(position);
-                    DrawContourLinesInOrder();
+                    DrawMap();
+                    DrawAreaLines();
                     OutputTxt.Text = "Dodano punkt konturu (" + position.X + "; " + position.Y + ")";
                 }
             }
