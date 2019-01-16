@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using LUPA.DataContainers;
 using System.Collections.Generic;
 using System.Linq;
+using LUPA.Exceptions;
 
 namespace LUPA
 {
@@ -22,7 +23,10 @@ namespace LUPA
         public readonly SolidColorBrush customObjectColor = Brushes.Gold;
         public readonly SolidColorBrush areaLinesColor = Brushes.Black;
         Map map;
+        bool isMapLoaded = false;
         System.Windows.Point position;
+
+        public bool IsMapLoaded { get => isMapLoaded; set => isMapLoaded = value; }
 
         public MainWindow()
         {
@@ -202,10 +206,30 @@ namespace LUPA
             if (result == true)
             {
                 Map.Children.Clear();
-                map = Parser.ParseFile(ofd.FileName, out List<string> feedback);
-                DrawMap();
-                DrawAreaLines();
+                try
+                {
+                    map = Parser.ParseFile(ofd.FileName, out List<string> feedback);
+                    OutputTxt.Text = MakeMessage(feedback);
+                    DrawMap();
+                    DrawAreaLines();
+                    isMapLoaded = true;
+                }
+                catch(ParseFileException ex)
+                {
+                    OutputTxt.Text = ex.Message;
+                }
+                
             }
+        }
+
+        private string MakeMessage(List<string> feedback)
+        {
+            string answer = "";
+            foreach(string line in feedback)
+            {
+                answer += line + "\n";
+            }
+            return answer;
         }
 
         private void DrawMap()

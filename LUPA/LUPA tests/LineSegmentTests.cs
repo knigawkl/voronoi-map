@@ -34,7 +34,7 @@ namespace LUPA_tests
         }
 
         [Test]
-        public void TestIntersectionTrue()
+        public void TestIntersectionTypical()
         {
             //Arrange
             LineSegment lineSegment1 = new LineSegment(new Point(1, 1), new Point(2, 4));
@@ -42,7 +42,7 @@ namespace LUPA_tests
             //Act
             bool result = lineSegment1.IsIntersecting(lineSegment2);
             //Assert
-            Assert.True(result);
+            Assert.False(result);
         }
 
         [Test]

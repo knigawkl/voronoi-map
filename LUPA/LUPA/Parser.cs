@@ -1,5 +1,6 @@
 ﻿using LUPA.DataContainers;
 using LUPA.Exceptions;
+using LUPA.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,6 +59,7 @@ namespace LUPA
                         if (line.Length > 0 && line[0] == '#')
                         {
                             state = ParserState.OBJECTSDEF;
+                            VerifyKeyPoints(map.ContourPoints, map.KeyPoints);
                         }
                         else
                         {
@@ -112,12 +114,23 @@ namespace LUPA
             return map;
         }
 
+        private static void VerifyKeyPoints(List<Point> contour, List<KeyPoint> keyPoints)
+        {
+            foreach (KeyPoint key in keyPoints)
+            {
+                if (!Mathematics.IsPointInPolygon(contour, key))
+                {
+                    throw new ParseFileException("At least one keypoint is not in contour");
+                }
+            }
+        }
+
         private static void VerifyObjectsDef(List<CustomObjectType> customObjectTypes)
         {
 
             bool isNiedzwiedz = false, isDom = false, isSzkola = false;
-            foreach(CustomObjectType cot in customObjectTypes)
-            {                
+            foreach (CustomObjectType cot in customObjectTypes)
+            {
                 if (cot.Name.Length == 6 && cot.Name.Substring(0, 4) == "SZKO")
                 {
                     isSzkola = true;
@@ -143,7 +156,7 @@ namespace LUPA
                     isDom = true;
                 }
             }
-            if(!(isNiedzwiedz && isDom && isSzkola))
+            if (!(isNiedzwiedz && isDom && isSzkola))
             {
                 throw new ParseFileException("You need to declare Niedźwiedz, Dom and Szkoła types to run program");
             }
@@ -151,7 +164,7 @@ namespace LUPA
 
         public static void VerifyContourPoints(List<Point> contourPoints)
         {
-            if(contourPoints.Count < 3)
+            if (contourPoints.Count < 3)
             {
                 throw new ParseFileException("You need at least 3 contour points to run program");
             }
@@ -164,13 +177,13 @@ namespace LUPA
 
             for (int i = 0; i < contourLines.Count; i++)
             {
-                for(int j = 0; j < contourLines.Count; j++)
+                for (int j = 0; j < contourLines.Count; j++)
                 {
                     if (i != j)
                     {
-                        if(contourLines[i].IsIntersecting(contourLines[j]))
+                        if (contourLines[i].IsIntersecting(contourLines[j]))
                         {
-                            throw new ParseFileException("Contour lines are intersecting, verify your file");
+                            throw new ParseFileException("Contour lines cannot be intersecting");
                         }
                     }
                 }
@@ -211,7 +224,7 @@ namespace LUPA
                         case "int":
                             if (!int.TryParse(elements[i], out int argI))
                             {
-                                throw new ParseLineException(i + ". argument is not integer type");
+                                throw new ParseLineException((i - 1) + ". argument is not integer type");
                             }
                             objectProperties[variableCounter] = argI;
                             variableCounter++;
@@ -220,15 +233,23 @@ namespace LUPA
                         case "double":
                             if (!double.TryParse(elements[i], out double argD))
                             {
-                                throw new ParseLineException(i + ". argument is not double type");
+                                throw new ParseLineException((i - 1) + ". argument is not double type");
                             }
                             if (cot.VariableNames[variableCounter] == "X")
                             {
                                 x = argD;
+                                if (x < 0 || x > 600)
+                                {
+                                    throw new ParseLineException("X coordinate out of range");
+                                }
                             }
                             else if (cot.VariableNames[variableCounter] == "Y")
                             {
                                 y = argD;
+                                if (y < 0 || y > 600)
+                                {
+                                    throw new ParseLineException("Y coordinate out of range");
+                                }
                             }
                             objectProperties[variableCounter] = argD;
                             variableCounter++;
@@ -237,7 +258,7 @@ namespace LUPA
                         case "float":
                             if (!float.TryParse(elements[i], out float argF))
                             {
-                                throw new ParseLineException(i + ". argument is not float type");
+                                throw new ParseLineException((i - 1) + ". argument is not float type");
                             }
                             objectProperties[variableCounter] = argF;
                             variableCounter++;
@@ -247,14 +268,14 @@ namespace LUPA
                         case "String":
                             if (!isStringLoading && elements[i][0] != '\"')
                             {
-                                throw new ParseLineException(i + ". argument does not start with \" symbol when string expected");
+                                throw new ParseLineException((i - 1) + ". argument does not start with \" symbol when string expected");
                             }
                             else if (!isStringLoading && elements[i][0] == '\"' && elements[i][elements[i].Length - 1] != '\"')
                             {
                                 isStringLoading = true;
                                 loadingString = loadingString + elements[i];
                             }
-                            else if (isStringLoading && elements[i][elements[i].Length-1] != '\"')
+                            else if (isStringLoading && elements[i][elements[i].Length - 1] != '\"')
                             {
                                 loadingString = loadingString + " " + elements[i];
                             }
@@ -276,7 +297,7 @@ namespace LUPA
                         case "bool":
                             if (!bool.TryParse(elements[i], out bool argB))
                             {
-                                throw new ParseLineException(i + ". argument is not boolean type");
+                                throw new ParseLineException((i - 1) + ". argument is not boolean type");
                             }
                             objectProperties[variableCounter] = argB;
                             variableCounter++;
@@ -285,18 +306,26 @@ namespace LUPA
                         case "long":
                             if (!long.TryParse(elements[i], out long argL))
                             {
-                                throw new ParseLineException(i + ". argument is not integer type");
+                                throw new ParseLineException((i - 1) + ". argument is not integer type");
                             }
                             objectProperties[variableCounter] = argL;
                             variableCounter++;
                             break;
                     }
                 }
+                if (objectProperties[objectProperties.Length - 1] == null)
+                {
+                    throw new ParseLineException("Too few arguments");
+                }
                 return new CustomObjectInstance(x, y, cot, objectProperties);
             }
             catch (IndexOutOfRangeException)
             {
                 throw new ParseLineException("Too few arguments");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new ParseLineException("Too many arguments");
             }
 
         }
@@ -332,6 +361,36 @@ namespace LUPA
                         throw new ParseLineException("Incorrect number of arguments - variable does not have name or type");
                     }
                 }
+                bool isX = false, isY = false;
+                for (int i = 0; i < cot.VariableNames.Count; i++)
+                {
+                    if (cot.VariableNames[i] == "X")
+                    {
+                        if (cot.VariableTypes[i] == "double")
+                        {
+                            isX = true;
+                        }
+                        else
+                        {
+                            throw new ParseLineException("X coordinate does not have double type");
+                        }
+                    }
+                    if (cot.VariableNames[i] == "Y")
+                    {
+                        if (cot.VariableTypes[i] == "double")
+                        {
+                            isY = true;
+                        }
+                        else
+                        {
+                            throw new ParseLineException("Y coordinate does not have double type");
+                        }
+                    }
+                }
+                if (!(isX && isY))
+                {
+                    throw new ParseLineException("At least one coordinate is missing in object declaration");
+                }
                 return cot;
             }
             catch (IndexOutOfRangeException)
@@ -358,9 +417,21 @@ namespace LUPA
                 {
                     throw new ParseLineException("Y position has to be a floating point number");
                 }
+                if (elements.Length < 4)
+                {
+                    throw new ParseLineException("Too few arguments");
+                }
                 for (int i = 3; i < elements.Length; i++)
                 {
                     name += elements[i];
+                }
+                if (x < 0 || x > 600)
+                {
+                    throw new ParseLineException("X coordinate out of range");
+                }
+                if (y < 0 || y > 600)
+                {
+                    throw new ParseLineException("Y coordinate out of range");
                 }
                 return new KeyPoint(x, y, name);
             }
@@ -390,6 +461,14 @@ namespace LUPA
                 if (!double.TryParse(elements[2], out double y))
                 {
                     throw new ParseLineException("Y position has to be a floating point number");
+                }
+                if (x < 0 || x > 600)
+                {
+                    throw new ParseLineException("X coordinate out of range");
+                }
+                if (y < 0 || y > 600)
+                {
+                    throw new ParseLineException("Y coordinate out of range");
                 }
                 return new Point(x, y);
             }
