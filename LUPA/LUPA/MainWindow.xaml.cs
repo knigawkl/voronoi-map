@@ -20,6 +20,7 @@ namespace LUPA
         public readonly SolidColorBrush keyPointColor = Brushes.IndianRed;
         public readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
         public readonly SolidColorBrush customObjectColor = Brushes.Gold;
+        public readonly SolidColorBrush areaLinesColor = Brushes.Black;
         Map map;
         System.Windows.Point position;
 
@@ -325,15 +326,33 @@ namespace LUPA
             {
                 OutputTxt.AppendText(kp.BrushColor.ToString() + "  ");
             }
-            
+
+            SolidColorBrush[,] colors = new SolidColorBrush[600, 600];
+
             for (int row = 0; row < 600; row++)
             {
                 for (int column = 0; column < 600; column++)
                 {
-                    SolidColorBrush color = FindClosestKeyPoint(row, column).BrushColor;
-                    DrawTransparentPoint(color, new System.Windows.Point(row, column));
+                    colors[row, column] = FindClosestKeyPoint(row, column).BrushColor;
+                    //DrawTransparentPoint(color, new System.Windows.Point(row, column));
+                    
                 }
-            } 
+            }
+
+            for (int row = 1; row < 599; row++)
+            {
+                for (int column = 1; column < 599; column++)
+                {
+                    if (colors[row, column] != colors[row - 1, column] || colors[row, column] != colors[row + 1, column]
+                        || colors[row, column] != colors[row, column - 1] || colors[row, column] != colors[row + 1, column])
+                    {
+                        DrawTransparentPoint(areaLinesColor, new System.Windows.Point(row, column));
+                    }
+
+                    //DrawTransparentPoint(colors[row, column], new System.Windows.Point(row, column));
+
+                }
+            }
         }
 
         private KeyPoint FindClosestKeyPoint(int x, int y)
@@ -392,7 +411,7 @@ namespace LUPA
             {
                 StrokeThickness = 1,
                 Stroke = color,
-                Opacity = .20
+                Opacity = .80
             };
             Map.Children.Add(rec);
             Canvas.SetTop(rec, position.Y);
