@@ -49,11 +49,14 @@ namespace LUPA
             position.Y -= TopToolbar.ActualHeight;
             if (KeyPointBtn.IsChecked == true)
             {
-                Map.Children.Clear();
-                AddKeyPoint(position);
-                DrawMap();
-                DrawAreaLines();
-                OutputTxt.Text = "Dodano punkt kluczowy (" + position.X + "; " + position.Y + ")";
+                if (Util.Mathematics.IsPointInPolygon(map.ContourPoints, new Point(position.X, position.Y)))
+                {
+                    Map.Children.Clear();
+                    AddKeyPoint(position);
+                    DrawMap();
+                    DrawAreaLines();
+                    OutputTxt.Text = "Dodano punkt kluczowy (" + position.X + "; " + position.Y + ")";
+                }              
             }
             else if (ContourPointBtn.IsChecked == true)
             {
