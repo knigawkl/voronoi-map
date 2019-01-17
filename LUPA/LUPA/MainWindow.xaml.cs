@@ -44,7 +44,7 @@ namespace LUPA
         /// </summary>
         private void Map_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            OutputTxt.Text = "";
+            ResetTextBoxes();
             position = e.GetPosition(this);
             position.X = (int)position.X;
             position.Y = (int)position.Y;
@@ -98,7 +98,6 @@ namespace LUPA
                     DrawMap();
                     DrawAreaLines();
                     OutputTxt.Text = "Dodano punkt kluczowy (" + position.X + "; " + position.Y + ")";
-                    UpperSideToolbarTxt.Text = "";
                 }              
             }
             else if (ContourPointBtn.IsChecked == true)
@@ -114,7 +113,6 @@ namespace LUPA
                     DrawMap();
                     DrawAreaLines();
                     OutputTxt.Text = "Dodano punkt konturu (" + position.X + "; " + position.Y + ")";
-                    UpperSideToolbarTxt.Text = "";
                 }
             }
         }
@@ -124,7 +122,7 @@ namespace LUPA
         /// </summary>
         private void Map_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            OutputTxt.Text = "";
+            ResetTextBoxes();
             if (e.OriginalSource is Rectangle clickedShape)
             {
                 if (clickedShape.Stroke == keyPointColor && KeyPointBtn.IsChecked == true && map.KeyPoints.Count == 1)
