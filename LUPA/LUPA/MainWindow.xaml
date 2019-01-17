@@ -29,9 +29,6 @@
             <Button Name="ChangeBackgroundBtn" Click="ChangeBackground_Click" Background="DarkGray" Height="30" Width="100">
                 Zmień tło
             </Button>
-            <Button Name="HelpBtn" Click="OpenFile_Click" Background="DarkGray" Height="30" Width="100">
-                Pomoc
-            </Button>
             <RadioButton Name="ContourPointBtn" Margin="10, 0"  GroupName="Objects"  
                         Width="100" Height="30" Background="Azure" Checked="ContourBtn_Checked">
                 Kontur
@@ -39,6 +36,10 @@
             <RadioButton Name="KeyPointBtn" Margin="0, 0" GroupName="Objects" 
                         Width="100" Height="30" Background="Azure" Checked="KeyPointBtn_Checked">
                 Punkt Kluczowy
+            </RadioButton>
+            <RadioButton Name="StatsBtn" Margin="10, 0" GroupName="Objects" 
+                        Width="100" Height="30" Background="Azure" Checked="StatsBtn_Checked">
+                Statystyki
             </RadioButton>
         </ToolBar>
 
@@ -49,15 +50,15 @@
         </Canvas>
 
         <StackPanel Name="SideToolbar" Height="600" Width="300" Grid.Row="1" Grid.Column="1"  Background="DarkGray">
-            <TextBox Name="UpperSideToolbarTxt" Margin="4,4,4,4" Background="LightGray" Width="292" Height="300" TextWrapping="Wrap" FontStyle="Italic" Focusable="False"
+            <TextBox xml:lang="pl" Name="UpperSideToolbarTxt" Margin="2,2,2,0" Background="LightGray" Width="296" Height="302" TextWrapping="Wrap" FontStyle="Italic" Focusable="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto">
-                Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów...
+                Kliknij lewym przyciskiem myszy na jeden z punktów kluczowych przy wybranym trybie statystyk, aby wyświetlić statystyki
             </TextBox>
-            <TextBox Name="LowerSideToolbarTxt" Margin="4,0,4,4" Background="LightGray" Width="292" Height="288" TextWrapping="Wrap" FontStyle="Italic" Focusable="False"
+            <TextBox xml:lang="pl" Name="LowerSideToolbarTxt" Margin="2,0,2,0" Background="LightGray" Width="296" Height="294" TextWrapping="Wrap" FontStyle="Italic" Focusable="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto">
-                Najedź kursorem myszy na jeden z punktów kluczowych, aby wyświetlić listę obiektów z grupowaniem po typie...
+                
             </TextBox>
         </StackPanel>
         

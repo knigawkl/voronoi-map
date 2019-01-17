@@ -1,4 +1,4 @@
-# Kontury terenu (wymienione w kolejnoúci ≥πczenia): Lp. x y
+Ôªø# Kontury terenu (wymienione w kolejno≈õci ≈ÇƒÖczenia): Lp. x y
 1. 0 0
 2. 0 200
 3. 200 305
@@ -7,17 +7,17 @@
 # Punkty kluczowe: Lp. x y Nazwa
 1. 10 10 KOK Krawczyka
 2. 10 190 KOK Kaczmarskiego
-3. 300 100 KOK £azarewicza
-# Definicje obiektÛw: Lp. Typ_obiektu (Nazwa_zmiennej Typ_zmiennej)*
-1. SZKO£A Nazwa String X double Y double
-2. DOM X double Y double L_MIESZKA—C”W int
-3. NIEDèWIEDè X double Y double
-# Obiekty: Typ_obiektu (zgodnie z definicjπ)
-1. SZKO£A "Szko≥a robienia duøych pieniÍdzy" 4 1
-2. DOM 4 3 100
-3. DOM 4 17 120
-4. DOM 4 18 80
-5. NIEDèWIEDè 20 20
-6. NIEDèWIEDè 40 1
-7. NIEDèWIEDè 39 1
-8. NIEDèWIEDè 39 2
+3. 300 100 KOK ≈Åazarewicza
+# Definicje obiekt√≥w: Lp. Typ_obiektu (Nazwa_zmiennej Typ_zmiennej)*
+1. SZKO≈ÅA Nazwa String X double Y double
+2. DOM X double Y double L_MIESZKA≈ÉC√ìW int
+3. NIED≈πWIED≈π X double Y double
+# Obiekty: Typ_obiektu (zgodnie z definicjƒÖ)
+1. SZKO≈ÅA "Szko≈Ça robienia du≈ºych pieniƒôdzy" 4 1
+2. DOM 40 354 100
+3. DOM 454 174 120
+4. DOM 45 184 80
+5. NIED≈πWIED≈π 230 250
+6. NIED≈πWIED≈π 404 133
+7. NIED≈πWIED≈π 393 134
+8. NIED≈πWIED≈π 39 234

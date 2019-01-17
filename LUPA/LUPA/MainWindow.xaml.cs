@@ -18,13 +18,15 @@ namespace LUPA
     /// </summary>
     public partial class MainWindow : Window
     {
-        public readonly SolidColorBrush keyPointColor = Brushes.IndianRed;
-        public readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
-        public readonly SolidColorBrush customObjectColor = Brushes.Gold;
-        public readonly SolidColorBrush areaLinesColor = Brushes.Black;
-        public readonly int pointThickness = 5;
-        public readonly int transparentPointThickness = 1;
-        public readonly int contourLineThickness = 2;
+        private readonly SolidColorBrush keyPointColor = Brushes.IndianRed;
+        private readonly SolidColorBrush contourPointColor = Brushes.LightSeaGreen;
+        private readonly SolidColorBrush customObjectColor = Brushes.Gold;
+        private readonly SolidColorBrush areaLinesColor = Brushes.Black;
+        private readonly SolidColorBrush statsColor = Brushes.MediumSlateBlue;
+        private readonly int pointThickness = 5;
+        private readonly int transparentPointThickness = 1;
+        private readonly int contourLineThickness = 2;
+        private int citizensCount = 0;
         Map map;
         bool isMapLoaded = false;
         System.Windows.Point position;
@@ -47,7 +49,40 @@ namespace LUPA
             position.X = (int)position.X;
             position.Y = (int)position.Y;
             position.Y -= TopToolbar.ActualHeight;
-            if (KeyPointBtn.IsChecked == true)
+            if (StatsBtn.IsChecked == true && e.OriginalSource is Rectangle clickedShape && clickedShape.Stroke == keyPointColor)
+            {
+                citizensCount = 0;
+                UpperSideToolbarTxt.Text = "";
+                LowerSideToolbarTxt.Text = "";
+                OutputTxt.Text = "";
+                KeyPoint clickedKeyPoint = FindClosestKeyPoint((int)position.X, (int)position.Y);
+                UpperSideToolbarTxt.AppendText("Nazwa punktu kluczowego: " + clickedKeyPoint.Name + "\n");
+
+                UpperSideToolbarTxt.AppendText("Obiekty znajdujące się w tym obszarze: \n");
+
+                foreach (var customObject in map.CustomObjects)
+                {
+                    if (Util.Mathematics.IsPointInPolygon(map.ContourPoints, customObject))
+                    {
+                        if (FindClosestKeyPoint(customObject.X, customObject.Y) == clickedKeyPoint)
+                        {
+                            UpperSideToolbarTxt.AppendText("*" + customObject.ObjectType.Name + "\n");
+                            for (int i = 0; i < customObject.ObjectType.VariableNames.Count; i++)
+                            {
+                                UpperSideToolbarTxt.AppendText(customObject.ObjectType.VariableNames[i]
+                                    + " " + customObject.objectProperties[i] + "\n");
+                                if (customObject.ObjectType.VariableNames[i].Equals("L_MIESZKAŃCÓW"))
+                                {
+                                    citizensCount += (int)customObject.objectProperties[i];
+                                }
+                            }
+                            UpperSideToolbarTxt.AppendText("\n");
+                        }
+                    }
+                }
+                UpperSideToolbarTxt.AppendText("Liczba mieszkańców obszaru: " + citizensCount.ToString());
+            }
+            if (KeyPointBtn.IsChecked == true && map.KeyPoints.Count > 0)
             {
                 if (Util.Mathematics.IsPointInPolygon(map.ContourPoints, new Point(position.X, position.Y)))
                 {
@@ -129,7 +164,7 @@ namespace LUPA
 
         private void AddKeyPoint(System.Windows.Point position)
         {
-            map.KeyPoints.Add(new KeyPoint((int)position.X, (int)position.Y, "defaultKeyPointName"));
+            map.KeyPoints.Add(new KeyPoint((int)position.X, (int)position.Y, "brak"));
             DrawMap();
         }
 
@@ -200,12 +235,21 @@ namespace LUPA
         {
             KeyPointBtn.Background = keyPointColor;
             ContourPointBtn.Background = Brushes.Azure;
+            StatsBtn.Background = Brushes.Azure;
         }
 
         private void ContourBtn_Checked(object sender, RoutedEventArgs e)
         {
             ContourPointBtn.Background = contourPointColor;
             KeyPointBtn.Background = Brushes.Azure;
+            StatsBtn.Background = Brushes.Azure;
+        }
+
+        private void StatsBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            StatsBtn.Background = statsColor;
+            KeyPointBtn.Background = Brushes.Azure;
+            ContourPointBtn.Background = Brushes.Azure;
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
