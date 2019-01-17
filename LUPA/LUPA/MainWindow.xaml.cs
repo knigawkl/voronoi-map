@@ -26,7 +26,7 @@ namespace LUPA
         private readonly int pointThickness = 5;
         private readonly int transparentPointThickness = 1;
         private readonly int contourLineThickness = 2;
-        private int citizensCount = 0;
+        private int citizensCount = 0, sameTypeObjectCounter = 0;
         Map map;
         bool isMapLoaded = false;
         System.Windows.Point position;
@@ -52,13 +52,13 @@ namespace LUPA
             if (StatsBtn.IsChecked == true && e.OriginalSource is Rectangle clickedShape && clickedShape.Stroke == keyPointColor)
             {
                 citizensCount = 0;
-                UpperSideToolbarTxt.Text = "";
-                LowerSideToolbarTxt.Text = "";
-                OutputTxt.Text = "";
+                ResetTextBoxes();
                 KeyPoint clickedKeyPoint = FindClosestKeyPoint((int)position.X, (int)position.Y);
                 UpperSideToolbarTxt.AppendText("Nazwa punktu kluczowego: " + clickedKeyPoint.Name + "\n");
 
                 UpperSideToolbarTxt.AppendText("Obiekty znajdujące się w tym obszarze: \n");
+
+                int[] objectTypesCounters = new int[map.CustomObjectTypes.Count];
 
                 foreach (var customObject in map.CustomObjects)
                 {
@@ -66,6 +66,7 @@ namespace LUPA
                     {
                         if (FindClosestKeyPoint(customObject.X, customObject.Y) == clickedKeyPoint)
                         {
+                            objectTypesCounters[map.CustomObjectTypes.FindIndex(x => x.Name == customObject.ObjectType.Name)]++;
                             UpperSideToolbarTxt.AppendText("*" + customObject.ObjectType.Name + "\n");
                             for (int i = 0; i < customObject.ObjectType.VariableNames.Count; i++)
                             {
@@ -80,7 +81,13 @@ namespace LUPA
                         }
                     }
                 }
-                UpperSideToolbarTxt.AppendText("Liczba mieszkańców obszaru: " + citizensCount.ToString());
+                UpperSideToolbarTxt.AppendText("Liczba mieszkańców obszaru: " + citizensCount.ToString() + "\n");
+                LowerSideToolbarTxt.Text = "Lista obiektów z grupowaniem po typie: \n";
+                for (int i = 0; i < objectTypesCounters.Length; i++)
+                {
+                    LowerSideToolbarTxt.AppendText(map.CustomObjectTypes[i].Name + " " +objectTypesCounters[i].ToString() + "\n");
+                }
+
             }
             if (KeyPointBtn.IsChecked == true && map.KeyPoints.Count > 0)
             {
@@ -91,6 +98,7 @@ namespace LUPA
                     DrawMap();
                     DrawAreaLines();
                     OutputTxt.Text = "Dodano punkt kluczowy (" + position.X + "; " + position.Y + ")";
+                    UpperSideToolbarTxt.Text = "";
                 }              
             }
             else if (ContourPointBtn.IsChecked == true)
@@ -106,6 +114,7 @@ namespace LUPA
                     DrawMap();
                     DrawAreaLines();
                     OutputTxt.Text = "Dodano punkt konturu (" + position.X + "; " + position.Y + ")";
+                    UpperSideToolbarTxt.Text = "";
                 }
             }
         }
@@ -143,6 +152,13 @@ namespace LUPA
                     OutputTxt.Text = "Usunięto punkt konturu (" + Canvas.GetLeft(clickedShape) + "; " + Canvas.GetTop(clickedShape) + ")";
                 }
             }
+        }
+
+        private void ResetTextBoxes()
+        {
+            UpperSideToolbarTxt.Text = "";
+            LowerSideToolbarTxt.Text = "";
+            OutputTxt.Text = "";
         }
 
         private void DeleteCurrentContour()

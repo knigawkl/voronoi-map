@@ -111,84 +111,14 @@ Ze względu na dużą ilość zróżnicowanych błędów, jakie pojawiały się 
 
 \subsection{Działanie finalnej wersji programu}
 
+\tab Udało się zrealizować wszystkie założone funkcje programu. Możliwe jest wczytanie konfiguracji mapy z pliku wejściowego, a także modyfikowanie jej wyglądu podczas działania programu. Wyświetlone mogą zostać także statystyki dotyczące wybranego obszaru.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=15cm] a
-\caption{Uruchomienie programu z wyszukiwaniem ścieżki}
-\label{fig:obrazek 3}
+\caption{Uruchomienie programu w wersji odpowiadającej wersji aktualnej na dzień obrony projektu. W uchwyconym na zdjęciu ekranu momencie, statystyki wyświetlane w polach tekstowych znajdujących się po prawej stronie okna głównego programu dotyczą obszaru położonego najbardziej na prawo.}
+\label{fig:obrazek 2}
 \end{figure}
-
-Kolejny obraz przedstawia uruchomienie programu dla tych samych danych, ale z poszukiwaniem dowolnego arbitrażu.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15cm] b
-\caption{Uruchomienie programu -- dowolny arbitraż}
-\label{fig:obrazek 4}
-\end{figure}
-
-Na trzecim rysunku widzimy uruchomienie programu w trzeciej opcji -- szukania arbitrażu dla konkretnej waluty.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15cm] g
-\caption{Uruchomienie programu -- konkretny arbitraż}
-\label{fig:obrazek 5}
-\end{figure}
-
-Kolejny obrazek to już niepoprawne uruchomienie programu -- w tym wypadku użytkownik podał za mało danych, zabrakło przynajmniej podania kwoty wejściowej.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15cm] c
-\caption{Uruchomienie programu -- za mało danych}
-\label{fig:obrazek 6}
-\end{figure}
-
-Piąty rysunek to próba uruchomienia programu dla pliku, który nie istnieje.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15cm] d
-\caption{Uruchomienie programu -- niepoprawne dane}
-\label{fig:obrazek 7}
-\end{figure}
-
-Dwa kolejne obrazki to przykłady uruchomienia programu dla plików, które nie zostały poprawnie zapisane. Są to pliki użyte do testowania programu, których treść zamieszczono poniżej. Obrazki ukazują reakcję programu na konkretne błędy w pliku tekstowym.
-
-Pierwszy plik to data3.txt: 
-
-\begin{lstlisting}
-# Waluty (id | symbol | pelna nazwa) 
-0 EUR Euro
-1 PLN Zloty
- Kursy walut (id | symbol (waluta wejsciowa)... 
-0 EUR PLN 0.8889 PROC 0.0001
-\end{lstlisting}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15cm] e
-\caption{Działanie programu z błędem krytycznym w pliku}
-\label{fig:obrazek 8}
-\end{figure}
-
-Kolejny plik to data4.txt:
-\begin{lstlisting}
-# Waluty (id | symbol | pelna nazwa) 
-0 EUR Euro
-1 PLN
-# Kursy walut (id | symbol (waluta wejsciowa)...
-0 EUR PLN 0.8889 PROC 0.0001
-\end{lstlisting}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15cm] f
-\caption{Działanie programu z mniej ważnym błędem w pliku}
-\label{fig:obrazek 9}
-\end{figure}
-
 
 \section{Zmiany względem specyfikacji funkcjonalnej}
 
@@ -234,23 +164,6 @@ private static void VerifyKeyPoints
 \end{itemize}
 
 Ich zadaniem jest weryfikacja argumentów po zakończeniu wczytywania danej części pliku -- na przykład, gdy cały kontur zostanie wczytany, metoda sprawdzi, czy ma on potrzebną liczbę punktów oraz linie tworzone przez te punkty nie przecinają się. Punkty konturowe są sprawdzane pod kątem umieszczenia ich poza granicami konturu korzystając ze stosownej funkcji matematycznej z klasy opisanej wyżej, a definicje obiektów -- czy są w nich zawarte trzy obowiązkowe typy obiektów (szkoła, dom i niedźwiedź).
-
-\subsection{Klasa ExchangeSearcher}
-
-\begin{itemize}
-\item \begin{lstlisting}
-public String SearchForArbitrage(double amount,
-CurrencyMatrix cm, Currency currency)
-\end{lstlisting}
-
-\item \begin{lstlisting}
-public String SearchForBestExchange(double amount,
-CurrencyMatrix cm, Currency inputCurrency,
-Currency outputCurrency)
-\end{lstlisting}
-\end{itemize}
-
-\tab Metody znajdujące się w tej klasie nie uległy dużej zmianie. Wykonują one dokładnie takie same czynności, jakie były przewidziane na wcześniejszym etapie projektu. Jedyną różnicą jest to, że metody nie wypisują na standardowym wyjściu odnalezionych ścieżek (lub komunikatów), ale zwracają je do metody \textit{main} w postaci obiektu klasy String.
 
 \subsection{Klasy przechowujące dane} 
 
